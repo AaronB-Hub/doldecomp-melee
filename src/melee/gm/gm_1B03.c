@@ -38,7 +38,7 @@ extern TmData gm_804771C4;
 /* 477738 */ extern ResultsMatchInfo gm_80477738;
 /* 4876D8 */ static StartMeleeData gm_804876D8;
 /* 487810 */ static MatchExitInfo gm_80487810;
-/* 49E548 */ extern struct gm_8049E548_t gm_8049E548;
+/* 49E548 */ static struct gm_8049E548_t gm_8049E548;
 
 static u32 gm_804D6878[2];
 
@@ -1013,7 +1013,7 @@ MinorScene gm_803DDAC0_MinorScenes[] = {
         gm_801B1724,
         NULL,
         {
-            MN_TOU,
+            MN_TOU_SETUP,
             NULL,
             NULL,
         },
@@ -1033,7 +1033,7 @@ MinorScene gm_803DDAC0_MinorScenes[] = {
         NULL,
         NULL,
         {
-            MN_TOU_FINISH,
+            MN_TOU_ALT,
             NULL,
             NULL,
         },
@@ -2719,7 +2719,7 @@ void gm_801BA8DC_OnLoad(void)
     gm_801A55C4();
 }
 
-extern UNK_T gm_804D6900;
+static UNK_T gm_804D6900;
 
 void gm_801BA8FC(void)
 {
