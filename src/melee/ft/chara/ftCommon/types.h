@@ -128,7 +128,7 @@ union ftCommon_MotionVars {
         /* fp+235B */ u8 x1B;
     } damage;
     struct {
-        /* fp+2340 */ s8 x0;
+        /* fp+2340 */ u8 x0;
         /* fp+2341 */ s8 x1;
         /* fp+2342 */ s8 x2;
         /* fp+2343 */ s8 x3;
@@ -239,7 +239,7 @@ union ftCommon_MotionVars {
         /* fp+2340 */ float x0;
     } downdamage;
     struct {
-        /* fp+2340 */ ftCo_GObj* x0;
+        /* fp+2340 */ Fighter_GObj* x0;
         /* fp+2344 */ bool x4;
         /* fp+2348 */ float x8;
         /* fp+234C */ float xC;
