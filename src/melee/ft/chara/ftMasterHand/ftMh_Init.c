@@ -1,6 +1,3 @@
-#include <platform.h>
-#include <placeholder.h>
-
 #include "ftMh_Init.h"
 
 #include "ftMh_BackAirplane1.h"
@@ -32,6 +29,9 @@
 #include "ftMh_Wait1_2.h"
 #include "ftMh_Walk.h"
 #include "types.h"
+
+#include <placeholder.h>
+#include <platform.h>
 
 #include "ft/ftbosslib.h"
 #include "ft/ftcamera.h"
@@ -621,7 +621,7 @@ void ftMh_Init_OnLoad(HSD_GObj* gobj)
         it_8026B3F8(items[1], 126);
         fp->no_normal_motion = true;
         fp->x2229_b6 = true;
-        fp->x2229_b7 = true;
+        fp->no_kb = true;
         fp->x222A_b0 = true;
         fp->x222A_b1 = true;
         fp->x2229_b3 = true;

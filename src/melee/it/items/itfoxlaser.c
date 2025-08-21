@@ -1,13 +1,13 @@
-#include <placeholder.h>
-
-#include "lb/forward.h"
-
 #include "itfoxlaser.h"
+
+#include <placeholder.h>
 
 #include "it/inlines.h"
 #include "it/it_2725.h"
 #include "it/itCharItems.h"
 #include "it/types.h"
+
+#include "lb/forward.h"
 
 #include <common_structs.h>
 #include <baselib/gobj.h>
@@ -21,8 +21,10 @@
 #include <MSL/math.h>
 
 ItemStateTable it_803F67D0[] = {
-    { 0, it_8029C6F4, it_8029C9CC, it_8029C9EC },
-    { 1, it_8029C6F4, it_8029C9CC, it_8029C9EC },
+    { 0, itFoxlaser_UnkMotion1_Anim, itFoxlaser_UnkMotion1_Phys,
+      itFoxlaser_UnkMotion1_Coll },
+    { 1, itFoxlaser_UnkMotion1_Anim, itFoxlaser_UnkMotion1_Phys,
+      itFoxlaser_UnkMotion1_Coll },
 };
 
 inline void* getFoxLaser(Item* item)
@@ -103,7 +105,7 @@ static inline f32 fabsf(f32 x)
     }
 }
 
-bool it_8029C6F4(Item_GObj* item_gobj)
+bool itFoxlaser_UnkMotion1_Anim(Item_GObj* item_gobj)
 {
     Article* article;
     Item* item;
@@ -146,13 +148,13 @@ bool it_8029C6F4(Item_GObj* item_gobj)
     return it_80273130(item_gobj);
 }
 
-void it_8029C9CC(Item_GObj* item_gobj)
+void itFoxlaser_UnkMotion1_Phys(Item_GObj* item_gobj)
 {
     Item* item = GET_ITEM(item_gobj);
     item->xDD4_itemVar.foxlaser.pos = item->pos;
 }
 
-bool it_8029C9EC(Item_GObj* item_gobj)
+bool itFoxlaser_UnkMotion1_Coll(Item_GObj* item_gobj)
 {
     Item* item = GET_ITEM(item_gobj);
     Vec3 pos = item->pos;
@@ -164,12 +166,12 @@ bool it_8029C9EC(Item_GObj* item_gobj)
     return false;
 }
 
-bool it_8029CA78(Item_GObj* arg0)
+bool it_2725_Logic94_Clanked(Item_GObj* arg0)
 {
     return true;
 }
 
-bool it_8029CA80(Item_GObj* item_gobj)
+bool it_2725_Logic94_Reflected(Item_GObj* item_gobj)
 {
     Item* item = GET_ITEM(item_gobj);
     HSD_JObj* jobj = GET_JOBJ(item_gobj);
@@ -183,12 +185,12 @@ bool it_8029CA80(Item_GObj* item_gobj)
     return false;
 }
 
-bool it_8029CC4C(Item_GObj* arg0)
+bool it_2725_Logic94_Absorbed(Item_GObj* arg0)
 {
     return true;
 }
 
-bool it_8029CC54(Item_GObj* item_gobj)
+bool it_2725_Logic94_ShieldBounced(Item_GObj* item_gobj)
 {
     Item* item = GET_ITEM(item_gobj);
     u8 _[4] = { 0 };
@@ -200,12 +202,12 @@ bool it_8029CC54(Item_GObj* item_gobj)
     return false;
 }
 
-bool it_8029CCF0(Item_GObj* arg0)
+bool it_2725_Logic94_HitShield(Item_GObj* arg0)
 {
     return true;
 }
 
-void it_8029CCF8(Item_GObj* item_gobj, HSD_GObj* ref)
+void it_2725_Logic94_EvtUnk(Item_GObj* item_gobj, HSD_GObj* ref)
 {
     it_8026B894(item_gobj, ref);
 }

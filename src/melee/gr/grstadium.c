@@ -1,5 +1,6 @@
 /// @todo this file needs to be named "grpstadium.c" for asserts, oops!
 #include "grstadium.h"
+
 #include "dolphin/gx/GXStruct.h"
 
 #include <sysdolphin/baselib/archive.h>
@@ -146,8 +147,8 @@ StageData grPs_803E1334 = {
     "/GrPs",
     grStadium_801D101C,
     grStadium_801D1018,
-    grStadium_801D10C8,
-    grStadium_801D10CC,
+    grStadium_UnkStage0_OnLoad,
+    grStadium_UnkStage0_OnStart,
     grStadium_801D10F0,
     grStadium_801D50B8,
     grStadium_801D50C0,
@@ -156,7 +157,7 @@ StageData grPs_803E1334 = {
     ARRAY_SIZE(grPs_803E1248),
 };
 
-void grStadium_801D1018(int unused) {}
+void grStadium_801D1018(bool unused) {}
 
 void grStadium_801D101C(void)
 {
@@ -181,9 +182,9 @@ void grStadium_801D101C(void)
     mpLib_800581DC(6, 4);
 }
 
-void grStadium_801D10C8(void) {}
+void grStadium_UnkStage0_OnLoad(void) {}
 
-void grStadium_801D10CC(void)
+void grStadium_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }
@@ -1467,13 +1468,7 @@ void grStadium_801D3460(Ground_GObj* gobj)
     HSD_Text* temp_r3;
     HSD_Text* temp_r3_2;
     HSD_Text* temp_r4;
-    struct {
-        u8 x0_0 : 6;
-        u8 x0_6 : 1;
-        u8 x0_7 : 1;
-        u8 _[0xC];
-        u32 x10;
-    }* temp_r3_4;
+    StartMeleeRules* rules;
     s16 temp_r0;
     s32 temp_r29_2;
     s32 var_r27;
@@ -1536,7 +1531,7 @@ void grStadium_801D3460(Ground_GObj* gobj)
     gp2->x1C->x4A = 1;
 
     for (i = 0; i < 4; i++) {
-        if (Player_GetPlayerSlotType(i) != 3) {
+        if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
             UNK_T tmp = gm_80160A60(i);
             sp38[var_r28] = tmp;
             if (tmp != NULL) {
@@ -1563,12 +1558,12 @@ void grStadium_801D3460(Ground_GObj* gobj)
     }
 
     gp2->x1C->x48 = 0;
-    temp_r3_4 = (void*) gm_8016AE50(); /// @todo gm struct needs to be larger
+    rules = gm_8016AE50();
     temp_r4 = gp2->x1C;
     temp_r4->x34.x = 0.625f;
     temp_r4->x34.y = 0.625f;
 
-    if ((temp_r3_4->x10 == 0) | !temp_r3_4->x0_6) {
+    if ((rules->x10 == 0) | !rules->x0_6) {
         HSD_SisLib_803A6B98(gp2->x1C, grPs_804DAF58, grPs_804DAF5C,
                             "00:00 00");
         return;
@@ -1667,7 +1662,7 @@ void grStadium_801D3A0C(Ground_GObj* gobj)
     sp24.z = 0xFF;
     temp_r30->x1C->x30 = sp24;
     temp_r30->x1C->x4A = 1;
-    if (gp->u.display.xF0 == 0) {
+    if (gp->u.display.xF0 == Gm_PKind_Human) {
         temp_r3 = temp_r30->x1C;
         temp_r3->x34.x = 0.625F;
         temp_r3->x34.y = 1.5F;
@@ -1700,7 +1695,7 @@ const float grPs_804DAF68 = 52;
 const float grPs_804DAF6C = -3;
 const float grPs_804DAF74 = 56;
 
-void grStadium_801D3B4C(int arg0, int arg1)
+void grStadium_801D3B4C(int arg0, int slot_type)
 {
     Ground_GObj* gobj;
     Ground* gp;
@@ -1709,7 +1704,7 @@ void grStadium_801D3B4C(int arg0, int arg1)
         gobj = Ground_801C2BA4(PsType_Display);
         gp = GET_GROUND(gobj);
         gp->u.display.xEE = arg0;
-        gp->u.display.xF0 = arg1;
+        gp->u.display.xF0 = slot_type;
         grStadium_801D2528(gobj, 9, 0);
     }
 }
@@ -1755,7 +1750,7 @@ void grStadium_801D3BBC(Ground_GObj* arg0)
     }
     var_r25 = 0;
     do {
-        if ((Player_GetPlayerSlotType(var_r25) != 3) &&
+        if ((Player_GetPlayerSlotType(var_r25) != Gm_PKind_NA) &&
             (Player_8003219C(var_r25) == 0))
         {
             temp_r3 = Player_GetEntity(var_r25);
@@ -1793,15 +1788,15 @@ void grStadium_801D3BBC(Ground_GObj* arg0)
         temp_r3_3->x34.y = 1.0f;
         temp_r31->x1C->x49 = 1;
     }
-    sp28[1] = *(GXColor*)&grPs_803B7F8C[0];
-    sp28[2] = *(GXColor*)&grPs_803B7F8C[1];
+    sp28[1] = *(GXColor*) &grPs_803B7F8C[0];
+    sp28[2] = *(GXColor*) &grPs_803B7F8C[1];
     var_r28 = 0;
     var_r30_2 = 0;
-    sp28[3] = *(GXColor*)&grPs_803B7F8C[2];
-    sp28[4] = *(GXColor*)&grPs_803B7F8C[3];
+    sp28[3] = *(GXColor*) &grPs_803B7F8C[2];
+    sp28[4] = *(GXColor*) &grPs_803B7F8C[3];
     temp_r29 = sp28[var_r30].r;
     do {
-        if (Player_GetPlayerSlotType(var_r30_2) != 3 &&
+        if (Player_GetPlayerSlotType(var_r30_2) != Gm_PKind_NA &&
             Player_8003219C(var_r30_2) == 0)
         {
             temp_r3_4 = Player_GetEntity(var_r30_2);
@@ -1826,7 +1821,7 @@ void grStadium_801D3BBC(Ground_GObj* arg0)
                 }
                 sp28[0].g = (u8) (s32) var_f0_3;
                 sp28[0].b = 0xFF;
-                temp_r31->x1C->x30 = *(U8Vec4*)&sp28[0];
+                temp_r31->x1C->x30 = *(U8Vec4*) &sp28[0];
                 temp_r3_5 = gm_80160A60(var_r30_2);
                 if (temp_r3_5 != 0) {
                     HSD_SisLib_803A6B98(temp_r31->x1C, grPs_804DAF58,
@@ -2383,7 +2378,7 @@ void fn_801D5074(Ground_GObj* gobj, int arg1)
     grDisplay_801C5DB0(gobj, arg1);
 }
 
-DynamicsDesc* grStadium_801D50B8(int unused)
+DynamicsDesc* grStadium_801D50B8(enum_t unused)
 {
     return NULL;
 }

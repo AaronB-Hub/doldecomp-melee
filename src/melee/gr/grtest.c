@@ -1,10 +1,10 @@
+#include "gr/grtest.h"
+
 #include <platform.h>
 
 #include "baselib/forward.h"
-
-#include "gr/grtest.h"
-
 #include "gr/forward.h"
+
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
 #include "gr/grzakogenerator.h"
@@ -37,8 +37,8 @@ StageData grTe_803E5764 = { 0x01,
                             "/GrTe.dat",
                             grTest_80206E30,
                             grTest_80206E2C,
-                            grTest_80207014,
-                            grTest_80207018,
+                            grTest_UnkStage0_OnLoad,
+                            grTest_UnkStage0_OnStart,
                             grTest_8020703C,
                             grTest_8020740C,
                             grTest_80207414,
@@ -48,7 +48,7 @@ StageData grTe_803E5764 = { 0x01,
 
 float grTe_804D6A48;
 
-void grTest_80206E2C(int unused) {}
+void grTest_80206E2C(bool unused) {}
 
 void grTest_80206E30(void)
 {
@@ -70,9 +70,9 @@ void grTest_80206E30(void)
     Ground_801C3BB4();
 }
 
-void grTest_80207014(void) {}
+void grTest_UnkStage0_OnLoad(void) {}
 
-void grTest_80207018(void)
+void grTest_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(false);
 }
@@ -209,7 +209,7 @@ void grTest_80207404(Ground_GObj* gobj) {}
 
 void grTest_80207408(Ground_GObj* gobj) {}
 
-struct DynamicsDesc* grTest_8020740C(int unused)
+struct DynamicsDesc* grTest_8020740C(enum_t unused)
 {
     return false;
 }

@@ -1,11 +1,8 @@
-#include <platform.h>
-
-#include "ftLink/forward.h"
-#include <baselib/forward.h>
-
 #include "ftLk_SpecialS.h"
 
 #include "ftLk_Init.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
@@ -22,9 +19,14 @@
 #include "ftCommon/ftCo_JumpAerial.h"
 #include "ftCommon/ftCo_SpecialAir.h"
 #include "ftCommon/ftCo_SpecialS.h"
+
+#include "ftLink/forward.h"
+
 #include "ftLink/types.h"
 #include "it/items/itlinkboomerang.h"
 #include "lb/lb_00B0.h"
+
+#include <baselib/forward.h>
 
 #include <common_structs.h>
 #include <math.h>
@@ -170,12 +172,12 @@ void onAccessory4(HSD_GObj* gobj)
     if (ftCheckThrowB0(fp)) {
         Vec3 pos;
         u8 _[4];
-        lb_8000B1CC(fp->parts[ftParts_8007500C(fp, FtPart_LThumbNb)].joint,
+        lb_8000B1CC(fp->parts[ftParts_GetBoneIndex(fp, FtPart_LThumbNb)].joint,
                     NULL, &pos);
         {
-            HSD_GObj* boomerang_gobj =
-                it_802A013C(fp->facing_dir, gobj, &pos,
-                            ftParts_8007500C(fp, FtPart_LThumbNb), da->x2C);
+            HSD_GObj* boomerang_gobj = it_802A013C(
+                fp->facing_dir, gobj, &pos,
+                ftParts_GetBoneIndex(fp, FtPart_LThumbNb), da->x2C);
             fp->x1984_heldItemSpec = boomerang_gobj;
             fp->fv.lk.boomerang_gobj = boomerang_gobj;
             if (boomerang_gobj != NULL) {

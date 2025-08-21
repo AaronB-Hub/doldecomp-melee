@@ -1,13 +1,13 @@
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ftCo_RunBrake.h"
 
 #include "math.h"
 
+#include <placeholder.h>
+
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0892.h"
@@ -15,6 +15,9 @@
 #include "ft/ftcommon.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Jump.h"
 #include "ftCommon/ftCo_TurnRun.h"
 
@@ -44,7 +47,7 @@ void ftCo_RunBrake_Enter(Fighter_GObj* gobj)
     fp->mv.co.runbrake.x0 = false;
     fp->mv.co.runbrake.frames = fp->co_attrs.max_run_brake_frames;
     if (fp->x197C != NULL) {
-        ft_80088148(fp, 0x119, 0x7F, 0x40);
+        ft_PlaySFX(fp, 0x119, 0x7F, 0x40);
     }
 }
 

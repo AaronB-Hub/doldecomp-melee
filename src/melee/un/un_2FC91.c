@@ -1,7 +1,4 @@
 #include "baselib/forward.h"
-#include "pl/forward.h"
-#include "sc/forward.h"
-#include "un/forward.h"
 
 #include "baselib/jobj.h"
 #include "baselib/memory.h"
@@ -16,8 +13,17 @@
 #include "lb/lbvector.h"
 #include "mn/mnmain.h"
 #include "mn/mnname.h"
+
+#include "pl/forward.h"
+
 #include "pl/player.h"
+
+#include "sc/forward.h"
+
 #include "sc/types.h"
+
+#include "un/forward.h"
+
 #include "un/types.h"
 #include "un/un_2FC9.h"
 
@@ -170,7 +176,7 @@ void fn_802FCAC4(HSD_GObj* gobj, int pass)
         int i;
         for (i = 0; i < PL_SLOT_MAX; i++) {
             int do_it;
-            if (Player_GetPlayerSlotType(i) ||
+            if (Player_GetPlayerSlotType(i) != Gm_PKind_Human ||
                 Player_GetNametagSlotID(i) == 0x78)
             {
                 do_it = false;
@@ -229,8 +235,8 @@ void fn_802FCC44(HSD_GObj* gobj)
     u8* slot = HSD_GObjGetUserData(gobj);
     HSD_JObj* jobj = gobj->hsd_obj;
     PAD_STACK(8);
-    if (Player_GetPlayerSlotType(*slot) != 3 && Player_GetPlayerState(*slot) &&
-        Player_GetStocks(*slot) &&
+    if (Player_GetPlayerSlotType(*slot) != Gm_PKind_NA &&
+        Player_GetPlayerState(*slot) && Player_GetStocks(*slot) &&
         (un_804D6D70[*slot] || Player_GetNametagSlotID(*slot) != 'x' ||
          Player_80036058(*slot) || gm_8016B258(*slot)))
     {

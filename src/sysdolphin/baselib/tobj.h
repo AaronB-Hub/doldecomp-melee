@@ -3,9 +3,10 @@
 
 #include <platform.h>
 
+#include "baselib/class.h"
+
 #include "baselib/forward.h" // IWYU pragma: export
 
-#include "baselib/class.h"
 #include "baselib/object.h"
 
 #include <dolphin/gx.h>
@@ -295,7 +296,7 @@ void HSD_TObjTevRemove(HSD_TObjTev* tev);
 HSD_ImageDesc* HSD_ImageDescAlloc(void);
 void HSD_ImageDescFree(HSD_ImageDesc* idesc);
 void HSD_ImageDescCopyFromEFB(HSD_ImageDesc* idesc, u16 origx, u16 origy,
-                              GXBool clear, int sync);
+                              GXBool clear, bool sync);
 void HSD_TObjSetupTextureCoordGen(HSD_TObj* tobj);
 void HSD_TObjSetupVolatileTev(HSD_TObj* tobj, u32 rendermode);
 s32 HSD_TObjAssignResources(HSD_TObj* tobj_top);

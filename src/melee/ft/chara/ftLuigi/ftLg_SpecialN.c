@@ -1,11 +1,11 @@
-#include <platform.h>
-
-#include "forward.h"
-#include "it/forward.h"
-
 #include "ftLg_SpecialN.h"
 
+#include <platform.h>
+
 #include "ef/efsync.h"
+
+#include "forward.h"
+
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
@@ -15,6 +15,9 @@
 #include "ft/types.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_Wait.h"
+
+#include "it/forward.h"
+
 #include "it/items/itluigifireball.h"
 #include "lb/lb_00B0.h"
 
@@ -146,11 +149,11 @@ void ftLg_SpecialN_FireSpawn(HSD_GObj* gobj)
     }
 
     if (flag != false) {
-        lb_8000B1CC(fp->parts[ftParts_8007500C(fp, FtPart_L1stNb)].joint, NULL,
-                    &sp10);
+        lb_8000B1CC(fp->parts[ftParts_GetBoneIndex(fp, FtPart_L1stNb)].joint,
+                    NULL, &sp10);
         it_802C01AC(gobj, &sp10, It_Kind_Luigi_Fire, fp->facing_dir);
         efSync_Spawn(1287, gobj,
-                     fp->parts[ftParts_8007500C(fp, FtPart_L1stNb)].joint,
+                     fp->parts[ftParts_GetBoneIndex(fp, FtPart_L1stNb)].joint,
                      &fp->facing_dir);
     }
 }

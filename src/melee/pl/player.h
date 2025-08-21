@@ -5,9 +5,11 @@
 
 #include "ft/forward.h"
 #include "pl/forward.h"
-#include <baselib/forward.h>
 
 #include "pl/types.h"
+
+#include <baselib/forward.h>
+#include <melee/pl/forward.h>
 
 #include <dolphin/mtx.h>
 #include <baselib/gobj.h>
@@ -102,7 +104,7 @@ typedef struct _StaticPlayer {
     /*0xA8*/ int nametag_slot_id;
 
     /*0xAC*/ struct {
-        u8 b0 : 1;
+        u8 b0 : 1; // rumble enabled
         u8 b1 : 1;
         u8 b2 : 1;
         u8 b3 : 1;
@@ -164,10 +166,10 @@ bool Player_8003219C(int slot);
 bool Player_8003221C(int slot);
 s32 Player_GetPlayerState(s32 slot);
 CharacterKind Player_GetPlayerCharacter(int slot);
-void Player_SetPlayerCharacter(s32 slot, s32 value);
-enum_t Player_GetPlayerSlotType(s32 slot);
-enum_t Player_8003248C(s32 slot, bool arg1);
-void Player_SetSlottype(s32 slot, enum_t value);
+void Player_SetPlayerCharacter(s32 slot, CharacterKind value);
+Gm_PKind Player_GetPlayerSlotType(s32 slot);
+Gm_PKind Player_8003248C(s32 slot, bool arg1);
+void Player_SetSlottype(s32 slot, Gm_PKind value);
 s8 Player_800325C8(s32 slot, bool b);
 s8 Player_80032610(s32 slot, bool arg1);
 void Player_LoadPlayerCoords(s32 slot, Vec3* out_vec);
@@ -188,7 +190,7 @@ f32 Player_GetFacingDirection(s32 slot);
 void Player_SetFacingDirection(s32 slot, f32 direction);
 void Player_SetFacingDirectionConditional(s32 slot, bool b, f32 direction);
 u32 Player_GetCostumeId(int slot);
-void Player_SetCostumeId(int slot, s8 costume_id);
+void Player_SetCostumeId(int slot, int costume_id);
 u8 Player_GetControllerIndex(int slot);
 void Player_SetControllerIndex(int slot, s8 controller_index);
 int Player_GetTeam(int slot);

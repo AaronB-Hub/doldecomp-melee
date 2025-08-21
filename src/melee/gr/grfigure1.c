@@ -1,14 +1,15 @@
-#include <platform.h>
-
-#include "lb/forward.h"
-
 #include "gr/grfigure1.h"
+
+#include <platform.h>
 
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
 
 #include <dolphin/mtx.h>
@@ -17,10 +18,10 @@
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-static void grFigure1_8020DFDC(int);
+static void grFigure1_8020DFDC(bool);
 static void grFigure1_8020DFE0(void);
-static void grFigure1_8020E050(void);
-static void grFigure1_8020E054(void);
+static void grFigure1_UnkStage0_OnLoad(void);
+static void grFigure1_UnkStage0_OnStart(void);
 static bool grFigure1_8020E078(void);
 static HSD_GObj* grFigure1_8020E080(int);
 static void grFigure1_8020E168(Ground_GObj*);
@@ -53,8 +54,8 @@ StageData grEF1_803E62C0 = {
     "/GrEF1.dat",
     grFigure1_8020DFE0,
     grFigure1_8020DFDC,
-    grFigure1_8020E050,
-    grFigure1_8020E054,
+    grFigure1_UnkStage0_OnLoad,
+    grFigure1_UnkStage0_OnStart,
     grFigure1_8020E078,
     grFigure1_8020E260,
     grFigure1_8020E268,
@@ -67,7 +68,7 @@ UNK_T grEF1_804D6A70;
 
 extern StageInfo stage_info;
 
-static void grFigure1_8020DFDC(int n) {}
+static void grFigure1_8020DFDC(bool n) {}
 
 static void grFigure1_8020DFE0(void)
 {
@@ -81,9 +82,9 @@ static void grFigure1_8020DFE0(void)
     Ground_801C3BB4();
 }
 
-static void grFigure1_8020E050(void) {}
+static void grFigure1_UnkStage0_OnLoad(void) {}
 
-static void grFigure1_8020E054(void)
+static void grFigure1_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(false);
 }
@@ -184,4 +185,4 @@ static bool grFigure1_8020E268(Vec3* v, int n, HSD_JObj* o)
     return true;
 }
 
-void grFigure1_8020E270(int n) {}
+void grFigure1_8020E270(bool n) {}

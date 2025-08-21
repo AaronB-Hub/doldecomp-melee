@@ -1,13 +1,16 @@
-#include <platform.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ft_0BEC.h"
 
+#include <platform.h>
+
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ftparts.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftFox/types.h"
 #include "ftMario/ftMr_SpecialN.h"
 #include "it/it_26B1.h"
@@ -37,7 +40,7 @@ void ftCo_800BECB0(Fighter_GObj* gobj)
     case FTKIND_FOX: {
         ftFox_DatAttrs* da = fp->dat_attrs;
         fp->item_gobj =
-            it_802AE994(gobj, ftParts_8007500C(fp, FtPart_RThumbNb),
+            it_802AE994(gobj, ftParts_GetBoneIndex(fp, FtPart_RThumbNb),
                         da->x20_FOX_BLASTER_GUN_ITKIND);
         it_8026BAE8(fp->item_gobj,
                     fp->x34_scale.y * fp->co_attrs.model_scaling);
@@ -50,8 +53,9 @@ void ftCo_800BED84(Fighter_GObj* gobj) {}
 static inline void FoxHelper(Fighter_GObj* gobj, Fighter* fp)
 {
     ftFox_DatAttrs* da = fp->dat_attrs;
-    fp->item_gobj = it_802AE994(gobj, ftParts_8007500C(fp, FtPart_RThumbNb),
-                                da->x20_FOX_BLASTER_GUN_ITKIND);
+    fp->item_gobj =
+        it_802AE994(gobj, ftParts_GetBoneIndex(fp, FtPart_RThumbNb),
+                    da->x20_FOX_BLASTER_GUN_ITKIND);
     it_8026BAE8(fp->item_gobj, fp->x34_scale.y * fp->co_attrs.model_scaling);
 }
 
@@ -102,7 +106,7 @@ void ftCo_800BEF04(Fighter_GObj* gobj)
     switch (fp->kind) {
     case FTKIND_NESS: {
         fp->item_gobj =
-            it_802AD590(gobj, ftParts_8007500C(fp, FtPart_RThumbNb));
+            it_802AD590(gobj, ftParts_GetBoneIndex(fp, FtPart_RThumbNb));
         it_8026BAE8(fp->item_gobj,
                     0.8f * (fp->x34_scale.y * fp->co_attrs.model_scaling));
     }

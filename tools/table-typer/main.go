@@ -4,11 +4,9 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-	"maps"
 	"os"
 	"path/filepath"
 	"sort"
-	"strconv"
 	"strings"
 
 	"lukechampine.com/flagg"
@@ -16,15 +14,25 @@ import (
 
 func main() {
 	log.SetFlags(0)
+	var typeName string
+	var fix bool
+	var conservative bool
 	root := flagg.Root
 	rootDir := root.String("root", "../../", "root directory containing C sources and asm")
-	cmdFixTab := flagg.New("fixtab", "Fix function types for a given table type")
-	tableTypeName := cmdFixTab.String("type", "", "table type to fix")
+	cmdFindFns := flagg.New("findfns", "Find function types to fix")
+	cmdFindFns.StringVar(&typeName, "type", "", "Enumerate functions in tables with a known type")
+	cmdFindFns.BoolVar(&fix, "fix", false, "Immediately apply fixes instead of listing them")
+	cmdFixFns := flagg.New("fixfns", "Fix function types")
+	cmdFixFns.BoolVar(&conservative, "conservative", false, "only fix UNK_RET/UNK_PARAMS functions")
+	cmdRename := flagg.New("rename", "Rename anonymous functions based on hardcoded patterns")
+	cmdRename.StringVar(&typeName, "type", "", "type of struct to derive names from")
 	cmdUnk := flagg.New("unk", "Search for UNK_RET functions in asm data")
 	cmd := flagg.Parse(flagg.Tree{
 		Cmd: root,
 		Sub: []flagg.Tree{
-			{Cmd: cmdFixTab},
+			{Cmd: cmdFindFns},
+			{Cmd: cmdFixFns},
+			{Cmd: cmdRename},
 			{Cmd: cmdUnk},
 		},
 	})
@@ -44,64 +52,226 @@ func main() {
 	fmt.Println("Sources: ", len(hFiles), ".h files,", len(cFiles), ".c files,", len(asmFiles), ".s files")
 	tables := extractAsmTables(asmFiles)
 
+	visitStructs := func(typeName string, st CStructType, fn func(string, string, int, *CStructValue)) {
+		for _, path := range append(hFiles, cFiles...) {
+			for _, name := range parseTableDecls(path, typeName) {
+				if tab, ok := tables[name]; ok && len(tab)%len(st.Fields) == 0 {
+					for index := range len(tab) / len(st.Fields) {
+						sv := st.New().(*CStructValue)
+						if sv.parse(tab[index*len(st.Fields):][:len(st.Fields)]) {
+							fn(path, name, index, sv)
+						}
+					}
+				}
+			}
+		}
+	}
+	runTypes := func(typeName string, fn func(string, CStructType)) {
+		switch typeName {
+		case "":
+			fmt.Println("No type specified. Available types:")
+			for name := range structTypes {
+				fmt.Println(" -", name)
+			}
+		case "all":
+			for name, typ := range structTypes {
+				fn(name, typ)
+			}
+		default:
+			tableType, ok := structTypes[typeName]
+			if !ok {
+				log.Fatalf("Unknown type: %s", typeName)
+			}
+			fn(typeName, tableType)
+		}
+	}
+	applyRewrites := func(fnTypes map[string]*CFuncValue) {
+		fmt.Println("Identified", len(fnTypes), "candidate functions for updating.")
+		if len(fnTypes) == 0 {
+			fmt.Println("Nothing to do, exiting.")
+			return
+		}
+		totalSigs := 0
+		totalFiles := 0
+		for _, path := range append(hFiles, cFiles...) {
+			fmt.Printf("\rChecking %-70v", path[:min(57, len(path))]+"...")
+			sigs := fixSignatures(path, fnTypes, conservative)
+			totalSigs += sigs
+			if sigs > 0 {
+				totalFiles++
+				s := "es"
+				if sigs == 1 {
+					s = ""
+				}
+				fmt.Printf("%3d fix%s\n", sigs, s)
+			}
+		}
+		fmt.Println()
+		fmt.Printf("Fixed %v signatures across %v source files.\n", totalSigs, totalFiles)
+	}
+
 	switch cmd {
-	case cmdFixTab:
+	case cmdFindFns:
+		if cmd.NArg() != 0 {
+			cmd.Usage()
+			return
+		}
+		runTypes(typeName, func(typeName string, st CStructType) {
+			fnTypes := make(map[string]*CFuncValue)
+			visitStructs(typeName, st, func(path, name string, index int, sv *CStructValue) {
+				for _, f := range sv.Fields {
+					if fn, ok := f.(*CFuncValue); ok {
+						fnTypes[fn.Name] = fn
+					}
+				}
+			})
+			if fix {
+				applyRewrites(fnTypes)
+			} else {
+				var lines []string
+				for name, fn := range fnTypes {
+					lines = append(lines, fmt.Sprintf("%s: %s", name, fn))
+				}
+				sort.Strings(lines)
+				for _, line := range lines {
+					fmt.Println(line)
+				}
+			}
+		})
+
+	case cmdFixFns:
+		if cmd.NArg() != 1 {
+			cmd.Usage()
+			return
+		}
+		fixList, err := os.ReadFile(cmd.Arg(0))
+		if err != nil {
+			log.Fatal(err)
+		}
+		fnTypes := make(map[string]*CFuncValue)
+		for _, line := range bytes.Split(fixList, []byte("\n")) {
+			if line = bytes.TrimSpace(line); len(line) == 0 {
+				continue
+			}
+			name, fixed, ok := bytes.Cut(line, []byte(": "))
+			if !ok {
+				log.Fatalf("Invalid format: %q", line)
+			}
+			fnTypes[string(name)] = parseCFuncValue(fixed)
+		}
+		applyRewrites(fnTypes)
+
+	case cmdRename:
 		if cmd.NArg() != 0 {
 			cmd.Usage()
 			return
 		}
 
-		fix := func(tableTypeName string, tableType TableType) {
-			fnTypes := make(map[string]FuncType)
-			for _, path := range append(hFiles, cFiles...) {
-				for _, name := range parseTableDecls(path, tableTypeName) {
-					fmt.Println("Found table", name, "in", path)
-					if tab, ok := tables[name]; ok && len(tab)%tableType.NumAsmEntries == 0 {
-						maps.Insert(fnTypes, tableType.parse(tab))
+		canonicalPrefix := func(typeName string, path string) string {
+			switch typeName {
+			case "ItemStateTable":
+				itKind := strings.TrimPrefix(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)), "it")
+				itKind = strings.ToUpper(itKind[:1]) + itKind[1:]
+				return fmt.Sprintf("it%s_UnkMotion", itKind)
+			case "MinorScene":
+				gmKind := strings.TrimPrefix(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)), "gm")
+				gmKind = strings.ToUpper(gmKind[:1]) + gmKind[1:]
+				return fmt.Sprintf("gm%s_UnkScene", gmKind)
+			case "StageData":
+				grKind := strings.TrimPrefix(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)), "gr")
+				grKind = strings.ToUpper(grKind[:1]) + grKind[1:]
+				return fmt.Sprintf("gr%s_UnkStage", grKind)
+			case "ItemLogicTable":
+				itKind := strings.TrimPrefix(strings.TrimSuffix(filepath.Base(path), filepath.Ext(path)), "it")
+				itKind = strings.ToUpper(itKind[:1]) + itKind[1:]
+				return fmt.Sprintf("it%s_Logic", itKind)
+			default:
+				panic("unhandled type: " + typeName)
+			}
+		}
+
+		canonicalFieldNames := func(typeName string) []string {
+			switch typeName {
+			case "ItemStateTable":
+				return []string{"", "Anim", "Phys", "Coll"}
+			case "MinorScene":
+				return []string{"", "Prep", "Decide"}
+			case "StageData":
+				return []string{"", "", "", "", "", "OnLoad", "OnStart", "", "", "", "", "", ""}
+			case "ItemLogicTable":
+				return []string{"", "Spawned", "Destroyed", "PickedUp", "Dropped", "Thrown", "DmgDealt", "DmgReceived", "EnteredAir", "Reflected", "Clanked", "Absorbed", "ShieldBounced", "HitShield", "EvtUnk"}
+			default:
+				panic("unhandled type: " + typeName)
+			}
+		}
+
+		runTypes(typeName, func(typeName string, st CStructType) {
+			renames := make(map[string]string)
+			visitStructs(typeName, st, func(path, name string, index int, sv *CStructValue) {
+				prefix := canonicalPrefix(typeName, path)
+				fieldNames := canonicalFieldNames(typeName)
+				for i, f := range sv.Fields {
+					if fn, ok := f.(*CFuncValue); ok && fieldNames[i] != "" {
+						renames[fn.Name] = fmt.Sprintf("%s%d_%s", prefix, index, fieldNames[i])
 					}
 				}
-			}
-			fmt.Println("Identified", len(fnTypes), "candidate functions for updating.")
-			if len(fnTypes) == 0 {
+			})
+			fmt.Println("Identified", len(renames), "functions to rename.")
+			if len(renames) == 0 {
 				fmt.Println("Nothing to do, exiting.")
 				return
 			}
-			totalSigs := 0
-			totalFiles := 0
-			for _, path := range append(hFiles, cFiles...) {
-				fmt.Printf("\rChecking %-70v", path[:min(57, len(path))]+"...")
-				sigs := fixSignatures(path, fnTypes)
-				totalSigs += sigs
-				if sigs > 0 {
-					totalFiles++
-					s := "es"
-					if sigs == 1 {
-						s = ""
+
+			// if there are conflicts, skip all of them
+			inv := make(map[string][]string)
+			for k, v := range renames {
+				inv[v] = append(inv[v], k)
+			}
+			for newName, oldNames := range inv {
+				if len(oldNames) > 1 {
+					fmt.Printf("Skipping %s (conflict: %v)\n", newName, oldNames)
+					for _, oldName := range oldNames {
+						delete(renames, oldName)
 					}
-					fmt.Printf("%3d fix%s\n", sigs, s)
 				}
 			}
-			fmt.Printf("\nFixed %v signatures across %v source files.\n", totalSigs, totalFiles)
-		}
 
-		switch *tableTypeName {
-		case "":
-			fmt.Println("No table type specified. Available types:")
-			for name := range tableTypes {
-				fmt.Println(" -", name)
+			var replacePairs []string
+			for oldName, newName := range renames {
+				replacePairs = append(replacePairs, oldName, newName)
 			}
-		case "all":
-			for name, typ := range tableTypes {
-				fmt.Println("Fixing table type", name)
-				fix(name, typ)
+			replacer := strings.NewReplacer(replacePairs...)
+
+			totalFiles := 0
+			renameFile := func(path string) {
+				fmt.Printf("\rChecking %-70v", path[:min(57, len(path))]+"...")
+				content, err := os.ReadFile(path)
+				if err != nil {
+					log.Fatalf("Failed to read file: %v", err)
+				}
+				contentStr := string(content)
+				updated := replacer.Replace(contentStr)
+				if updated != contentStr {
+					if err := os.WriteFile(path, []byte(updated), 0644); err != nil {
+						log.Fatalf("Failed to write file %s: %v", path, err)
+					}
+					fmt.Printf("\rUpdated %-70v\n", path[:min(57, len(path))])
+					totalFiles++
+				}
 			}
-		default:
-			tableType, ok := tableTypes[*tableTypeName]
-			if !ok {
-				log.Fatalf("Unknown table type: %s", *tableTypeName)
+
+			for _, path := range append(append(hFiles, cFiles...), asmFiles...) {
+				renameFile(path)
 			}
-			fix(*tableTypeName, tableType)
-		}
+			renameFile(filepath.Join(*rootDir, "config", "GALE01", "symbols.txt"))
+
+			fmt.Println()
+			if totalFiles > 0 {
+				fmt.Printf("Renamed %d symbols in %d files.\n", len(renames), totalFiles)
+			} else {
+				fmt.Println("Nothing to rename.")
+			}
+		})
 
 	case cmdUnk:
 		if cmd.NArg() != 0 {
@@ -119,16 +289,20 @@ func main() {
 			}
 		}
 		fmt.Println("Found", len(fnNames), "symbols in tables.")
-		candidates := make(map[string]struct{})
+		var tables []string
+		seen := make(map[string]struct{})
 		findUNKs := func(path string) (n int) {
 			content, err := os.ReadFile(path)
 			if err != nil {
 				log.Fatalf("Failed to read file %s: %v", path, err)
 			}
 			for name := range fnNames {
-				if bytes.Contains(content, []byte(fmt.Sprintf("UNK_RET %s", name))) {
-					n++
-					candidates[name] = struct{}{}
+				if bytes.Contains(content, fmt.Appendf(nil, "UNK_RET %s", name)) {
+					if _, ok := seen[fnNames[name]]; !ok {
+						tables = append(tables, fnNames[name])
+						seen[fnNames[name]] = struct{}{}
+						n++
+					}
 				}
 			}
 			return n
@@ -139,15 +313,7 @@ func main() {
 			n := findUNKs(path)
 			total += n
 			if n > 0 {
-				fmt.Printf("%3d found, %4d total\n", n, len(candidates))
-			}
-		}
-		var tables []string
-		seen := make(map[string]struct{})
-		for name := range candidates {
-			if _, ok := seen[fnNames[name]]; !ok {
-				tables = append(tables, fnNames[name])
-				seen[fnNames[name]] = struct{}{}
+				fmt.Printf("%3d found, %4d total\n", n, len(tables))
 			}
 		}
 		sort.Strings(tables)
@@ -177,14 +343,6 @@ type AsmTableEntry struct {
 	Value string
 }
 
-func (e AsmTableEntry) Integer() int64 {
-	if e.Value == "NULL" {
-		return 0
-	}
-	val, _ := strconv.ParseInt(e.Value, 16, e.Size*8)
-	return val
-}
-
 func extractAsmTables(paths []string) map[string][]AsmTableEntry {
 	tables := make(map[string][]AsmTableEntry)
 	for _, path := range paths {
@@ -201,12 +359,9 @@ func extractAsmTables(paths []string) map[string][]AsmTableEntry {
 			symbol, _, _ := strings.Cut(strings.TrimSpace(lines[0]), ",")
 			var entries []AsmTableEntry
 			for _, line := range lines[1:] {
-				fields := strings.Fields(line)
-				if len(fields) != 2 {
-					continue
-				}
+				typ, val, _ := strings.Cut(strings.TrimSpace(line), " ")
 				var size int
-				switch fields[0] {
+				switch typ {
 				case ".byte":
 					size = 1
 				case ".2byte":
@@ -218,7 +373,11 @@ func extractAsmTables(paths []string) map[string][]AsmTableEntry {
 				default:
 					continue
 				}
-				entries = append(entries, AsmTableEntry{Size: size, Value: fields[1]})
+				// TODO: support other sizes
+				if size != 4 {
+					continue
+				}
+				entries = append(entries, AsmTableEntry{Size: size, Value: val})
 			}
 			tables[symbol] = entries
 		}

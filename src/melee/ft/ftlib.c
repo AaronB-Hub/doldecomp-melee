@@ -1,6 +1,3 @@
-#include "ftCommon/forward.h"
-#include "it/forward.h"
-
 #include "ftlib.h"
 
 #include "cm/camera.h"
@@ -16,9 +13,15 @@
 #include "ft/ftdata.h"
 #include "ft/ftmetal.h"
 #include "ft/ftparts.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftGameWatch/ftGw_Init.h"
 #include "ftKirby/ftKb_Init.h"
 #include "gm/gm_unsplit.h"
+
+#include "it/forward.h"
+
 #include "it/it_26B1.h"
 #include "lb/lb_00B0.h"
 #include "lb/lb_00F9.h"
@@ -291,7 +294,7 @@ void ftLib_800865D8(HSD_GObj* gobj, float* x, float* y)
 void* ftLib_800865F0(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    return fp->parts[ftParts_8007500C(fp, 4)].joint;
+    return fp->parts[ftParts_GetBoneIndex(fp, 4)].joint;
 }
 
 void* ftLib_80086630(HSD_GObj* gobj, Fighter_Part part)
@@ -787,7 +790,7 @@ void ftLib_800871A8(Fighter_GObj* gobj, Item_GObj* item_gobj)
     ft_80081C88(gobj, fp->x34_scale.y);
     ftCommon_8007EBAC(fp, 0xC, 0);
     Camera_80030E44(2, &fp->cur_pos);
-    ft_80088148(fp, 0x121, 0x7F, 0x40);
+    ft_PlaySFX(fp, 0x121, 0x7F, 0x40);
 }
 
 bool ftLib_80087284(HSD_GObj* gobj)

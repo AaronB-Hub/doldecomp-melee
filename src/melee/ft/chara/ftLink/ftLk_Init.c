@@ -1,5 +1,3 @@
-#include "ftCommon/forward.h"
-
 #include "ftLk_Init.h"
 
 #include "ftLk_SpecialHi.h"
@@ -18,6 +16,9 @@
 #include "ft/ftparts.h"
 #include "ft/types.h"
 #include "ftCLink/ftCl_Init.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_AirCatch.h"
 #include "ftCommon/ftCo_Guard.h"
 #include "it/it_26B1.h"
@@ -295,8 +296,6 @@ Fighter_CostumeStrings ftLk_Init_CostumeStrings[] = {
 
 int ftLk_Init_803C82EC[31] = { 0 };
 
-ftLk_SpecialN_Vec3Group const ftLk_Init_Vec3Group = { 0 };
-
 bool ftLk_Init_BoomerangExists(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
@@ -435,5 +434,5 @@ void ftLk_800EB334(HSD_GObj* gobj)
         new_ground_vel = -fp->gr_vel;
     }
     fp->gr_vel = new_ground_vel;
-    ft_80088148(fp, 160106, 127, 64);
+    ft_PlaySFX(fp, 160106, 127, 64);
 }

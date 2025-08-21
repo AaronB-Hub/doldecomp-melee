@@ -1,9 +1,7 @@
-#include <platform.h>
-#include <placeholder.h>
-
-#include "ftCommon/forward.h"
-
 #include "ftCo_CaptureWaitKirby.h"
+
+#include <placeholder.h>
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_0D14.h"
@@ -11,6 +9,9 @@
 #include "ft/ftcoll.h"
 #include "ft/ftcommon.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/types.h"
 #include "ftKirby/ftKb_Init.h"
 
@@ -83,7 +84,7 @@ static inline void inlineB0(Fighter_GObj* gobj)
     {
         fp->x670_timer_lstick_tilt_x = 254;
         if (fp->input.lstick.x < 0) {
-            ftKb_SpecialN_800F5A04(fp->victim_gobj);
+            ftKb_SpecialN_800F5A04(fp->victim_gobj, lstick_x);
         }
     }
 }
@@ -96,10 +97,10 @@ void ftCo_CaptureWaitKirby_IASA(Fighter_GObj* gobj)
         inlineB0(gobj);
         ftCo_800BD6EC(gobj);
     }
-    fp->x1A4C -= ftKb_SpecialN_800F5B00(fp->victim_gobj);
+    fp->grab_timer -= ftKb_SpecialN_800F5B00(fp->victim_gobj);
     fp->mv.co.capturekirby.x18 =
         ftCommon_8007DC08(fp, ftKb_SpecialN_800F5B10(fp->victim_gobj));
-    if (fp->x1A4C <= 0) {
+    if (fp->grab_timer <= 0) {
         Fighter_GObj* victim_gobj = fp->victim_gobj;
         fp->facing_dir = ftKb_SpecialN_800F5A60(victim_gobj);
         HSD_JObjSetScale(jobj, &jobj->scale);

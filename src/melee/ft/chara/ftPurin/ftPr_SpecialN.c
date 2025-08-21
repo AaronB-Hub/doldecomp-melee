@@ -1,11 +1,13 @@
+#include "ftPr_SpecialN.h"
+
 #include <placeholder.h>
 
 #include "forward.h"
-#include "ft/forward.h"
-
-#include "ftPr_SpecialN.h"
 
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0881.h"
@@ -77,7 +79,7 @@ void ftPr_SpecialS_8013D764(HSD_GObj* gobj)
         fp->mv.pr.specialn.facing_dir = 0;
 
         ftParts_80075AF0(fp, FtPart_TopN, M_PI_2);
-        ft_80088148(fp, 250070, 127, 64);
+        ft_PlaySFX(fp, 250070, 127, 64);
     }
 }
 

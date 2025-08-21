@@ -1,5 +1,3 @@
-#include "ftCommon/forward.h"
-
 #include "ftCo_PassiveCeil.h"
 
 #include "ftCo_DamageFall.h"
@@ -15,6 +13,9 @@
 #include "ft/ftcolanim.h"
 #include "ft/ftcommon.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Fall.h"
 #include "ftKirby/ftKb_Init.h"
 
@@ -58,7 +59,7 @@ void ftCo_800C23FC(Fighter_GObj* gobj)
     }
     ftCo_80090574(gobj);
     ft_800881D8(fp, fp->ft_data->x4C_sfx->x24, 0x7F, 0x40);
-    ft_80088148(fp, 3, 0x7F, 0x40);
+    ft_PlaySFX(fp, 3, 0x7F, 0x40);
     ftCommon_8007EBAC(fp, 12, 0);
     ftCo_800BFFD0(fp, 120, 0);
 }

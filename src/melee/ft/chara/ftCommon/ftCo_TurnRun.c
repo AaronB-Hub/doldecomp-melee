@@ -1,17 +1,20 @@
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ftCo_TurnRun.h"
 
+#include <placeholder.h>
+
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0892.h"
 #include "ft/ftcommon.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_Jump.h"
 #include "ftCommon/ftCo_Run.h"
@@ -50,7 +53,7 @@ void ftCo_TurnRun_Enter(Fighter_GObj* gobj, float anim_start)
                               anim_start, 1.0F, 0.0F, NULL);
     fp->mv.co.turnrun.x14 = 0;
     if (fp->x197C != NULL) {
-        ft_80088148(fp, 0x119, 0x7F, 0x40);
+        ft_PlaySFX(fp, 0x119, 0x7F, 0x40);
     }
 }
 

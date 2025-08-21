@@ -1,14 +1,13 @@
 #ifndef MELEE_FT_TYPES_H
 #define MELEE_FT_TYPES_H
 
-#include <platform.h>
 #include <placeholder.h>
-
-#include "ft/forward.h" // IWYU pragma: export
-#include "it/forward.h"
-#include <baselib/forward.h>
+#include <platform.h>
 
 #include "cm/types.h"
+
+#include "ft/forward.h" // IWYU pragma: export
+
 #include "ftCaptain/types.h"
 #include "ftCommon/types.h"
 #include "ftDonkey/types.h"
@@ -34,8 +33,13 @@
 #include "ftZakoBoy/types.h"
 #include "ftZelda/types.h"
 #include "gr/types.h"
+
+#include "it/forward.h"
+
 #include "lb/lbanim.h"
 #include "lb/types.h"
+
+#include <baselib/forward.h>
 
 #include <common_structs.h>
 #include <dolphin/gx.h>
@@ -504,17 +508,17 @@ struct ftCommonData {
     /* +770 */ float x770;
     /* +774 */ int x774;
     /* +778 */ float passive_wall_vel_y_base;
-    /* +77C */ float x77C;
-    /* +780 */ float x780;
-    /* +784 */ float x784;
-    /* +788 */ float x788;
-    /* +78C */ float x78C;
-    /* +790 */ UNK_T x790;
-    /* +794 */ float x794;
-    /* +798 */ float x798;
-    /* +79C */ float x79C;
-    /* +7A0 */ float x7A0;
-    /* +7A4 */ float x7A4;
+    /* +77C */ float damageice_gravity_mult;
+    /* +780 */ float damageice_min_speed;
+    /* +784 */ float damageice_speed_mult_on_break;
+    /* +788 */ float damageice_rot_speed_min;
+    /* +78C */ float damageice_rot_speed_max;
+    /* +790 */ float x790_damageice_unk;
+    /* +794 */ float x794_damageice_unk;
+    /* +798 */ float x798_damageice_unk;
+    /* +79C */ float damageice_dmg_time_reduction_mult;
+    /* +7A0 */ float damageice_ice_size;
+    /* +7A4 */ float damageicejump_escape_time;
     /* +7A8 */ float x7A8;
     /* +7AC */ int x7AC;
     /* +7B0 */ int x7B0;
@@ -732,11 +736,11 @@ typedef struct ftCo_DatAttrs {
     /* +128 fp+250 */ float x128;
     /* +12C fp+254 */ int x12C;
     /* +130 fp+258 */ float x130;
-    /* +134 fp+25C */ float bubble_ratio;
-    /* +138 fp+260 */ int x138;
-    /* +13C fp+264 */ int x13C;
-    /* +140 fp+268 */ float x140;
-    /* +144 fp+26C */ int x144;
+    /* +134 fp+25C */ float damageice_ice_size;
+    /* +138 fp+260 */ float x138_damageice_unk;
+    /* +13C fp+264 */ float x13C_damageice_unk;
+    /* +140 fp+268 */ float damageicejump_vel_y;
+    /* +144 fp+26C */ float damageicejump_vel_x_mult;
     /* +148 fp+270 */ float respawn_platform_scale;
     /* +14C fp+274 */ float x14C;
     /* +150 fp+278 */ int x150;
@@ -907,53 +911,6 @@ struct ftCmdScript {
     ftSubactionList* x3EC_scriptCurrent; // 0x3EC
     s32 x3F0_scriptLoopNum;              // 0x3F0
     void* x3F4_scriptReturn;             // 0x3F4
-};
-
-struct ftDeviceUnk1 {
-    /*  +0 */ u8 x0[0x7B - 0x00];
-    /* +7B */ u8 x7B;
-};
-
-struct ftDeviceUnk2 {
-    /*  +0 */ UNK_T x0;
-    /*  +4 */ UNK_T x4;
-    /*  +8 */ UNK_T x8;
-    /*  +C */ UNK_T xC;
-    /* +10 */ UNK_T x10;
-    /* +14 */ UNK_T x14;
-    /* +18 */ UNK_T x18;
-    /* +1C */ UNK_T x1C;
-    /* +20 */ UNK_T x20;
-    /* +24 */ UNK_T x24;
-    /* +28 */ ftDeviceUnk1* x28;
-    /* +2C */ UNK_T x2C;
-    /* +30 */ UNK_T x30;
-    /* +34 */ UNK_T x34;
-    /* +38 */ UNK_T x38;
-    /* +3C */ UNK_T x3C;
-    /* +40 */ UNK_T x40;
-    /* +44 */ UNK_T x44;
-    /* +48 */ UNK_T x48;
-    /* +4C */ UNK_T x4C;
-    /* +50 */ GXColor lobj_color;
-    /* +54 */ UNK_T x54;
-    /* +58 */ UNK_T x58;
-    /* +5C */ UNK_T x5C;
-    /* +60 */ UNK_T x60;
-    /* +64 */ UNK_T x64;
-    /* +68 */ UNK_T x68;
-    /* +6C */ UNK_T x6C;
-    /* +70 */ UNK_T x70;
-    /* +74 */ float lobj_rot_x;
-    /* +74 */ float lobj_rot_yz;
-    /* +7C:0 */ u8 x7C_b0 : 1;
-    /* +7C:1 */ u8 x7C_b1 : 1;
-    /* +7C:2 */ u8 x7C_b2 : 1;
-    /* +7C:3 */ u8 x7C_b3 : 1;
-    /* +7C:4 */ u8 x7C_b4 : 1;
-    /* +7C:5 */ u8 x7C_b5 : 1;
-    /* +7C:6 */ u8 x7C_b6 : 1;
-    /* +7C:7 */ u8 x7C_b7 : 1;
 };
 
 struct ftDeviceUnk3 {
@@ -1177,9 +1134,9 @@ struct Fighter {
     /*  fp+3FC */ UNK_T x3FC;
     /*  fp+400 */ UNK_T x400;
     /*  fp+404 */ UNK_T x404;
-    /*  fp+408 */ ftDeviceUnk2 x408;
-    /*  fp+488 */ ftDeviceUnk2 x488;
-    /*  fp+508 */ ftDeviceUnk2 x508;
+    /*  fp+408 */ ColorOverlay x408;
+    /*  fp+488 */ ColorOverlay x488;
+    /*  fp+508 */ ColorOverlay x508;
     /*  fp+588 */ HSD_LObj* x588;
     /*  fp+58C */ s32 x58C;
     /*  fp+590 */ FigaTree* x590;
@@ -1318,7 +1275,7 @@ struct Fighter {
     /* fp+119D */ u8 grabber_unk1;
     /* fp+119E */ u8 hurt_capsules_len;
     /* fp+119F */ u8 x119F;
-    /* fp+11A0 */ HurtCapsule hurt_capsules[15];
+    /* fp+11A0 */ FighterHurtCapsule hurt_capsules[15];
     /* fp+1614 */ UNK_T x1614;
     /* fp+1618 */ u8 filler_x1618[0x166C - 0x1618];
     /* fp+166C */ u8 x166C;
@@ -1392,8 +1349,7 @@ struct Fighter {
         /* fp+1924 */ int x1924;
         /* fp+1928 */ float x1928;
         /* fp+192C */ float x192c;
-        /* fp+1930 */ Vec3 x1930;
-        /* fp+193C */ Vec3 x193c;
+        /* fp+1930 */ struct lb_80014638_arg0_t x1930;
         /* fp+1948 */ int x1948;
         /* fp+194C */ int x194C;
         /* fp+1950 */ bool x1950;
@@ -1444,7 +1400,7 @@ struct Fighter {
         /// unconfirmed?
         /* fp+1A48 */ s32 x1A48_hitsTaken;
     } AbsorbAttr;
-    /* fp+1A4C */ float x1A4C;
+    /* fp+1A4C */ float grab_timer;
     /* fp+1A50 */ s8 x1A50;
     /* fp+1A51 */ s8 x1A51;
     /* fp+1A52 */ u8 x1A52;
@@ -1452,7 +1408,7 @@ struct Fighter {
     /* fp+1A54 */ s32 x1A54;
     /* fp+1A58 */ Fighter_GObj* victim_gobj;
     /* fp+1A5C */ Fighter_GObj* x1A5C;
-    /* fp+1A60 */ Item_GObj* x1A60;
+    /* fp+1A60 */ Item_GObj* target_item_gobj;
     /* fp+1A64 */ UNK_T x1A64;
     /* fp+1A68 */ u16 x1A68;
     /* fp+1A6A */ u16 x1A6A;
@@ -1572,7 +1528,7 @@ struct Fighter {
     /* fp+21E4 */ HSD_GObjEvent death2_cb;
     /* fp+21E8 */ HSD_GObjEvent death3_cb;
     /* fp+21EC */ HSD_GObjEvent x21EC;
-    /* fp+21F0 */ HSD_GObjEvent x21F0;
+    /* fp+21F0 */ HSD_GObjEvent take_dmg_2_cb;
     /* fp+21F4 */ HSD_GObjEvent x21F4;
     /* fp+21F8 */ HSD_GObjEvent x21F8;
     /* fp+21FC */ UnkFlagStruct x21FC_flag;
@@ -1749,7 +1705,7 @@ struct Fighter {
     /* fp+2229:4 */ u8 x2229_b4 : 1;
     /* fp+2229:5 */ u8 no_normal_motion : 1;
     /* fp+2229:6 */ u8 x2229_b6 : 1;
-    /* fp+2229:7 */ u8 x2229_b7 : 1;
+    /* fp+2229:7 */ u8 no_kb : 1;
 
     /* fp+222A:0 */ u8 x222A_b0 : 1;
     /* fp+222A:1 */ u8 x222A_b1 : 1;
@@ -1949,11 +1905,5 @@ struct ft_80459B88_t {
     /* +4 */ KirbyHatStruct* hats[FTKIND_MAX];
 };
 STATIC_ASSERT(sizeof(struct ft_80459B88_t) == 0x88);
-
-struct Fighter_804D653C_t {
-    u32 unk;
-    u8 unk4;
-    u8 unk5;
-};
 
 #endif

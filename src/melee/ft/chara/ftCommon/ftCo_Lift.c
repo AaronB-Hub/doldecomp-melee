@@ -1,11 +1,9 @@
-#include <platform.h>
-
-#include "it/forward.h"
-
 #include "ftCo_Lift.h"
 
 #include "ftCo_DamageFall.h"
 #include "ftCo_ItemThrow.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
@@ -14,6 +12,9 @@
 #include "ft/types.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/types.h"
+
+#include "it/forward.h"
+
 #include "it/it_26B1.h"
 #include "it/item.h"
 
@@ -142,7 +143,7 @@ void ftCo_LiftTurn_Anim(HSD_GObj* gobj)
 {
     u8 _[8] = { 0 };
     Fighter* fp = gobj->user_data;
-    Fighter_Part part = ftParts_8007500C(fp, FtPart_TransN);
+    Fighter_Part part = ftParts_GetBoneIndex(fp, FtPart_TransN);
     HSD_JObj* jobj = fp->parts[part].x4_jobj2;
     fp->mv.co.lift.x4 -= 1;
     if (!fp->x2222_b6) {

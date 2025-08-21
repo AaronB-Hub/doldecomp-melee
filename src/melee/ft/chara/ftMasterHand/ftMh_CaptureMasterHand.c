@@ -1,17 +1,17 @@
-#include <platform.h>
-
-#include "ftCommon/forward.h"
-
 #include "ftMh_CaptureMasterHand.h"
 
 #include "ftMh_BackDisappear.h"
 #include "ftMh_CaptureDamageMasterHand.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_0D14.h"
 #include "ft/ftanim.h"
 #include "ft/ftcommon.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
 
 void ftMh_CaptureMasterHand_Anim(HSD_GObj* gobj) {}
 
@@ -38,7 +38,7 @@ void ftMh_CaptureDamageMasterHand_Anim(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     ftCommon_8007DC08(fp, p_ftCommonData->x3A8);
-    if (fp->x1A4C <= 0) {
+    if (fp->grab_timer <= 0) {
         ftMh_CaptureDamageMasterHand_80155C94(gobj);
         ftMh_MS_381_8015483C(fp->victim_gobj);
     }

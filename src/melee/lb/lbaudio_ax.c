@@ -1,6 +1,7 @@
-#include <melee/ft/forward.h>
-
 #include "lbaudio_ax.static.h"
+
+#include "baselib/forward.h"
+#include <melee/ft/forward.h>
 
 #include <baselib/axdriver.h>
 #include <baselib/synth.h>
@@ -8,6 +9,21 @@
 #include <melee/lb/lblanguage.h>
 
 extern s8 flags_arr_803BB800[0x62];
+
+typedef bool (*lbl_803BCA24_fn)(HSD_GObj*);
+
+lbl_803BCA24_fn lbl_803BCA24[] = {
+    fn_800251EC,
+    fn_800253D8,
+    fn_800256BC,
+    fn_800259A0,
+    fn_800259EC,
+    fn_80025A98,
+    fn_80025B44,
+    fn_80025CBC,
+    fn_80025E38,
+    fn_80025E38,
+};
 
 int lbAudioAx_8002305C(int arg0, int arg1)
 {
@@ -302,7 +318,7 @@ bool fn_80026E58(int arg0)
     return false;
 }
 
-u64 lbAudioAx_80026E84(int c_kind)
+u64 lbAudioAx_80026E84(CharacterKind c_kind)
 {
     if (c_kind < 0 || c_kind >= CHKIND_MAX) {
         return 0;

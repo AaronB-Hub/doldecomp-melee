@@ -1,8 +1,8 @@
 #ifndef MELEE_GR_TYPES_H
 #define MELEE_GR_TYPES_H
 
-#include <platform.h>
 #include <placeholder.h>
+#include <platform.h>
 
 #include <melee/cm/forward.h>
 #include <melee/gr/forward.h>
@@ -149,8 +149,8 @@ typedef struct StageData {
     char* data1;
     void (*callback0)(void);
     void (*callback1)(int);
-    void (*callback2)(void); ///< on load callback
-    void (*callback3)(void); ///< on GO! callback
+    void (*OnLoad)(void);
+    void (*OnStart)(void);
     bool (*callback4)(void);
     DynamicsDesc* (*callback5)(enum_t);
     bool (*callback6)(Vec3*, int, HSD_JObj*);
@@ -509,7 +509,7 @@ struct grStadium_Display {
     /* EA   */ s16 xEA;
     /* EC   */ s16 xEC;
     /* EE   */ s16 xEE; ///< The focused player, or 99 if none
-    /* F0   */ s16 xF0;
+    /* F0   */ s16 xF0; ///< Slot type of the focused player
     /* F2   */ s16 xF2;
     /* F4   */ CameraBox* xF4;
     /* F8:0 */ u8 xF8_0 : 1;

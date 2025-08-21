@@ -2,11 +2,12 @@
 #define MELEE_GM_18A5_H
 
 #include <placeholder.h>
+
 #include <melee/ft/forward.h>
-#include <sysdolphin/baselib/forward.h>
 #include <melee/gm/forward.h>
-#include <melee/sc/forward.h>
 #include <melee/mn/forward.h>
+#include <melee/sc/forward.h>
+#include <sysdolphin/baselib/forward.h>
 
 /* 18A514 */ UNK_RET fn_8018A514(UNK_PARAMS);
 /* 18A970 */ void fn_8018A970(int);
@@ -17,7 +18,7 @@
 /* 18DC18 */ UNK_RET fn_8018DC18(UNK_PARAMS);
 /* 18DF68 */ UNK_RET fn_8018DF68(UNK_PARAMS);
 /* 18E46C */ void fn_8018E46C(HSD_GObj*, int);
-/* 18E618 */ UNK_RET fn_8018E618(UNK_PARAMS);
+/* 18E618 */ void fn_8018E618(int, int, float);
 /* 18E85C */ UNK_RET fn_8018E85C(UNK_PARAMS);
 /* 18EC48 */ UNK_RET fn_8018EC48(UNK_PARAMS);
 /* 18EC7C */ UNK_RET fn_8018EC7C(UNK_PARAMS);
@@ -25,10 +26,10 @@
 /* 18F00C */ UNK_RET fn_8018F00C(UNK_PARAMS);
 /* 18F1B0 */ s32 gm_8018F1B0(MatchEnd*);
 /* 17F294 */ int fn_8017F294(void);
-/* 18F310 */ UNK_RET fn_8018F310(UNK_PARAMS);
+/* 18F310 */ int fn_8018F310(int);
 /* 18F3BC */ u8 fn_8018F3BC(s32 arg0);
-/* 18F3D0 */ UNK_RET fn_8018F3D0(UNK_PARAMS);
-/* 18F410 */ UNK_RET fn_8018F410(UNK_PARAMS);
+/* 18F3D0 */ int fn_8018F3D0(int);
+/* 18F410 */ int fn_8018F410(void);
 /* 18F4A0 */ int fn_8018F4A0(void);
 /* 18F508 */ UNK_RET fn_8018F508(UNK_PARAMS);
 /* 18F5F0 */ char* fn_8018F5F0(void);
@@ -39,7 +40,8 @@
 /* 18F6A8 */ u32 fn_8018F6A8(int);
 /* 18F6DC */ int fn_8018F6DC(int);
 /* 18F6FC */ CharacterKind fn_8018F6FC(CSSIconHud);
-/* 18F71C */ float fn_8018F71C(int, int); ///< returns the frame for the tou css icon?
+/* 18F71C */ float
+fn_8018F71C(int, int); ///< returns the frame for the tou css icon?
 /* 18F74C */ int fn_8018F74C(void);
 /* 18F808 */ int fn_8018F808(void);
 /* 18F888 */ UNK_RET fn_8018F888(UNK_PARAMS);
@@ -51,15 +53,16 @@
 /* 190174 */ HSD_GObj* fn_80190174(HSD_CObjDesc*);
 /* 1901F8 */ HSD_GObj* fn_801901F8(HSD_CObjDesc*);
 /* 19027C */ void fn_8019027C(UNK_T lights);
-/* 1902F0 */ UNK_RET fn_801902F0(UNK_PARAMS);
-/* 19035C */ HSD_GObj* fn_8019035C(bool, DynamicModelDesc*, int, int, int, bool, void (*)(HSD_GObj*), float);
+/* 1902F0 */ void fn_801902F0(int);
+/* 19035C */ HSD_GObj* fn_8019035C(bool, DynamicModelDesc*, int, int, int,
+                                   bool, void (*)(HSD_GObj*), float);
 /* 19044C */ void fn_8019044C(HSD_JObj*, float);
 /* 190480 */ void fn_80190480(float);
 /* 1904D0 */ UNK_RET fn_801904D0(UNK_PARAMS);
-/* 190520 */ UNK_RET fn_80190520(UNK_PARAMS);
-/* 1905F0 */ UNK_RET gm_801905F0(UNK_PARAMS);
-/* 190ABC */ UNK_RET fn_80190ABC(UNK_PARAMS);
-/* 190EA4 */ UNK_RET gm_80190EA4(UNK_PARAMS);
+/* 190520 */ void fn_80190520(float x, float y, float z);
+/* 1905F0 */ void gm_801905F0(StartMeleeData*);
+/* 190ABC */ void fn_80190ABC(int);
+/* 190EA4 */ void gm_80190EA4(void);
 /* 190FE4 */ UNK_RET gm_80190FE4(UNK_PARAMS);
 /* 1910E0 */ void fn_801910E0(HSD_GObj*);
 /* 191154 */ void fn_80191154(HSD_GObj*);
@@ -84,18 +87,18 @@
 /* 193230 */ UNK_RET fn_80193230(UNK_PARAMS);
 /* 193308 */ UNK_RET fn_80193308(UNK_PARAMS);
 /* 1935B8 */ UNK_RET fn_801935B8(UNK_PARAMS);
-/* 1937C4 */ UNK_RET fn_801937C4(UNK_PARAMS);
-/* 193B58 */ UNK_RET fn_80193B58(UNK_PARAMS);
-/* 193FCC */ UNK_RET fn_80193FCC(UNK_PARAMS);
-/* 194658 */ UNK_RET fn_80194658(UNK_PARAMS);
-/* 1949B4 */ UNK_RET fn_801949B4(UNK_PARAMS);
-/* 194BC4 */ UNK_RET fn_80194BC4(UNK_PARAMS);
-/* 194D84 */ UNK_RET fn_80194D84(UNK_PARAMS);
-/* 194F30 */ UNK_RET fn_80194F30(UNK_PARAMS);
-/* 1953C8 */ UNK_RET fn_801953C8(UNK_PARAMS);
-/* 195AF0 */ UNK_RET fn_80195AF0(UNK_PARAMS);
-/* 195CCC */ UNK_RET fn_80195CCC(UNK_PARAMS);
-/* 19610C */ UNK_RET fn_8019610C(UNK_PARAMS);
+/* 1937C4 */ void fn_801937C4(s32* arg, u32 arg0, u32 arg01);
+/* 193B58 */ void fn_80193B58(s32* arg, u32 arg0, u32 arg01);
+/* 193FCC */ void fn_80193FCC(s32* arg, u32 arg0, u32 arg01);
+/* 194658 */ void fn_80194658(s32* arg, u32 arg0, u32 arg01);
+/* 1949B4 */ void fn_801949B4(s32* arg, u32 arg0, u32 arg01);
+/* 194BC4 */ void fn_80194BC4(s32* arg, u32 arg0, u32 arg01);
+/* 194D84 */ void fn_80194D84(s32* arg, u32 arg0, u32 arg01);
+/* 194F30 */ void fn_80194F30(s32* arg, u32 arg0, u32 arg01);
+/* 1953C8 */ void fn_801953C8(s32* arg, u32 arg0, u32 arg01);
+/* 195AF0 */ void fn_80195AF0(s32* arg, u32 arg0, u32 arg01);
+/* 195CCC */ void fn_80195CCC(s32* arg, u32 arg0, u32 arg01);
+/* 19610C */ void fn_8019610C(s32* arg, u32 arg0, u32 arg01);
 /* 19628C */ void gm_8019628C_OnFrame(void);
 /* 1963B4 */ void gm_801963B4_OnEnter(UNK_T);
 /* 1964A4 */ void gm_801964A4_OnLeave(UNK_T);
@@ -103,7 +106,7 @@
 /* 19655C */ s32 fn_8019655C(void);
 /* 196564 */ bool fn_80196564(TmData*);
 /* 196594 */ bool fn_80196594(TmData*);
-/* 1965C4 */ UNK_RET fn_801965C4(UNK_PARAMS);
+/* 1965C4 */ void fn_801965C4(void);
 /* 196684 */ UNK_RET fn_80196684(UNK_PARAMS);
 /* 1967E0 */ UNK_RET fn_801967E0(UNK_PARAMS);
 /* 196CF8 */ UNK_RET fn_80196CF8(UNK_PARAMS);
@@ -134,7 +137,7 @@
 /* 19A828 */ UNK_RET gm_8019A828(UNK_PARAMS);
 /* 19A86C */ UNK_RET fn_8019A86C(UNK_PARAMS);
 /* 19AF50 */ UNK_RET fn_8019AF50(UNK_PARAMS);
-/* 19B2DC */ UNK_RET gm_8019B2DC_OnFrame(UNK_PARAMS);
+/* 19B2DC */ void gm_8019B2DC_OnFrame(void);
 /* 19B458 */ UNK_RET fn_8019B458(UNK_PARAMS);
 /* 19B81C */ UNK_RET fn_8019B81C(UNK_PARAMS);
 /* 19B860 */ UNK_RET fn_8019B860(UNK_PARAMS);

@@ -1,9 +1,6 @@
-#include <platform.h>
-
-#include "lb/forward.h"
-#include <baselib/forward.h>
-
 #include "gr/grtemblem.h"
+
+#include <platform.h>
 
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
@@ -11,17 +8,22 @@
 #include "gr/grzakogenerator.h"
 #include "gr/inlines.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSError.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-static void grTRoy_802243F4(int);
+static void grTRoy_802243F4(bool);
 static void grTRoy_802243F8(void);
-static void grTRoy_80224468(void);
-static void grTRoy_8022446C(void);
+static void grTemblem_UnkStage0_OnLoad(void);
+static void grTemblem_UnkStage0_OnStart(void);
 static bool grTRoy_80224490(void);
 static HSD_GObj* grTRoy_80224498(s32 gobj_id);
 static void grTRoy_80224580(Ground_GObj* gobj);
@@ -69,15 +71,15 @@ StageData grTFe_803E981C = {
     "/GrTFe.dat",
     grTRoy_802243F8,
     grTRoy_802243F4,
-    grTRoy_80224468,
-    grTRoy_8022446C,
+    grTemblem_UnkStage0_OnLoad,
+    grTemblem_UnkStage0_OnStart,
     grTRoy_80224490,
     grTRoy_802246C8,
     grTRoy_802246D0,
     1,
 };
 
-static void grTRoy_802243F4(int arg0) {}
+static void grTRoy_802243F4(bool arg0) {}
 
 static void grTRoy_802243F8(void)
 {
@@ -92,9 +94,9 @@ static void grTRoy_802243F8(void)
     Ground_801C42AC();
 }
 
-static void grTRoy_80224468(void) {}
+static void grTemblem_UnkStage0_OnLoad(void) {}
 
-static void grTRoy_8022446C(void)
+static void grTemblem_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }

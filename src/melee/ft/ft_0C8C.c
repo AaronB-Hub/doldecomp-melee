@@ -1,10 +1,11 @@
+#include "ft/ft_0C8C.h"
+
 #include <placeholder.h>
+
+#include "ft/fighter.h"
 
 #include "ft/forward.h"
 
-#include "ft/ft_0C8C.h"
-
-#include "ft/fighter.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0C31.h"
 #include "ft/ft_0D14.h"
@@ -90,7 +91,7 @@ void ftCo_800C8D00(Fighter_GObj* gobj)
 
 void fn_800C8E40(Fighter* fp, FtSFX* sfx)
 {
-    ft_80088148(fp, fp->ft_data->x4C_sfx->xC, SFX_VOLUME_MAX, SFX_PAN_MID);
+    ft_PlaySFX(fp, fp->ft_data->x4C_sfx->xC, SFX_VOLUME_MAX, SFX_PAN_MID);
 }
 
 void fn_800C8E74(Fighter_GObj* gobj)

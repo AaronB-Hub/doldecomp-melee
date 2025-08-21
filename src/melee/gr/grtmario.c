@@ -1,7 +1,5 @@
 #include <platform.h>
 
-#include "lb/forward.h"
-
 #include "baselib/psstructs.h"
 #include "ft/ftdevice.h"
 #include "ft/ftlib.h"
@@ -12,6 +10,9 @@
 #include "gr/grzakogenerator.h"
 #include "gr/inlines.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
 
 #include <dolphin/mtx.h>
@@ -20,10 +21,10 @@
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-/* 21F840 */ static void grTMario_8021F840(int);
+/* 21F840 */ static void grTMario_8021F840(bool);
 /* 21F844 */ static void grTMario_8021F844(void);
-/* 21F8B4 */ static void grTMario_8021F8B4(void);
-/* 21F8B8 */ static void grTMario_8021F8B8(void);
+/* 21F8B4 */ static void grTmario_UnkStage0_OnLoad(void);
+/* 21F8B8 */ static void grTmario_UnkStage0_OnStart(void);
 /* 21F8DC */ static bool grTMario_8021F8DC(void);
 /* 21F8E4 */ static HSD_GObj* grTMario_8021F8E4(s32);
 /* 21F9CC */ static void grTMario_8021F9CC(Ground_GObj*);
@@ -75,8 +76,8 @@ StageData grTMr_803E85A4 = {
     "/GrTMr.dat",
     grTMario_8021F844,
     grTMario_8021F840,
-    grTMario_8021F8B4,
-    grTMario_8021F8B8,
+    grTmario_UnkStage0_OnLoad,
+    grTmario_UnkStage0_OnStart,
     grTMario_8021F8DC,
     grTMario_8021FC50,
     grTMario_8021FC58,
@@ -85,7 +86,7 @@ StageData grTMr_803E85A4 = {
     0,
 };
 
-void grTMario_8021F840(int unk) {}
+void grTMario_8021F840(bool unk) {}
 
 void grTMario_8021F844(void)
 {
@@ -101,9 +102,9 @@ void grTMario_8021F844(void)
     Ground_801C42AC();
 }
 
-void grTMario_8021F8B4(void) {}
+void grTmario_UnkStage0_OnLoad(void) {}
 
-void grTMario_8021F8B8(void)
+void grTmario_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }

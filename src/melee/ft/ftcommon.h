@@ -9,8 +9,7 @@
 /* 07C930 */ void ftCommon_8007C930(Fighter*, float);
 /* 07C98C */ void ftCommon_8007C98C(Fighter*, float vel, float,
                                     float gr_friction);
-/* 07CA80 */ void ftCommon_8007CA80(Fighter* fp, float result, float,
-                                    float);
+/* 07CA80 */ void ftCommon_8007CA80(Fighter* fp, float result, float, float);
 /* 07CADC */ void ftCommon_8007CADC(Fighter*, float, float, float);
 /* 07CB74 */ void ftCommon_8007CB74(Fighter_GObj*);
 /* 07CC1C */ Fighter_GObj* ftCommon_8007CC1C(Fighter_GObj*);
@@ -56,15 +55,16 @@
 /* 07DA74 */ float ftCommon_CalcHitlag(int dmg, FtMotionId msid, float mul);
 /* 07DB24 */ void ftCommon_8007DB24(Fighter_GObj*);
 /* 07DB58 */ void ftCommon_8007DB58(Fighter_GObj*);
-/* 07DBCC */ void ftCommon_8007DBCC(Fighter*, bool, float);
+/* 07DBCC */ void ftCommon_InitGrab(Fighter*, bool, float);
 /* 07DC08 */ bool ftCommon_8007DC08(Fighter*, float);
 /* 07DD7C */ void ftCommon_8007DD7C(Fighter_GObj*, Vec3*);
 /* 07DFD0 */ void ftCommon_8007DFD0(Fighter_GObj* gobj, Vec3* arg1);
 /* 07E0E4 */ void ftCommon_8007E0E4(Fighter_GObj*);
 /* 07E2A4 */ Fighter_GObj* ftCommon_8007E2A4(Fighter_GObj*);
-/* 07E2D0 */ void ftCommon_8007E2D0(Fighter*, s16, HSD_GObjEvent,
-                                    HSD_GObjEvent,
-                                    void (*)(Fighter_GObj*, Fighter_GObj*));
+/* 07E2D0 */ void ftCommon_8007E2D0(Fighter* fp, s16 arg1,
+                                    HSD_GObjEvent grab_cb,
+                                    HSD_GObjEvent unk_cb,
+                                    void (*grabbed_cb)(HSD_GObj*, HSD_GObj*));
 /* 07E2F4 */ void ftCommon_8007E2F4(Fighter*, s16 val);
 /* 07E2FC */ void ftCommon_8007E2FC(Fighter_GObj*);
 /* 07E358 */ void ftCommon_8007E358(Fighter_GObj*);

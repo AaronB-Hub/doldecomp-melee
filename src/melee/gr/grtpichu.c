@@ -1,25 +1,27 @@
 #include <platform.h>
 
-#include "lb/forward.h"
-#include <baselib/forward.h>
-
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
 #include "gr/inlines.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSError.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-/* 222B98 */ static void grTPichu_80222B98(int);
+/* 222B98 */ static void grTPichu_80222B98(bool);
 /* 222B9C */ static void grTPichu_80222B9C(void);
-/* 222C0C */ static void grTPichu_80222C0C(void);
-/* 222C10 */ static void grTPichu_80222C10(void);
+/* 222C0C */ static void grTpichu_UnkStage0_OnLoad(void);
+/* 222C10 */ static void grTpichu_UnkStage0_OnStart(void);
 /* 222C34 */ static bool grTPichu_80222C34(void);
 /* 222C3C */ static HSD_GObj* grTPichu_80222C3C(int gobj_id);
 /* 222D24 */ static void grTPichu_80222D24(Ground_GObj* gobj);
@@ -34,7 +36,7 @@
 /* 222E40 */ static bool grTPichu_80222E40(Ground_GObj*);
 /* 222E48 */ static void grTPichu_80222E48(Ground_GObj*);
 /* 222E68 */ static void grTPichu_80222E68(Ground_GObj*);
-/* 222E6C */ static DynamicsDesc* grTPichu_80222E6C(int);
+/* 222E6C */ static DynamicsDesc* grTPichu_80222E6C(enum_t);
 /* 222E74 */ static bool grTPichu_80222E74(Vec3*, int, HSD_JObj*);
 
 static StageCallbacks grTPc_803E91B0[] = {
@@ -68,8 +70,8 @@ StageData grTPc_803E920C = {
     "/GrTPc.dat",
     grTPichu_80222B9C,
     grTPichu_80222B98,
-    grTPichu_80222C0C,
-    grTPichu_80222C10,
+    grTpichu_UnkStage0_OnLoad,
+    grTpichu_UnkStage0_OnStart,
     grTPichu_80222C34,
     grTPichu_80222E6C,
     grTPichu_80222E74,
@@ -95,9 +97,9 @@ static void grTPichu_80222B9C(void)
     Ground_801C42AC();
 }
 
-static void grTPichu_80222C0C(void) {}
+static void grTpichu_UnkStage0_OnLoad(void) {}
 
-static void grTPichu_80222C10(void)
+static void grTpichu_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }
@@ -193,7 +195,7 @@ static void grTPichu_80222E48(Ground_GObj* arg0)
 
 static void grTPichu_80222E68(Ground_GObj* arg0) {}
 
-static DynamicsDesc* grTPichu_80222E6C(int arg0)
+static DynamicsDesc* grTPichu_80222E6C(enum_t arg0)
 {
     return NULL;
 }

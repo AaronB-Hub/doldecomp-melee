@@ -3,10 +3,11 @@
 
 #include <platform.h>
 
-#include "baselib/forward.h" // IWYU pragma: export
-
 #include "baselib/class.h"
 #include "baselib/debug.h"
+
+#include "baselib/forward.h" // IWYU pragma: export
+
 #include "baselib/list.h"
 #include "baselib/object.h"
 #include "baselib/pobj.h"
@@ -249,6 +250,14 @@ inline void HSD_JObjSetupMatrix(HSD_JObj* jobj)
             HSD_JObjSetMtxDirtySub(jobj);                                     \
         }                                                                     \
     }
+
+/// @todo See #lb_800117F4
+static inline void HSD_JObjSetMtxDirtyInline(HSD_JObj* jobj)
+{
+    if (jobj != NULL && !HSD_JObjMtxIsDirty(jobj)) {
+        HSD_JObjSetMtxDirtySub(jobj);
+    }
+}
 
 static inline void HSD_JObjSetRotation(HSD_JObj* jobj, Quaternion* rotate)
 {

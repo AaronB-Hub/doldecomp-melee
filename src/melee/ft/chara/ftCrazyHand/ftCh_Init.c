@@ -1,18 +1,20 @@
-#include <platform.h>
-#include <placeholder.h>
-
-#include "baselib/forward.h"
-#include "ftCrazyHand/forward.h"
-
 #include "ftCh_Init.h"
 
 #include "types.h"
+
+#include <placeholder.h>
+#include <platform.h>
+
+#include "baselib/forward.h"
 
 #include "ft/ft_081B.h"
 #include "ft/ftbosslib.h"
 #include "ft/ftcamera.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCrazyHand/forward.h"
+
 #include "ftMasterHand/types.h"
 #include "it/it_26B1.h"
 #include "pl/player.h"
@@ -667,7 +669,7 @@ void ftCh_Init_OnLoad(HSD_GObj* gobj)
     it_8026B3F8(items[2], 129);
     fp->no_normal_motion = 1;
     fp->x2229_b6 = 1;
-    fp->x2229_b7 = 1;
+    fp->no_kb = 1;
     fp->x222A_b0 = 1;
     fp->x222A_b1 = 1;
     fp->x2229_b3 = 1;
@@ -715,7 +717,7 @@ void ftCh_Init_80156014(HSD_GObj* gobj) {}
 void ftCh_Wait1_0_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -741,7 +743,7 @@ void ftCh_Entry_Anim(HSD_GObj* gobj)
 void ftCh_Entry_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -765,7 +767,7 @@ void ftCh_Damage_Anim(HSD_GObj* gobj)
 void ftCh_Damage_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -784,7 +786,7 @@ void ftCh_Damage_Coll(HSD_GObj* gobj) {}
 void ftCh_Damage2_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -810,7 +812,7 @@ void ftCh_WaitSweep_Phys(HSD_GObj* gobj)
 void ftCh_WaitSweep_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -829,7 +831,7 @@ void ftCh_SweepLoop_Anim(HSD_GObj* gobj)
 void ftCh_SweepLoop_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -853,7 +855,7 @@ void ftCh_SweepWait_Anim(HSD_GObj* gobj)
 void ftCh_SweepWait_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -872,7 +874,7 @@ void ftCh_SweepWait_Coll(HSD_GObj* gobj) {}
 void ftCh_Slap_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -893,7 +895,7 @@ void ftCh_Walk2_Anim(HSD_GObj* gobj)
 void ftCh_Walk2_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -912,7 +914,7 @@ void ftCh_Slap_Coll(HSD_GObj* gobj) {}
 void ftCh_WalkLoop_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -931,7 +933,7 @@ void ftCh_WalkLoop_Coll(HSD_GObj* gobj) {}
 void ftCh_WalkWait_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -952,7 +954,7 @@ void ftCh_WalkShoot_Anim(HSD_GObj* gobj)
 void ftCh_WalkShoot_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -976,7 +978,7 @@ void ftCh_Drill_Anim(HSD_GObj* gobj)
 void ftCh_Drill_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -994,7 +996,7 @@ void ftCh_Drill_Coll(HSD_GObj* gobj) {}
 void ftCh_RockCrushUp_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1015,7 +1017,7 @@ void ftCh_RockCrushDown_Anim(HSD_GObj* gobj)
 void ftCh_RockCrushDown_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1036,7 +1038,7 @@ void ftCh_PaperCrush_Anim(HSD_GObj* gobj)
 void ftCh_PaperCrush_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1055,7 +1057,7 @@ void ftCh_PaperCrush_Coll(HSD_GObj* gobj) {}
 void ftCh_Poke1_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1081,7 +1083,7 @@ void ftCh_Poke2_Anim(HSD_GObj* gobj)
 void ftCh_Poke2_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1105,7 +1107,7 @@ void ftCh_FingerBeamStart_Anim(HSD_GObj* gobj)
 void ftCh_FingerBeamStart_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1126,7 +1128,7 @@ void ftCh_FingerBeamStart_Coll(HSD_GObj* gobj) {}
 void ftCh_FingerBeamLoop_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1142,7 +1144,7 @@ void ftCh_FingerBeamLoop_Coll(HSD_GObj* gobj) {}
 void ftCh_FingerBeamEnd_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1166,7 +1168,7 @@ void ftCh_BackPunch_Anim(HSD_GObj* gobj)
 void ftCh_BackPunch_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1182,7 +1184,7 @@ void ftCh_BackPunch_Coll(HSD_GObj* gobj) {}
 void ftCh_FingerGun1_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1200,7 +1202,7 @@ void ftCh_FingerGun1_IASA(HSD_GObj* gobj)
 void ftCh_BackAirplane1_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1216,7 +1218,7 @@ void ftCh_BackAirplane1_IASA(HSD_GObj* gobj)
 void ftCh_BackAirplane2_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1235,7 +1237,7 @@ void ftCh_BackAirplane2_Coll(HSD_GObj* gobj) {}
 void ftCh_BackAirplane3_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1254,7 +1256,7 @@ void ftCh_BackAirplane3_Coll(HSD_GObj* gobj) {}
 void ftCh_BackCrush_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1273,7 +1275,7 @@ void ftCh_BackCrush_Coll(HSD_GObj* gobj) {}
 void ftCh_BackDisappear_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1289,7 +1291,7 @@ void ftCh_BackDisappear_Coll(HSD_GObj* gobj) {}
 void ftCh_Wait1_1_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1310,7 +1312,7 @@ void ftCh_Grab_Anim(HSD_GObj* gobj)
 void ftCh_Grab_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1329,7 +1331,7 @@ void ftCh_Grab_Coll(HSD_GObj* gobj) {}
 void ftCh_Cancel_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1350,7 +1352,7 @@ void ftCh_Squeezing0_Anim(HSD_GObj* gobj)
 void ftCh_Squeezing0_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1369,7 +1371,7 @@ void ftCh_Squeezing0_Coll(HSD_GObj* gobj) {}
 void ftCh_Squeezing1_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1388,7 +1390,7 @@ void ftCh_Squeezing1_Coll(HSD_GObj* gobj) {}
 void ftCh_Squeeze_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1407,7 +1409,7 @@ void ftCh_Squeeze_Coll(HSD_GObj* gobj) {}
 void ftCh_Throw_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1424,7 +1426,7 @@ void ftCh_Throw_Coll(HSD_GObj* gobj) {}
 void ftCh_Slam_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1441,7 +1443,7 @@ void ftCh_Slam_Coll(HSD_GObj* gobj) {}
 void ftCh_Fail_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1465,7 +1467,7 @@ void ftCh_TagCrush_Anim(HSD_GObj* gobj)
 void ftCh_TagCrush_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1482,7 +1484,7 @@ void ftCh_TagCrush_Coll(HSD_GObj* gobj) {}
 void ftCh_TagApplaud_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1498,7 +1500,7 @@ void ftCh_TagApplaud_IASA(HSD_GObj* gobj)
 void ftCh_TagRockPaper_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1516,7 +1518,7 @@ void ftCh_TagRockPaper_Coll(HSD_GObj* gobj) {}
 void ftCh_FingerGun2_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1534,7 +1536,7 @@ void ftCh_FingerGun2_Coll(HSD_GObj* gobj) {}
 void ftCh_TagGrab_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }
@@ -1550,7 +1552,7 @@ void ftCh_TagGrab_Coll(HSD_GObj* gobj) {}
 void ftCh_TagFail_IASA(HSD_GObj* gobj)
 {
     Fighter* ft = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(ft->player_id) == 0) {
+    if (Player_GetPlayerSlotType(ft->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }

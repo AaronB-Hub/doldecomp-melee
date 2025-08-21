@@ -1,25 +1,27 @@
 #include <platform.h>
 
-#include "lb/forward.h"
-#include <baselib/forward.h>
-
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
 #include "gr/inlines.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSError.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-/* 223580 */ static void grTSamus_80223580(int);
+/* 223580 */ static void grTSamus_80223580(bool);
 /* 223584 */ static void grTSamus_80223584(void);
-/* 2235F4 */ static void grTSamus_802235F4(void);
-/* 2235F8 */ static void grTSamus_802235F8(void);
+/* 2235F4 */ static void grTsamus_UnkStage0_OnLoad(void);
+/* 2235F8 */ static void grTsamus_UnkStage0_OnStart(void);
 /* 22361C */ static bool grTSamus_8022361C(void);
 /* 223624 */ static HSD_GObj* grTSamus_80223624(s32);
 /* 22370C */ static void grTSamus_8022370C(Ground_GObj*);
@@ -68,15 +70,15 @@ StageData grTSs_803E9454 = {
     "/GrTSs.dat",
     grTSamus_80223584,
     grTSamus_80223580,
-    grTSamus_802235F4,
-    grTSamus_802235F8,
+    grTsamus_UnkStage0_OnLoad,
+    grTsamus_UnkStage0_OnStart,
     grTSamus_8022361C,
     grTSamus_80223854,
     grTSamus_8022385C,
     1,
 };
 
-void grTSamus_80223580(int unk0) {}
+void grTSamus_80223580(bool unk0) {}
 
 void grTSamus_80223584(void)
 {
@@ -92,9 +94,9 @@ void grTSamus_80223584(void)
     Ground_801C42AC();
 }
 
-void grTSamus_802235F4(void) {}
+void grTsamus_UnkStage0_OnLoad(void) {}
 
-void grTSamus_802235F8(void)
+void grTsamus_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }

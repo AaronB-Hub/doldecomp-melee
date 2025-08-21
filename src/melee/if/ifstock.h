@@ -1,8 +1,8 @@
 #ifndef GALE01_2F7EFC
 #define GALE01_2F7EFC
 
-#include <platform.h>
 #include <placeholder.h>
+#include <platform.h>
 
 /* 2F7EFC */ int ifStock_802F7EFC(int, int);
 /* 2F8298 */ UNK_RET ifStock_802F8298(UNK_PARAMS);
@@ -20,7 +20,7 @@
 /* 2F98E8 */ void ifStock_802F98E8(void);
 /* 2F9F48 */ UNK_RET ifStock_802F9F48(UNK_PARAMS);
 /* 2FA118 */ UNK_RET ifStock_802FA118(UNK_PARAMS);
-/* 2FA2D0 */ UNK_RET ifStock_802FA2D0(UNK_PARAMS);
+/* 2FA2D0 */ UNK_RET ifStock_802FA2D0(int);
 /* 2FA5BC */ UNK_RET ifStock_802FA5BC(UNK_PARAMS);
 /* 2FA6C4 */ UNK_RET fn_802FA6C4(UNK_PARAMS);
 /* 2FA8C0 */ UNK_RET fn_802FA8C0(UNK_PARAMS);

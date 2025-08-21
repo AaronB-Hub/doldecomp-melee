@@ -1,14 +1,13 @@
-#include <platform.h>
-
-#include "forward.h"
-#include "ftCommon/forward.h"
-#include <baselib/forward.h>
-
 #include "ftdata.h"
 
 #include "ft_0877.h"
 
+#include <platform.h>
+
 #include "ef/efasync.h"
+
+#include "forward.h"
+
 #include "ft/fighter.h"
 #include "ft/ft_0852.h"
 #include "ft/ft_0BEC.h"
@@ -30,6 +29,9 @@
 #include "ftCaptain/ftCa_SpecialN.h"
 #include "ftCaptain/ftCa_SpecialS.h"
 #include "ftCLink/ftCl_Init.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Attack1.h"
 #include "ftCommon/ftCo_AttackAir.h"
 #include "ftCommon/ftCo_AttackDash.h"
@@ -207,7 +209,9 @@
 #include "ftSeak/ftSk_SpecialS.h"
 #include "ftYoshi/ftYs_Guard.h"
 #include "ftYoshi/ftYs_Init.h"
+#include "ftYoshi/ftYs_SpecialHi.h"
 #include "ftYoshi/ftYs_SpecialN.h"
+#include "ftYoshi/ftYs_SpecialS.h"
 #include "ftZakoBoy/ftBo_Init.h"
 #include "ftZakoGirl/ftGl_Init.h"
 #include "ftZelda/ftZd_Init.h"
@@ -217,6 +221,8 @@
 #include "ftZelda/ftZd_SpecialS.h"
 #include "lb/lbdvd.h"
 #include "pl/player.h"
+
+#include <baselib/forward.h>
 
 #include <baselib/debug.h>
 #include <baselib/objalloc.h>

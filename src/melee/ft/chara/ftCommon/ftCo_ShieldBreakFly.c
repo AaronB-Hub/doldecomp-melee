@@ -1,11 +1,9 @@
-#include <platform.h>
-
-#include <baselib/forward.h>
-
 #include "ftCo_ShieldBreakFly.h"
 
 #include "ftCo_ShieldBreakDown.h"
 #include "ftCo_ShieldBreakFall.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
@@ -15,6 +13,8 @@
 #include "ft/ftcommon.h"
 #include "ft/types.h"
 #include "ftCommon/inlines.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 
@@ -30,7 +30,7 @@ void ftCo_80098B20(Fighter_GObj* gobj)
         fp->x2222_b3 = true;
     }
     ftCo_SpawnEf(gobj, fp->parts[fp->ft_data->x8->x11].joint, 0, 1051);
-    ft_80088148(fp, 130, 127, 64);
+    ft_PlaySFX(fp, 130, 127, 64);
     ftCommon_8007EBAC(fp, 24, 0U);
     ftColl_8007B62C(gobj, 2);
 }

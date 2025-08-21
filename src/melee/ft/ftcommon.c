@@ -1,6 +1,3 @@
-#include "ft/forward.h"
-#include "it/forward.h"
-
 #include "ftcommon.h"
 
 #include "fighter.h"
@@ -12,6 +9,9 @@
 #include "ftparts.h"
 
 #include "ef/eflib.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_0881.h"
 #include "ft/ft_0892.h"
 #include "ft/ft_0C88.h"
@@ -27,6 +27,9 @@
 #include "ftCommon/ftCo_HammerWait.h"
 #include "ftCommon/ftpickupitem.h"
 #include "gm/gm_unsplit.h"
+
+#include "it/forward.h"
+
 #include "it/it_26B1.h"
 #include "it/item.h"
 #include "it/items/it_2E5A.h"
@@ -42,6 +45,7 @@
 #include "vi/vi1202.h"
 
 #include <common_structs.h>
+#include <math.h>
 #include <trigf.h>
 #include <dolphin/os/OSError.h>
 #include <baselib/debug.h>
@@ -49,7 +53,6 @@
 #include <baselib/jobj.h>
 #include <baselib/rumble.h>
 #include <melee/it/items/itpeachparasol.h>
-#include <math.h>
 
 const Vec3 ftCo_803B74A0 = { 0 };
 
@@ -568,7 +571,7 @@ bool ftCommon_8007D528(Fighter* fp)
     {
         fp->x221A_b4 = 1;
         fp->x671_timer_lstick_tilt_y = 0xFE;
-        ft_80088148(fp, 0x96, 0x7F, 0x40);
+        ft_PlaySFX(fp, 0x96, 0x7F, 0x40);
         return true;
     }
     return false;
@@ -773,9 +776,9 @@ extern struct {
     s32 x4;
 }* Fighter_804D652C;
 
-void ftCommon_8007DBCC(Fighter* fp, bool arg1, float arg8)
+void ftCommon_InitGrab(Fighter* fp, bool arg1, float timer)
 {
-    fp->x1A4C = arg8;
+    fp->grab_timer = timer;
     fp->x1A51 = 0;
     fp->x1A50 = 0;
     fp->x2224_b6 = arg1;
@@ -789,7 +792,7 @@ bool ftCommon_8007DC08(Fighter* fp, float arg1)
 {
     bool result = false;
     if (fp->input.x668 & (HSD_PAD_AB | HSD_PAD_XY | HSD_PAD_LR)) {
-        fp->x1A4C -= arg1;
+        fp->grab_timer -= arg1;
         result = true;
     }
     {
@@ -808,7 +811,7 @@ bool ftCommon_8007DC08(Fighter* fp, float arg1)
             fp->x1A51 = 1;
         }
         if (r5 != fp->x1A50 || r6 != fp->x1A51) {
-            fp->x1A4C -= arg1;
+            fp->grab_timer -= arg1;
             result = true;
         }
     }
@@ -998,15 +1001,15 @@ HSD_GObj* ftCommon_8007E2A4(HSD_GObj* gobj)
     return gobj;
 }
 
-void ftCommon_8007E2D0(Fighter* fp, s16 arg1, void (*cb0)(HSD_GObj*),
-                       void (*cb1)(HSD_GObj*),
-                       void (*cb2)(HSD_GObj*, HSD_GObj*))
+void ftCommon_8007E2D0(Fighter* fp, s16 arg1, HSD_GObjEvent grab_cb,
+                       HSD_GObjEvent unk_cb,
+                       void (*grabbed_cb)(HSD_GObj*, HSD_GObj*))
 {
-    fp->x221E_b6 = 1;
+    fp->x221E_b6 = true;
     fp->x1A68 = arg1;
-    fp->grab_cb = cb0;
-    fp->grabbed_cb = cb2;
-    fp->x2194 = cb1;
+    fp->grab_cb = grab_cb;
+    fp->grabbed_cb = grabbed_cb;
+    fp->x2194 = unk_cb;
 }
 
 void ftCommon_8007E2F4(Fighter* fp, s16 val)
@@ -1048,14 +1051,14 @@ void ftCommon_8007E358(HSD_GObj* gobj)
 {
     HSD_JObj* jobj;
     Fighter* fp = gobj->user_data;
-    jobj = fp->parts[ftParts_8007500C(fp, 4)].joint;
+    jobj = fp->parts[ftParts_GetBoneIndex(fp, 4)].joint;
     HSD_JObjGetTranslation(jobj, &fp->x1A7C);
 }
 
 void ftCommon_8007E3EC(HSD_GObj* gobj)
 {
     Fighter* fp = gobj->user_data;
-    HSD_JObj* jobj = fp->parts[ftParts_8007500C(fp, 4)].joint;
+    HSD_JObj* jobj = fp->parts[ftParts_GetBoneIndex(fp, 4)].joint;
     Vec3 sp10;
 
     u8 _[4];
@@ -1638,7 +1641,7 @@ void ftCommon_8007FA58(Fighter_GObj* gobj, Item_GObj* arg1)
 
         if (fp2->x197C != NULL) {
             fp->x2014 = it_8026B54C(arg1);
-            ft_80088148(fp, 0x117, 0x7F, 0x40);
+            ft_PlaySFX(fp, 0x117, 0x7F, 0x40);
             ftCommon_8007EBAC(fp, 0x10, 0);
             Item_8026A8EC(arg1);
             return;
@@ -1652,7 +1655,7 @@ void ftCommon_8007FA58(Fighter_GObj* gobj, Item_GObj* arg1)
     ftCommon_8007F948(gobj, arg1, it_8026B54C(arg1));
     ftCo_800D105C(gobj);
     ft_80081C88(gobj, fp->x34_scale.y);
-    ft_80088148(fp, 0x117, 0x7F, 0x40);
+    ft_PlaySFX(fp, 0x117, 0x7F, 0x40);
     ftCommon_8007EBAC(fp, 0x10, 0);
     it_8026BCF4(arg1);
     ftCommon_8007FA00(gobj);
@@ -1684,7 +1687,7 @@ void ftCommon_8007FC7C(HSD_GObj* gobj, float arg8)
             ftCommon_8007FDA0(gobj);
         }
     }
-    ft_80088148(fp, 0x11F, 0x7F, 0x40);
+    ft_PlaySFX(fp, 0x11F, 0x7F, 0x40);
 }
 
 inline float fminf(float a, float b)

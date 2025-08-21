@@ -1,27 +1,31 @@
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-#include <baselib/forward.h>
-
 #include "ftYs_Guard.h"
 
 #include "ftYs_Init.h"
 #include "ftYs_SpecialN.h"
 
+#include <placeholder.h>
+
 #include "ef/efasync.h"
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_0892.h"
 #include "ft/ft_0D14.h"
 #include "ft/ftanim.h"
 #include "ft/ftcoll.h"
 #include "ft/ftparts.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Escape.h"
 #include "ftCommon/ftCo_Guard.h"
 #include "ftCommon/ftCo_ItemThrow.h"
 #include "ftCommon/ftCo_Pass.h"
 #include "ftYoshi/types.h"
+
+#include <baselib/forward.h>
 
 char ftYs_Init_DatFilename[] = "PlYs.dat";
 char ftYs_Init_DataName[] = "ftDataYoshi";
@@ -61,6 +65,13 @@ Fighter_CostumeStrings ftYs_Init_CostumeStrings[] = {
     { ftYs_Unk2_803CEC24, ftYs_Unk2_803CEC30, ftYs_Unk2_803CEC4C },
 };
 
+/* 3CED84 */ static Vec4 ftYs_Unk3_803CED84 = { 0.65, 0.7, 0.8, 1 };
+/* 3CED94 */ static Vec4 ftYs_Unk3_803CED94 = { 1.1, 1.35, 1.3, 1.2 };
+/* 3CEDA4 */ static Vec3 ftYs_Unk3_803CEDA4[] = {
+    { 12, 0, -6 },
+    { 6, 6, 6 },
+};
+
 /* static */ extern float const ftYs_Init_804D9A28;
 
 static inline void spawnEffect(HSD_GObj* gobj)
@@ -75,7 +86,7 @@ static inline void spawnEffect(HSD_GObj* gobj)
     ftColl_8007B0C0(gobj, 0);
 
     co_xBC = &fp->co_attrs.xBC;
-    part = ftParts_8007500C(fp, FtPart_HipN);
+    part = ftParts_GetBoneIndex(fp, FtPart_HipN);
     fp2 = GET_FIGHTER(gobj);
     jobj = fp->parts[part].joint;
 
@@ -123,14 +134,14 @@ static inline void inlineA0(Fighter_GObj* gobj)
     FORCE_PAD_STACK(4 * 4);
     {
         Fighter* fp = GET_FIGHTER(gobj);
-        struct UNK_SAMUS_S2 foo;
+        ftHurtboxInit hurt;
         ftColl_8007B0C0(gobj, Intangible);
-        foo.parts[0] = fp->ft_data->x8->x11;
-        foo.parts[1] = FtPart_TransN;
-        foo.parts[2] = FtPart_TransN;
-        foo.vec1 = foo.vec2 = ftYs_Unk1_803B75C0;
-        foo.scale = 1;
-        ftColl_8007B5AC(fp, fp->hurt_capsules, &foo);
+        hurt.bone_idx = fp->ft_data->x8->x11;
+        hurt.height = HurtHeight_Mid;
+        hurt.is_grabbable = true;
+        hurt.a_offset = hurt.b_offset = ftYs_Unk1_803B75C0;
+        hurt.scale = 1;
+        ftColl_HurtboxInit(fp, fp->hurt_capsules, &hurt);
     }
 }
 
@@ -202,7 +213,7 @@ void ftYs_Shield_8012C49C(HSD_GObj* gobj)
 
             ftCo_DatAttrs_xBC_t* co_xBC = &fp0->co_attrs.xBC;
 
-            ssize_t bone_idx = ftParts_8007500C(fp0, 4);
+            ssize_t bone_idx = ftParts_GetBoneIndex(fp0, 4);
             Fighter* fp1 = GET_FIGHTER(gobj);
 
             /// @todo Why is this still using @c fp0?
@@ -301,47 +312,4 @@ bool ftYs_Shield_8012CC1C(HSD_GObj* gobj)
     }
 
     return false;
-}
-
-Fighter_Part ftYs_Shield_8012CC6C(Fighter_GObj* gobj)
-{
-    return ftParts_8007500C(GET_FIGHTER(gobj), 52);
-}
-
-void ftYs_Shield_8012CC94(HSD_GObj* gobj, Vec3* out)
-{
-    Fighter* fp = GET_FIGHTER(gobj);
-    ftYoshiAttributes* da = fp->dat_attrs;
-    out->x = (-fp->facing_dir * da->x10);
-    out->y = da->x14;
-    out->z = 0;
-}
-
-float ftYs_Shield_8012CCC4(HSD_GObj* gobj)
-{
-    return GET_FIGHTER(gobj)->facing_dir;
-}
-
-float ftYs_Shield_8012CCD0(HSD_GObj* gobj)
-{
-    ftYoshiAttributes* da = GET_FIGHTER(gobj)->dat_attrs;
-    return da->x18;
-}
-
-float ftYs_Shield_8012CCE0(HSD_GObj* gobj)
-{
-    ftYoshiAttributes* da = GET_FIGHTER(gobj)->dat_attrs;
-    return da->x1C;
-}
-
-float ftYs_Shield_8012CCF0(HSD_GObj* gobj)
-{
-    ftYoshiAttributes* da = GET_FIGHTER(gobj)->dat_attrs;
-    return da->x20;
-}
-
-float ftYs_Shield_8012CD00(HSD_GObj* gobj)
-{
-    ftYoshiAttributes* da = GET_FIGHTER(gobj)->dat_attrs;
-    return da->x24;
 }

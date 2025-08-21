@@ -1,11 +1,9 @@
-#include <platform.h>
-
-#include <baselib/forward.h>
-
 #include "ftSs_SpecialN.h"
 
 #include "inlines.h"
 #include "math.h"
+
+#include <platform.h>
 
 #include "ef/eflib.h"
 #include "ef/efsync.h"
@@ -24,6 +22,8 @@
 #include "ftSamus/types.h"
 #include "it/items/itsamuschargeshot.h"
 #include "lb/lb_00B0.h"
+
+#include <baselib/forward.h>
 
 #include <common_structs.h>
 #include <dolphin/mtx.h>
@@ -365,7 +365,7 @@ void ftSs_SpecialNHold_Coll(HSD_GObj* gobj)
         Fighter_ChangeMotionState(gobj, 348, 0x0C4C5080, fp->cur_anim_frame, 1,
                                   0, NULL);
         ftSamus_updateDamageDeathCBs(gobj);
-        ft_80088148(fp, 260021, 127, 64);
+        ft_PlaySFX(fp, 260021, 127, 64);
         fp->cmd_vars[1] = 1;
     }
 }

@@ -1,9 +1,6 @@
-#include <platform.h>
-
-#include "lb/forward.h"
-#include <baselib/forward.h>
-
 #include "gr/grtzelda.h"
+
+#include <platform.h>
 
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
@@ -11,31 +8,36 @@
 #include "gr/grzakogenerator.h"
 #include "gr/inlines.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSError.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-void grTZelda_80223E2C(int);                   /* static */
+void grTZelda_80223E2C(bool);                  /* static */
 void grTZelda_80223E30(void);                  /* static */
-void grTZelda_80223EA0(void);                  /* static */
-void grTZelda_80223EA4(void);                  /* static */
+void grTzelda_UnkStage0_OnLoad(void);          /* static */
+void grTzelda_UnkStage0_OnStart(void);         /* static */
 bool grTZelda_80223EC8(void);                  /* static */
 HSD_GObj* grTZelda_80223ED0(s32);              /* static */
-void grTZelda_80223FB8(Ground_GObj*);             /* static */
-bool grTZelda_80223FE4(Ground_GObj*);             /* static */
-void grTZelda_80223FEC(Ground_GObj*);             /* static */
-void grTZelda_80223FF0(Ground_GObj*);             /* static */
-void grTZelda_80223FF4(Ground_GObj*);             /* static */
-bool grTZelda_80224044(Ground_GObj*);             /* static */
-void grTZelda_8022404C(Ground_GObj*);             /* static */
-void grTZelda_80224080(Ground_GObj*);             /* static */
-void grTZelda_80224084(Ground_GObj*);             /* static */
-bool grTZelda_802240D4(Ground_GObj*);             /* static */
-void grTZelda_802240DC(Ground_GObj*);             /* static */
-void grTZelda_802240FC(Ground_GObj*);             /* static */
+void grTZelda_80223FB8(Ground_GObj*);          /* static */
+bool grTZelda_80223FE4(Ground_GObj*);          /* static */
+void grTZelda_80223FEC(Ground_GObj*);          /* static */
+void grTZelda_80223FF0(Ground_GObj*);          /* static */
+void grTZelda_80223FF4(Ground_GObj*);          /* static */
+bool grTZelda_80224044(Ground_GObj*);          /* static */
+void grTZelda_8022404C(Ground_GObj*);          /* static */
+void grTZelda_80224080(Ground_GObj*);          /* static */
+void grTZelda_80224084(Ground_GObj*);          /* static */
+bool grTZelda_802240D4(Ground_GObj*);          /* static */
+void grTZelda_802240DC(Ground_GObj*);          /* static */
+void grTZelda_802240FC(Ground_GObj*);          /* static */
 DynamicsDesc* grTZelda_80224100(enum_t);       /* static */
 bool grTZelda_80224108(Vec3*, int, HSD_JObj*); /* static */
 
@@ -55,15 +57,15 @@ StageData grTZd_803E9694 = {
     "/GrTZd.dat",
     grTZelda_80223E30,
     grTZelda_80223E2C,
-    grTZelda_80223EA0,
-    grTZelda_80223EA4,
+    grTzelda_UnkStage0_OnLoad,
+    grTzelda_UnkStage0_OnStart,
     grTZelda_80223EC8,
     grTZelda_80224100,
     grTZelda_80224108,
     1,
 };
 
-void grTZelda_80223E2C(int unk0) {}
+void grTZelda_80223E2C(bool unk0) {}
 
 void grTZelda_80223E30(void)
 {
@@ -79,9 +81,9 @@ void grTZelda_80223E30(void)
     Ground_801C42AC();
 }
 
-void grTZelda_80223EA0(void) {}
+void grTzelda_UnkStage0_OnLoad(void) {}
 
-void grTZelda_80223EA4(void)
+void grTzelda_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }

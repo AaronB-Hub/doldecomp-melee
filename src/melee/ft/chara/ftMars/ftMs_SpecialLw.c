@@ -1,10 +1,8 @@
-#include <platform.h>
-
-#include "lb/forward.h"
-
 #include "ftMs_SpecialLw.h"
 
 #include "math.h"
+
+#include <platform.h>
 
 #include "ef/efsync.h"
 #include "ft/fighter.h"
@@ -18,6 +16,9 @@
 #include "ft/types.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftMars/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00B0.h"
 #include "lb/lb_00F9.h"
 
@@ -347,15 +348,13 @@ static inline void ftMs_SpecialLw_80139140_inline(HSD_GObj* gobj)
         case 18:
             efSync_Spawn(
                 1265, gobj,
-                fp->parts[ftParts_8007500C(fp, FtPart_RShoulderN)]
-                    .joint,
+                fp->parts[ftParts_GetBoneIndex(fp, FtPart_RShoulderN)].joint,
                 &fp->facing_dir);
             break;
         case 26:
             efSync_Spawn(
                 1296, gobj,
-                fp->parts[ftParts_8007500C(fp, FtPart_RShoulderN)]
-                    .joint,
+                fp->parts[ftParts_GetBoneIndex(fp, FtPart_RShoulderN)].joint,
                 &fp->facing_dir);
             break;
         }
@@ -387,7 +386,7 @@ void ftMs_SpecialLw_80139140(HSD_GObj* gobj)
             fp->mv.ms.speciallw.x0 = (s32) (temp_r0 * da->x5C);
         }
 
-        lb_8000B1CC(fp->parts[ftParts_8007500C(fp, FtPart_HipN)].joint, 0,
+        lb_8000B1CC(fp->parts[ftParts_GetBoneIndex(fp, FtPart_HipN)].joint, 0,
                     &sp18);
         lb_800119DC(&sp18, 120, 0.9, 0.02, M_PI / 3);
 

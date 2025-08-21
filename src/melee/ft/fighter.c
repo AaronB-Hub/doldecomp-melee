@@ -1,7 +1,3 @@
-#include <platform.h>
-
-#include "ftCommon/forward.h"
-
 #include "ft/fighter.h"
 
 #include "ft_07C1.h"
@@ -20,6 +16,8 @@
 #include "ftlib.h"
 #include "ftparts.h"
 
+#include <platform.h>
+
 #include "cm/camera.h"
 #include "db/db.h"
 #include "ef/efasync.h"
@@ -37,6 +35,9 @@
 #include "ft/ftmaterial.h"
 #include "ft/ftmetal.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_09F4.h"
 #include "ftCommon/ftCo_0A01.h"
 #include "ftCommon/ftCo_0C35.h"
@@ -402,7 +403,7 @@ void Fighter_UnkInitReset_80067C98(Fighter* fp)
 
     fp->x221B_b6 = 0;
 
-    fp->x1A60 = 0;
+    fp->target_item_gobj = 0;
     fp->x1A64 = 0;
 
     fp->x221B_b7 = 0;
@@ -587,14 +588,14 @@ void Fighter_UnkUpdateVecFromBones_8006876C(Fighter* fp)
 {
     Vec3 vec;
     Vec3 vec2;
-    HSD_JObj* jobj = fp->parts[ftParts_8007500C(fp, 2)].joint;
+    HSD_JObj* jobj = fp->parts[ftParts_GetBoneIndex(fp, 2)].joint;
 
     HSD_JObjGetTranslation(jobj, &vec);
 
     fp->x1A6C = (vec.y / 8.55f);
 
     lb_8000B1CC(jobj, 0, &vec);
-    lb_8000B1CC(fp->parts[ftParts_8007500C(fp, 1)].joint, 0, &vec2);
+    lb_8000B1CC(fp->parts[ftParts_GetBoneIndex(fp, 1)].joint, 0, &vec2);
     fp->x1A70.x = vec2.x - vec.x;
     fp->x1A70.y = vec2.y - vec.y;
     fp->x1A70.z = vec2.z - vec.z;
@@ -773,7 +774,7 @@ void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct S_TEMP1* argdata)
 
     fp->no_normal_motion = 0;
     fp->x2229_b6 = 0;
-    fp->x2229_b7 = 0;
+    fp->no_kb = 0;
 
     fp->x222A_b0 = 0;
     fp->x222A_b1 = 0;
@@ -905,7 +906,7 @@ Fighter_GObj* Fighter_Create(struct S_TEMP1* input)
     HSD_GObjProc_8038FD54(gobj, &Fighter_8006C80C, 9);
     HSD_GObjProc_8038FD54(gobj, &Fighter_UnkProcessGrab_8006CA5C, 0xC);
     HSD_GObjProc_8038FD54(gobj, &Fighter_8006CB94, 0xD);
-    HSD_GObjProc_8038FD54(gobj, &Fighter_UnkProcessShieldHit_8006D1EC, 0xE);
+    HSD_GObjProc_8038FD54(gobj, &Fighter_ProcessHit_8006D1EC, 0xE);
     HSD_GObjProc_8038FD54(gobj, &Fighter_8006D9AC, 0x10);
     HSD_GObjProc_8038FD54(gobj, &Fighter_UnkCallCameraCallback_8006D9EC, 0x12);
     HSD_GObjProc_8038FD54(gobj, &Fighter_8006DA4C, 0x16);
@@ -1387,7 +1388,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
         fp->post_hitlag_cb = 0;
         fp->pre_hitlag_cb = 0;
         fp->take_dmg_cb = 0;
-        fp->x21F0 = 0;
+        fp->take_dmg_2_cb = 0;
         fp->x21F4 = 0;
         fp->x21F8 = 0;
         fp->death2_cb = 0;
@@ -1585,7 +1586,9 @@ void Fighter_8006A360(Fighter_GObj* gobj)
                 if (fp->x2104 == 0) {
                     fp->x2221_b4 = 0;
 
-                    if (fp->item_gobj && itGetKind(fp->item_gobj) == 0x67) {
+                    if (fp->item_gobj &&
+                        itGetKind(fp->item_gobj) == It_Kind_Peach_Parasol)
+                    {
                         fp->x2221_b5 = 1;
                         ftCo_800968C8(gobj);
                     } else {
@@ -1637,7 +1640,7 @@ void Fighter_8006A360(Fighter_GObj* gobj)
         }
 
         if (fp->item_gobj) {
-            if (itGetKind(fp->item_gobj) != 0x1C) {
+            if (itGetKind(fp->item_gobj) != It_Kind_Hammer) {
                 !fp;
             } else {
                 ftCo_800C511C(gobj);
@@ -2395,7 +2398,7 @@ void Fighter_procUpdate(Fighter_GObj* gobj)
             {
                 // plays this sound you always hear when you get close to the
                 // bottom blast zone
-                ft_80088148(fp, 96, 127, 64);
+                ft_PlaySFX(fp, 96, 127, 64);
                 fp->x2225_b0 = 1;
             }
         }
@@ -2578,7 +2581,7 @@ void Fighter_UnkProcessGrab_8006CA5C(Fighter_GObj* gobj)
             ftColl_80078A2C(gobj);
             if (fp->victim_gobj) {
                 if (!fp->x2225_b1) {
-                    ft_80088148(fp, fp->ft_data->x4C_sfx->x30, 0x7F, 0x40);
+                    ft_PlaySFX(fp, fp->ft_data->x4C_sfx->x30, 0x7F, 0x40);
                 }
                 ftColl_80078754(gobj, fp->victim_gobj, 0);
                 fp->grab_cb(gobj);
@@ -2587,11 +2590,11 @@ void Fighter_UnkProcessGrab_8006CA5C(Fighter_GObj* gobj)
             }
             ftColl_8007BC90(gobj);
 
-            if (fp->x1A60) {
+            if (fp->target_item_gobj) {
                 if (!fp->x2225_b1) {
-                    ft_80088148(fp, fp->ft_data->x4C_sfx->x30, 0x7F, 0x40);
+                    ft_PlaySFX(fp, fp->ft_data->x4C_sfx->x30, 0x7F, 0x40);
                 }
-                it_8027B4A4(gobj, fp->x1A60);
+                it_8027B4A4(gobj, fp->target_item_gobj);
                 if (fp->x2194) {
                     fp->x2194(gobj);
                 }
@@ -2662,8 +2665,7 @@ void Fighter_8006CDA4(Fighter* fp, s32 arg1, s32 arg2)
         hold_item_bool = 1;
     }
 
-    temp_bool =
-        !((fp->x2220_b3 || fp->x2220_b4 || ftCo_8008E984(fp)));
+    temp_bool = !((fp->x2220_b3 || fp->x2220_b4 || ftCo_8008E984(fp)));
     vec = vec3_803B7494;
 
     if (fp->motion_id != 0x145 && (unsigned) fp->motion_id - 0x122 > 1 &&
@@ -2790,7 +2792,7 @@ void Fighter_8006D10C(Fighter_GObj* gobj)
     }
 }
 
-void Fighter_UnkProcessShieldHit_8006D1EC(Fighter_GObj* gobj)
+void Fighter_ProcessHit_8006D1EC(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     bool bool1 = 0;
@@ -2846,11 +2848,11 @@ void Fighter_UnkProcessShieldHit_8006D1EC(Fighter_GObj* gobj)
             ftCo_Damage_CalcKnockback(fp);
             ftKb_SpecialN_800F5BA4(fp);
 
-            if (fp->x21F0) {
-                fp->x21F0(gobj);
+            if (fp->take_dmg_2_cb) {
+                fp->take_dmg_2_cb(gobj);
             }
 
-            if (!fp->x2229_b7) {
+            if (!fp->no_kb) {
                 switch (fp->x1828) {
                 case 0:
                     ftCo_8008EC90(gobj);
@@ -2897,7 +2899,7 @@ void Fighter_UnkProcessShieldHit_8006D1EC(Fighter_GObj* gobj)
         } else if (fp->x19A4) {
             if (bool3) {
                 ftCo_80098B20(gobj);
-                ft_80088148(fp, 0x82, 0x7F, 0x40);
+                ft_PlaySFX(fp, 0x82, 0x7F, 0x40);
             } else {
                 if (fp->shield_hit_cb) {
                     fp->shield_hit_cb(gobj);
@@ -2905,7 +2907,9 @@ void Fighter_UnkProcessShieldHit_8006D1EC(Fighter_GObj* gobj)
             }
             bool1 = fp->x19A4;
         } else if (fp->dmg.int_value) {
-            if ((fp->dmg.x191C) && (!fp->victim_gobj) && (!fp->x1A60)) {
+            if ((fp->dmg.x191C) && (!fp->victim_gobj) &&
+                (!fp->target_item_gobj))
+            {
                 ftCommon_8007DB58(gobj);
                 ftCo_80099D9C(gobj);
             }

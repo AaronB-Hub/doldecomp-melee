@@ -1,6 +1,7 @@
+#include "gm_16AE.h"
+
 #include "gm_16AE.static.h"
 
-#include "gm_16AE.h"
 #include "gm_unsplit.h"
 #include "gmmain_lib.h"
 
@@ -14,6 +15,7 @@
 #include <melee/ef/eflib.h>
 #include <melee/ft/ftdevice.h>
 #include <melee/ft/ftlib.h>
+#include <melee/gm/gmmultiman.h>
 #include <melee/gm/gmpause.h>
 #include <melee/gr/ground.h>
 #include <melee/gr/grstadium.h>
@@ -89,7 +91,7 @@ u32 gm_8016AEDC(void)
     return lbl_8046B6A0.frame_count;
 }
 
-bool gm_8016AEEC(void)
+u32 gm_8016AEEC(void)
 {
     return lbl_8046B6A0.timer_seconds;
 }
@@ -384,7 +386,7 @@ int gm_8016B558(void)
     int count;
     count = 0;
     for (i = 0; i < 6; i++) {
-        if (Player_GetPlayerSlotType(i) != 3) {
+        if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
             count++;
         }
     }
@@ -411,7 +413,7 @@ float fn_8016B5B0(void)
 
     count = 0;
     for (i = 0; i < 6; i++) {
-        if (Player_GetPlayerSlotType(i) != 3) {
+        if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
             count++;
         }
     }
@@ -494,12 +496,11 @@ void fn_8016B88C(int arg0)
     lbl_8046B6A0.hud_enabled = 0;
 }
 
-void gm_8016B8D4(s32 arg0, s32 arg1)
+void gm_8016B8D4(s32 arg0, u8 slot_type)
 {
-    u8 tmp = arg1;
     lbl_8046B6A0.FighterMatchInfo[arg0].x1 = 0x82;
-    lbl_8046B6A0.FighterMatchInfo[arg0].slot_type = tmp;
-    grStadium_801D3B4C(arg0, tmp);
+    lbl_8046B6A0.FighterMatchInfo[arg0].slot_type = slot_type;
+    grStadium_801D3B4C(arg0, slot_type);
 }
 
 static inline int fn_8016B918_inline(int var_r31)
@@ -538,8 +539,9 @@ void fn_8016B918(void)
     }
 
     for (i = 0; i < 6; i++) {
-        if (Player_GetPlayerSlotType(i) != 3 && Player_GetEntity(i) != NULL &&
-            Player_8003219C(i) != 0 && Player_GetStocks(i) == 0)
+        if (Player_GetPlayerSlotType(i) != Gm_PKind_NA &&
+            Player_GetEntity(i) != NULL && Player_8003219C(i) != 0 &&
+            Player_GetStocks(i) == 0)
         {
             var_r0 = true;
         } else {
@@ -575,7 +577,7 @@ void fn_8016B918(void)
 bool fn_8016BAF4(void)
 {
     int i;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < PAD_MAX_CONTROLLERS; i++) {
         HSD_PadStatus* pad = &HSD_PadMasterStatus[(u8) i];
         if (pad->err == 0 && (pad->trigger & 0x1000)) {
             return true;
@@ -587,7 +589,7 @@ bool fn_8016BAF4(void)
 bool fn_8016BBB4(void)
 {
     int i;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < PAD_MAX_CONTROLLERS; i++) {
         HSD_PadStatus* pad = &HSD_PadMasterStatus[(u8) i];
         if (pad->err == 0 && (pad->trigger & 0x10)) {
             return true;
@@ -627,7 +629,7 @@ int fn_8016BC74(void)
             }
         }
     } else {
-        for (var_r30 = 0; var_r30 < 4; var_r30++) {
+        for (var_r30 = 0; var_r30 < PAD_MAX_CONTROLLERS; var_r30++) {
             temp_r3_3 = &HSD_PadCopyStatus[(u8) var_r30];
             if (temp_r3_3->err == 0) {
                 if (g_debugLevel >= 3) {
@@ -643,7 +645,7 @@ int fn_8016BC74(void)
                 }
                 if (var_r0_3) {
                     for (var_r29 = 0; var_r29 < 6; var_r29++) {
-                        if (Player_GetPlayerSlotType(var_r29) != 3 &&
+                        if (Player_GetPlayerSlotType(var_r29) != Gm_PKind_NA &&
                             Player_GetEntity(var_r29) != NULL &&
                             Player_8003219C(var_r29) == 0 &&
                             var_r30 == Player_GetPlayerId(var_r29))
@@ -666,7 +668,7 @@ int gm_8016BE80(void)
     int var_r29;
     PAD_STACK(0x10);
 
-    for (var_r30 = 0; var_r30 < 4; var_r30++) {
+    for (var_r30 = 0; var_r30 < PAD_MAX_CONTROLLERS; var_r30++) {
         temp_r3 = &HSD_PadCopyStatus[(u8) var_r30];
         if (temp_r3->err == 0) {
             if (g_debugLevel >= 3) {
@@ -684,7 +686,7 @@ int gm_8016BE80(void)
                 }
                 for (var_r29 = 0; var_r29 < 6; var_r29++) {
                     if (var_r30 == Player_GetPlayerId(var_r29) &&
-                        Player_GetPlayerSlotType(var_r29) != 3)
+                        Player_GetPlayerSlotType(var_r29) != Gm_PKind_NA)
                     {
                         return var_r30;
                     }
@@ -731,7 +733,7 @@ int fn_8016BF74(void)
         int var_r31 = 0;
         int var_r29 = 0;
         for (i = 0; i < 6; i++) {
-            if (Player_GetPlayerSlotType(i) != 3) {
+            if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
                 if (Player_GetStocks(i) == 0) {
                     var_r31 += 1;
                 }
@@ -790,7 +792,7 @@ int fn_8016C0C8(void)
         if (var_r0_3 && !lbl_8046B6A0.x24C8.x5_1) {
             for (var_r29 = 0; var_r29 < 6; var_r29++) {
                 if (Player_GetFlagsBit1(var_r29) == 0 &&
-                    Player_GetPlayerSlotType(var_r29) != 3 &&
+                    Player_GetPlayerSlotType(var_r29) != Gm_PKind_NA &&
                     Player_GetEntity(var_r29) != NULL)
                 {
                     if (Player_GetTeam(var_r29) != Player_GetTeam(0)) {
@@ -815,7 +817,7 @@ int fn_8016C0C8(void)
         memset(sp14, -1, sizeof(sp14));
 
         for (var_r27_2 = 0; var_r27_2 < 6; var_r27_2++) {
-            if (Player_GetPlayerSlotType(var_r27_2) != 3) {
+            if (Player_GetPlayerSlotType(var_r27_2) != Gm_PKind_NA) {
                 if (sp14[Player_GetTeam(var_r27_2)] == -1) {
                     sp14[Player_GetTeam(var_r27_2)] =
                         Player_GetStocks(var_r27_2);
@@ -993,13 +995,13 @@ void fn_8016C7F0(void)
     u8 var_r29_2;
     int var_r28;
     u8* temp_r29_2;
-    struct UnkAllstarData* temp_r30;
+    UnkAllstarData* temp_r30;
 
     if (lbl_8046B6A0.x24C8.x50 != NULL) {
         lbl_8046B6A0.x24C8.x50(lbl_8046B6A0.match_result);
     }
     HSD_PadRumbleRemoveAll();
-    for (var_r29 = 0; var_r29 < 4; var_r29++) {
+    for (var_r29 = 0; var_r29 < PAD_MAX_CONTROLLERS; var_r29++) {
         HSD_PadRumbleOn(var_r29);
     }
     if (!lbl_8046B6A0.x24C8.x1_5) {
@@ -1064,7 +1066,7 @@ static inline s8 fn_8016CA68_inline(int var_r31)
     int var_r30;
     for (var_r30 = 0; var_r30 < 6; var_r30++) {
         if (var_r31 == Player_GetPlayerId(var_r30) &&
-            Player_GetPlayerSlotType(var_r30) == 0)
+            Player_GetPlayerSlotType(var_r30) == Gm_PKind_Human)
         {
             return var_r30;
         }
@@ -1125,7 +1127,7 @@ static inline int fn_8016CBE8_inline(void)
     HSD_PadStatus* pad;
     bool var_r0;
     int i;
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < PAD_MAX_CONTROLLERS; i++) {
         pad = &HSD_PadCopyStatus[(u8) i];
         if (pad->err == 0) {
             if (g_debugLevel >= 3) {
@@ -1185,7 +1187,6 @@ void fn_8016CD98(lbl_8046B6A0_t* arg0)
     s32 var_r3;
     u16 temp_r3_2;
     u8 temp_r0_2;
-    u8 temp_r3_5;
     int i;
     PAD_STACK(4);
 
@@ -1198,7 +1199,7 @@ void fn_8016CD98(lbl_8046B6A0_t* arg0)
             arg0->frame_count++;
         }
         if (arg0->x24C8.x0_6) {
-            if (++arg0->unk_2C >= 0x3C) {
+            if (++arg0->unk_2C >= 60) {
                 arg0->unk_2C = 0;
                 if (arg0->x24C8.x0_7) {
                     if (arg0->timer_seconds < -1) {
@@ -1221,12 +1222,12 @@ void fn_8016CD98(lbl_8046B6A0_t* arg0)
             }
         }
         for (i = 0; i < 4; i++) {
-            temp_r3_5 = arg0->FighterMatchInfo[i].x1;
             if (arg0->FighterMatchInfo[i].x1 != 0) {
                 arg0->FighterMatchInfo[i].x1--;
                 temp_r0_2 = arg0->FighterMatchInfo[i].x1;
                 if (temp_r0_2 == 0x50) {
-                    if (arg0->FighterMatchInfo[i].slot_type == 0) {
+                    if (arg0->FighterMatchInfo[i].slot_type == Gm_PKind_Human)
+                    {
                         var_r3 = arg0->unk_20[i];
                     } else {
                         var_r3 = 0x7C865;
@@ -1509,7 +1510,7 @@ void fn_8016D8AC(int arg0, struct PlayerInitData* arg1)
     } else {
         Player_SetPlayerId(arg0, arg1->slot - 1);
     }
-    if (arg1->slot_type == 0 &&
+    if (arg1->slot_type == Gm_PKind_Human &&
         (HSD_PadCopyStatus[(u8) Player_GetPlayerId(arg0)].button &
          HSD_PAD_A) &&
         (Player_GetPlayerCharacter(arg0) == CKIND_ZELDA ||
@@ -1520,7 +1521,7 @@ void fn_8016D8AC(int arg0, struct PlayerInitData* arg1)
         } else {
             Player_SetPlayerCharacter(arg0, CKIND_ZELDA);
         }
-        tmp->FighterMatchInfo[arg0].x4_b4 = 1;
+        tmp->FighterMatchInfo[arg0].x4_b4 = true;
     }
 
     tmp->FighterMatchInfo[arg0].spawn_point = arg1->x5;
@@ -1549,7 +1550,7 @@ void fn_8016D8AC(int arg0, struct PlayerInitData* arg1)
     } else {
         Player_SetMoreFlagsBit2(arg0, 0);
     }
-    Player_SetOtherStamina(arg0, arg1->x14);
+    Player_SetOtherStamina(arg0, arg1->hp);
     Player_SetModelScale(arg0, arg1->x20);
     Player_SetAttackRatio(arg0, arg1->x18);
     Player_SetDefenseRatio(arg0, arg1->x1C);
@@ -1664,7 +1665,7 @@ void fn_8016DCC0(StartMeleeData* arg0)
     case 1:
         fn_8016D8AC(0, &arg0->players[0]);
         for (i = 1; i < 6; i++) {
-            Player_SetSlottype(i, 3);
+            Player_SetSlottype(i, Gm_PKind_NA);
         }
         if (arg0->rules.x54->x10_b1) {
             fn_8016A09C();
@@ -1697,7 +1698,7 @@ void fn_8016DEEC(void)
     int var_r23;
 
     for (i = 0; i < 6; i++) {
-        if (Player_GetPlayerSlotType(i) != 3) {
+        if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
             if (tmp->FighterMatchInfo[i].spawn_point == -1) {
                 Stage_80224E64(i, &spC);
             } else {
@@ -1714,7 +1715,7 @@ void fn_8016DEEC(void)
             var_r23 = -1;
 
             for (j = 0; j < 6; j++) {
-                if (j != i && Player_GetPlayerSlotType(j) != 3 &&
+                if (j != i && Player_GetPlayerSlotType(j) != Gm_PKind_NA &&
                     (tmp->x24C8.x8 != 1 ||
                      Player_GetTeam(i) != Player_GetTeam(j)))
                 {
@@ -1780,7 +1781,7 @@ void fn_8016E124(void)
     }
     if (var_r27 > 0) {
         for (i = 0; i < 6; i++) {
-            if (Player_GetPlayerSlotType(i) != 3) {
+            if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
                 temp_r3 = Player_80032610(i, 0);
                 if (temp_r3 != -1 && temp_r3 != 4) {
                     for (j = 0; j < var_r27; j++) {
@@ -1845,7 +1846,7 @@ void fn_8016E2BC(void)
     } else {
         fn_8016DEEC();
         for (i = 0; i < 6; i++) {
-            if (Player_GetPlayerSlotType(i) != 3) {
+            if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
                 if (tmp->FighterMatchInfo[i].spawn_point == -1) {
                     Stage_80224E64(i, &sp18);
                 } else {
@@ -1892,7 +1893,7 @@ bool fn_8016E5C0(StartMeleeData* arg0)
     var_r4 = false;
     var_r6 = false;
     for (i = 0; i < 6; i++) {
-        if (arg0->players[i].slot_type == 0) {
+        if (arg0->players[i].slot_type == Gm_PKind_Human) {
             var_r4 = true;
             if (!(HSD_PadCopyStatus[(u8) i].button & (HSD_PAD_L | HSD_PAD_R)))
             {
@@ -2034,7 +2035,7 @@ void gm_8016E9C8(void* arg0_raw)
     if (gm_8016B3D8() || gm_8016E9C8_inline() || gm_801A4310() == MJ_VS) {
         if (lbl_8046B6A0.match_result != 7 && lbl_8046B6A0.match_result != 8) {
             for (i = 0; i < 6; i++) {
-                if (Player_GetPlayerSlotType(i) == 0) {
+                if (Player_GetPlayerSlotType(i) == Gm_PKind_Human) {
                     gmMainLib_8015D00C(
                         gm_80164024(Player_GetPlayerCharacter(i)));
                 }
@@ -2110,7 +2111,8 @@ bool gm_8016EDDC(int arg0, PlayerInitData* arg1)
     PAD_STACK(4);
 
     if (lbl_8046B6A0.is_singleplayer == 0 &&
-        Player_GetPlayerSlotType(arg0) == 3 && Player_GetEntity(arg0) == NULL)
+        Player_GetPlayerSlotType(arg0) == Gm_PKind_NA &&
+        Player_GetEntity(arg0) == NULL)
     {
         Player_80036D24(arg0);
         fn_8016D8AC(arg0, arg1);
@@ -2158,7 +2160,7 @@ bool fn_8016EF98(int arg0)
     if (lbl_8046B6A0.is_singleplayer == 0 && Player_GetEntity(arg0) != NULL) {
         ifStatus_802F6788(arg0);
         Player_80031EBC(arg0);
-        Player_SetSlottype(arg0, 3);
+        Player_SetSlottype(arg0, Gm_PKind_NA);
         return 1;
     }
     return 0;
@@ -2185,7 +2187,7 @@ void gm_8016F088(StartMeleeData* arg0)
     int i;
 
     for (i = 0; i < 6; i++) {
-        if (arg0->players[i].slot_type == 0 && i < 4) {
+        if (arg0->players[i].slot_type == Gm_PKind_Human && i < 4) {
             temp_r3 = arg0->players[i].slot;
             if (temp_r3 == 0) {
                 var_r3 = i;

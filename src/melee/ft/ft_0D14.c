@@ -1,6 +1,3 @@
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ft/ft_0D14.h"
 
 #include "placeholder.h"
@@ -8,12 +5,18 @@
 #include "stdbool.h"
 
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
 #include "ft/ft_0C88.h"
 #include "ft/ftcommon.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_FallAerial.h"
 #include "ftCommon/ftCo_ItemThrow.h"
@@ -43,8 +46,14 @@
 #include <melee/pl/plbonuslib.h>
 #include <melee/pl/plstale.h>
 
-static void fn_800D9CE8(Fighter_GObj* arg0);
-static void fn_800DAADC(Fighter_GObj* arg0, Fighter_GObj* arg1);
+/* 0D17FC */ static void fn_800D17FC(Fighter_GObj* gobj);
+/* 0D1C40 */ static void fn_800D1C40(Fighter_GObj* gobj);
+/* 0D20EC */ static void fn_800D20EC(Fighter_GObj* gobj);
+/* 0D2530 */ static void fn_800D2530(Fighter_GObj* gobj);
+/* 0D8BFC */ static void fn_800D8BFC(Fighter_GObj* arg0);
+/* 0D9CE8 */ static void fn_800D9CE8(Fighter_GObj* arg0);
+/* 0DAADC */ static void fn_800DAADC(Fighter_GObj* arg0, Fighter_GObj* arg1);
+/* 105FEC */ static void fn_80105FEC(void);
 
 bool Fighter_SuperMushroomApply(Fighter_GObj* gobj)
 {
@@ -685,12 +694,12 @@ bool fn_800D2A3C(HSD_GObj* gobj)
 
 void fn_800D2AD8(Fighter* fp)
 {
-    ft_80088148(fp, ftCo_MS_CaptureDamageKoopaAir, 0x7F, 0x40);
+    ft_PlaySFX(fp, ftCo_MS_CaptureDamageKoopaAir, 0x7F, 0x40);
 }
 
 void fn_800D2B04(Fighter* fp)
 {
-    ft_80088148(fp, ftCo_MS_CaptureWaitKoopaAir, 0x7F, 0x40);
+    ft_PlaySFX(fp, ftCo_MS_CaptureWaitKoopaAir, 0x7F, 0x40);
 }
 
 void fn_800D2B30(Fighter_GObj* gobj)
@@ -1075,7 +1084,7 @@ void ftCo_800D3680(Fighter_GObj* gobj)
     ftCo_800D38B8(temp_r27_2, temp_r28_2->x4);
     ftCo_800D38B8(temp_r27_2, temp_r28_2->x8);
 
-    ft_80088148(temp_r31, 0x88, 0x7F, 0x40);
+    ft_PlaySFX(temp_r31, 0x88, 0x7F, 0x40);
     ft_8008805C(temp_r31, 0x88);
     sp2C = temp_r31->cur_pos;
     temp_f31 = Stage_GetBlastZoneTopOffset();

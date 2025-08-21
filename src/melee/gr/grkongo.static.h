@@ -1,19 +1,19 @@
 #ifndef __GALE01_1D5238
 #define __GALE01_1D5238
 
-#include <platform.h>
 #include <placeholder.h>
-
-#include "mp/forward.h"
+#include <platform.h>
 
 #include "gr/types.h"
+
+#include "mp/forward.h"
 
 /* 1D7700 */ static void fn_801D7700(Ground* gp, UNK_T, UNK_T, UNK_T,
                                      mpLib_GroundEnum arg4);
 /* 1D7E60 */ static void fn_801D7E60(Ground* gp, UNK_T, UNK_T, UNK_T,
                                      mpLib_GroundEnum arg4);
 /* 1D8134 */ static int fn_801D8134(HSD_GObj* arg0, HSD_GObj* arg1);
-/* 1D8444 */ static bool grKongo_801D8444(void);
+/* 1D8444 */ static DynamicsDesc* grKongo_801D8444(enum_t);
 
 static StageCallbacks* grKg_803E16E0;
 

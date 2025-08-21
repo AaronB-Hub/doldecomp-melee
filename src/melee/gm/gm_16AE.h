@@ -2,6 +2,7 @@
 #define MELEE_GM_16AE_H
 
 #include <placeholder.h>
+
 #include <melee/gm/forward.h>
 #include <melee/it/forward.h>
 #include <melee/mn/forward.h>
@@ -16,7 +17,7 @@
 /* 16AEB8 */ s32 gm_8016AEB8(void);
 /* 16AEC8 */ bool gm_8016AEC8(void);
 /* 16AEDC */ u32 gm_8016AEDC(void);
-/* 16AEEC */ bool gm_8016AEEC(void);
+/* 16AEEC */ u32 gm_8016AEEC(void);
 /* 16AEFC */ u16 gm_8016AEFC(void);
 /* 16AF0C */ u16 gm_8016AF0C(void);
 /* 16AF88 */ bool GetMatchTimer(int*);
@@ -65,7 +66,7 @@
 /* 16B7B4 */ void fn_8016B7B4(int);
 /* 16B7F8 */ void fn_8016B7F8(void);
 /* 16B88C */ void fn_8016B88C(int);
-/* 16B8D4 */ void gm_8016B8D4(s32, s32);
+/* 16B8D4 */ void gm_8016B8D4(s32, u8 slot_type);
 /* 16B918 */ void fn_8016B918(void);
 /* 16BAF4 */ bool fn_8016BAF4(void);
 /* 16BBB4 */ bool fn_8016BBB4(void);

@@ -1,15 +1,36 @@
 #ifndef MELEE_GM_TYPES_H
 #define MELEE_GM_TYPES_H
 
-#include <platform.h>
 #include <placeholder.h>
+#include <platform.h>
 
 #include "baselib/forward.h"
-#include <melee/gm/forward.h> // IWYU pragma: export
+
 #include "dolphin/types.h"
-#include <melee/mn/types.h>
+
+#include <melee/gm/forward.h> // IWYU pragma: export
+#include <melee/pl/forward.h>
 
 #include <common_structs.h>
+#include <melee/mn/types.h>
+
+struct UnkMultimanData {
+    u16 x0_0 : 1;
+    u16 x2;
+    int x4;
+};
+
+struct DebugGameOverData {
+    u32 x0;
+    int x4;
+    u32 x8;
+    int xC;
+    u32 x10;
+    u8 x14;
+    u8 x15;
+    u16 x16;
+    u16 x18;
+};
 
 struct MinorScene {
     /* 00 */ u8 idx;
@@ -19,11 +40,11 @@ struct MinorScene {
     /* 04 */ void (*Prep)(MinorScene*);
     /* 08 */ void (*Decide)(MinorScene*);
 
-             struct MinorSceneInfo {
-    /* 0C */     u8 class_id;
-    /* 10 */     void* unk_struct_0; ///< data passed to OnLoad callback
-    /* 14 */     void* unk_struct_1; ///< data passed to OnLeave callback
-             } info;
+    struct MinorSceneInfo {
+        /* 0C */ u8 class_id;
+        /* 10 */ void* unk_struct_0; ///< data passed to OnLoad callback
+        /* 14 */ void* unk_struct_1; ///< data passed to OnLeave callback
+    } info;
 };
 
 struct MajorScene {
@@ -72,15 +93,15 @@ struct sceneData {
 };
 
 struct gmm_x1CB0 {
-/* +0 */ u8 item_freq;
-/* +1 */ u8 pad_x1[0x8 - 0x1];
-/* +8 */ u64 item_mask;
-/* +10 */ u8 rumble[4];
-/* +14 */ u8 sound_balance;
-/* +15 */ u8 deflicker;
-/* +16 */ u8 saved_language; /* 0x1CC6 */
-/* +18 */ u32 stage_mask;
-/* +1C */ u8 padding_x16[0x1];
+    /* +0 */ u8 item_freq;
+    /* +1 */ u8 pad_x1[0x8 - 0x1];
+    /* +8 */ u64 item_mask;
+    /* +10 */ u8 rumble[4];
+    /* +14 */ u8 sound_balance;
+    /* +15 */ u8 deflicker;
+    /* +16 */ u8 saved_language; /* 0x1CC6 */
+    /* +18 */ u32 stage_mask;
+    /* +1C */ u8 padding_x16[0x1];
 };
 
 struct gmm_x1F2C {
@@ -245,8 +266,14 @@ struct gmm_x0 {
     /* 0x0522 */ s16 unk_522;
     /* 0x0524 */ s16 unk_524;
     /* 0x0526 */ s16 unk_526;
-    /* 0x0528 */ s32 unk_528;
-    /* 0x052C */ s32 unk_52C;
+    struct gmm_x0_528_t {
+        /* 0x0528 */ s8 c_kind;
+        /* 0x0529 */ s8 stocks;
+        /* 0x052A */ u8 color;
+        /* 0x052B */ u8 cpu_level;
+        /* 0x052C */ s8 x4;
+        /* 0x052D */ u8 x5;
+    } unk_528;
     struct EventData {
         /* 0x0530 */ u8 x0;
         /* 0x0531 */ u8 x1;
@@ -259,11 +286,33 @@ struct gmm_x0 {
         /* 0x0538 */ s8 x8;
         /* 0x0539 */ s8 x9;
         /* 0x053A */ s8 xA;
-        /* 0x053B */ char pad_B[0x44 - 0xB];
+        /* 0x053B */ u8 xB_0 : 1;
+        /* 0x053B */ u8 xB_1 : 1;
+        /* 0x053B */ u8 xB_2 : 1;
+        /* 0x053B */ u8 xB_3 : 1;
+        /* 0x053B */ u8 xB_4 : 1;
+        /* 0x053B */ u8 xB_5 : 1;
+        /* 0x053B */ u8 xB_6 : 1;
+        /* 0x053B */ u8 xB_7 : 1;
+        /* 0x053C */ int xC;
+        /* 0x0540 */ int x10;
+        /* 0x0544 */ int x14;
+        /* 0x0548 */ int x18;
+        /* 0x054C */ float x1C;
+        /* 0x0550 */ int x20;
+        /* 0x0554 */ int x24;
+        /* 0x0558 */ int x28;
+        /* 0x055C */ int x2C; // timer seconds
+        /* 0x0560 */ int x30;
+        /* 0x0564 */ int x34;
+        /* 0x0568 */ u8 x38;
+        /* 0x056C */ int x3C;
+        /* 0x0570 */ int x40;
         /* 0x0574 */ s8 x44;
+        /* 0x0575 */ s8 x45;
         /* 0x0578 */ int x48;
-        /* 0x057C */ s32 unk_57C;
-        /* 0x0580 */ char pad_580[4];
+        /* 0x057C */ u8 x4C[4];
+        /* 0x0580 */ u8 x50[4];
         /* 0x0584 */ M2C_UNK unk_584; /* inferred */
         /* 0x0588 */ s8 unk_588[4];   /* inferred */
         /* 0x0590 */ char pad_58B[4]; /* inferred */
@@ -272,11 +321,11 @@ struct gmm_x0 {
     /* 0x06D0 */ VsModeData unk_6D0; ///< super sudden death
     /* 0x0810 */ VsModeData unk_810; ///< invisible melee
     /* 0x0950 */ VsModeData unk_950;
-    /* 0x0A90 */ VsModeData unk_A90; ///< fixed camera mode
-    /* 0x0BD0 */ VsModeData unk_BD0; ///< single button melee
-    /* 0x0D10 */ VsModeData unk_D10; ///< training mode
-    /* 0x0E50 */ VsModeData unk_E50; ///< tiny melee
-    /* 0x0F90 */ VsModeData unk_F90; ///< giant melee
+    /* 0x0A90 */ VsModeData unk_A90;  ///< fixed camera mode
+    /* 0x0BD0 */ VsModeData unk_BD0;  ///< single button melee
+    /* 0x0D10 */ VsModeData unk_D10;  ///< training mode
+    /* 0x0E50 */ VsModeData unk_E50;  ///< tiny melee
+    /* 0x0F90 */ VsModeData unk_F90;  ///< giant melee
     /* 0x10D0 */ VsModeData unk_10D0; ///< stamina melee
     /* 0x1210 */ VsModeData unk_1210; ///< slowmo melee
     /* 0x1350 */ VsModeData unk_1350; ///< lightning melee
@@ -290,8 +339,8 @@ struct gmm_x0 {
 struct lbl_8046B6A0_24C_t {
     UNK_T x0;
     u8 x4;
-    u8 x5;
-    u8 x6;
+    u8 x5; ///< match mode
+    u8 x6; ///< is teams
     u32 x8;
     u8 xC;
     u8 padD[0x24 - 0xD];
@@ -360,7 +409,7 @@ struct lbl_8046B6A0_t {
     /* 0x0008 */ u8 match_result;
     /* 0x0009 */ u8 unk_9;
     /* 0x000A */ u8 unk_A;
-    /* 0x000B */ u8 unk_B;
+    /* 0x000B */ u8 unk_B; // end graphic / SFX type
     /* 0x000C */ u8 unk_C;
     /* 0x000D */ u8 unk_D;
     /* 0x000E */ u8 match_over;
@@ -372,20 +421,20 @@ struct lbl_8046B6A0_t {
     /* 0x0020 */ u32* unk_20;
     /* 0x0024 */ u32 frame_count;
     /* 0x0028 */ u32 timer_seconds;
-    /* 0x002C */ u16 unk_2C;
+    /* 0x002C */ u16 unk_2C; ///< timer frames
     /* 0x002E */ u16 unk_2E;
     /* 0x0030 */ u8 unk_30;
     /* 0x0034 */ f32 unk_34;
     /* 0x0038 */ struct {
-        u8 x0;
+        u8 x0; ///< CharacterKind
         u8 x1;
         u8 slot_type;
         s8 spawn_point;
         u8 x4_b0 : 1;
         u8 x4_b1 : 1;
-        u8 x4_b2 : 1;
+        u8 x4_b2 : 1; ///< invisible
         u8 x4_b3 : 1;
-        u8 x4_b4 : 1;
+        u8 x4_b4 : 1; ///< Zelda/Sheik transforming on load
         u8 x4_b5 : 1;
         u8 x4_b6 : 1;
         u8 x4_b7 : 1;
@@ -432,18 +481,19 @@ struct gm_8017DB6C_arg0_t {
 STATIC_ASSERT(sizeof(struct gm_8017DB6C_arg0_t) == 0xC);
 
 struct gmMainLib_8046B0F0_t {
-    bool x0;
-    bool x4; // reset switch pressed
-    bool x8; // true = progressive, false = interlaced
-    int xC, x10, x14;
+    /* 00 */ bool x0;
+    /* 04 */ bool resetting;   ///< reset switch pressed
+    /* 08 */ bool progressive; ///< true = progressive, false = interlaced
+    /* 0C */ bool xC;          // movie playback done, maybe?
+    /* 10 */ int x10, x14;
 };
 
 extern struct gmMainLib_8046B0F0_t gmMainLib_8046B0F0;
 
-struct gm_8016A92C_arg0_t {
-    char pad_0[0x58];
-    struct lbl_8046B668_t* x58;
-};
+typedef struct gm_803DF94C_t {
+    void (*x0)(HSD_GObj*);
+    void (*x4)(int);
+} gm_803DF94C_t;
 
 struct MatchTeamData {
     int score;
@@ -498,8 +548,8 @@ struct MatchPlayerData {
     u32 x90;
     u32 x94;
     u32 x98;
-    u32 x9C;
-    u32 xA0;
+    int x9C;
+    int xA0;
     u32 xA4;
 };
 
@@ -540,12 +590,12 @@ struct ResultsMatchInfo {
 };
 
 struct UnkAllstarData {
-    s8 x0;
-    u8 x1;
-    u8 x2;
-    u8 x3;
+    s8 x0; ///< c_kind
+    u8 x1; ///< color
+    u8 x2; ///< cpu_level
+    u8 x3; ///< slot
     u8 x4;
-    u8 x5;
+    u8 x5; ///< stocks
     u8 x6;
     u8 x7;
     u8 x8;
@@ -565,10 +615,7 @@ struct UnkAllstarData {
         u8 x9;
         u8 xA;
         u8 xB;
-        u8 xC;
-        u8 xD;
-        u8 xE;
-        u8 xF;
+        int xC;
         s8 x10;
         u8 x11;
         u8 x12;
@@ -603,13 +650,21 @@ struct UnkAllstarData {
         u8 x2F;
         s8 x30;
     } xC;
-    s8 pad_x0[0xA0 - 0x31 - 0xC];
+    s8 pad_x0[0x74 - 0x40];
+    u16 x74;
+    s8 pad_x76[0xA0 - 0x76];
 };
 
 struct TmData {
-    s32 x0;
-    s32 x4;
-    u8 pad_x8[0x28 - 0x8];
+    int x0;
+    int x4;
+    int x8;
+    int xC;
+    int x10;
+    int x14;
+    u8 pad_x18[0x20 - 0x18];
+    int x20;
+    int x24;
     u32 x28; ///< stage id
     u8 x2C;
     u8 x2D;
@@ -635,14 +690,17 @@ struct TmData {
         u8 xC;
         u8 xD;
         u8 pad_xE[0x11 - 0xE];
-    } x37[16];
+    } x37[16]; ///< @todo needs to be larger, see gm_80190EA4
     u8 pad_x158[0x4B8 - 0x158];
     struct UnkSelections {
-        u8 x0; ///< slot type?
+        u8 x0; ///< slot type
         u8 x1; ///< CSSIconHud
         u8 x2;
-        u8 x3;
-        u8 pad_x4[0xA - 0x4];
+        u8 x3; ///< color
+        u8 x4; ///< CPU level
+        u8 x5;
+        u16 x6;
+        u8 pad_x4[0xA - 0x8];
     } x4B8[4];
     HSD_Text* x4E0;
     HSD_Text* x4E4;
@@ -694,9 +752,34 @@ struct CameraVsData {
 
 struct TmVsData {
     u32 stage_id;
-    s32 slot_type[4];
+    Gm_PKind slot_type[4];
     u32 char_id[4];
     u32 color[4];
 };
+
+struct gm_801677C0_s {
+    /*  +1 */ u8 x0;
+    /*  +2 */ u8 x1;
+    /*  +3 */ u8 x2;
+    /*  +4 */ u8 x3;
+    /*  +4 */ bool (*x4[2])(void);
+    /*  +C */ UNK_T xC;
+    /* +20 */ u64 unk_20;
+    /* +28 */ u64 unk_28;
+    /* +30 */ void (*unk_30)(void);
+    /* +34 */ int unk_34;
+    /* +38 */ u8 unk_38_0 : 1;
+    /* +38 */ u8 unk_38_1 : 1;
+};
+STATIC_ASSERT(sizeof(struct gm_801677C0_s) == 0x30);
+
+struct gm_80479D58_t {
+    /*  +0 */ u32 unk_0;
+    /*  +4 */ u32 unk_4;
+    /*  +8 */ u32 unk_8;
+    /*  +C */ int unk_C;
+    /* +10 */ struct gm_801677C0_s unk_10;
+};
+STATIC_ASSERT(sizeof(struct gm_80479D58_t) == 0x40);
 
 #endif

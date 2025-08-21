@@ -2,6 +2,9 @@
 
 #include <platform.h>
 
+#include <sysdolphin/baselib/gobjgxlink.h>
+#include <sysdolphin/baselib/gobjproc.h>
+#include <sysdolphin/baselib/random.h>
 #include <melee/gr/granime.h>
 #include <melee/gr/grdisplay.h>
 #include <melee/gr/grlib.h>
@@ -14,9 +17,6 @@
 #include <melee/it/items/itheiho.h>
 #include <melee/lb/lb_00B0.h>
 #include <melee/lb/lb_00F9.h>
-#include <sysdolphin/baselib/gobjgxlink.h>
-#include <sysdolphin/baselib/gobjproc.h>
-#include <sysdolphin/baselib/random.h>
 
 /* 1E302C */ static void grStory_801E302C(bool);
 /* 1E36D0 */ static DynamicsDesc* grStory_801E36D0(enum_t);
@@ -48,8 +48,8 @@ StageData grSt_803E274C = {
     "/GrSt.dat",
     grStory_801E3030,
     grStory_801E302C,
-    grStory_801E30A8,
-    grStory_801E30AC,
+    grStory_UnkStage0_OnLoad,
+    grStory_UnkStage0_OnStart,
     grStory_801E30D0,
     grStory_801E36D0,
     grStory_801E36D8,
@@ -73,9 +73,9 @@ void grStory_801E3030(void)
     Ground_801C3BB4();
 }
 
-void grStory_801E30A8(void) {}
+void grStory_UnkStage0_OnLoad(void) {}
 
-void grStory_801E30AC(void)
+void grStory_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(false);
 }
@@ -143,8 +143,8 @@ inline int randi(int max)
 static inline void reset_shyguy_timer(Ground* gp)
 {
     // Reset the timer
-    gp->u.shyguys.timer = shyguy_vars->timer_min
-        + randi(shyguy_vars->timer_rand);
+    gp->u.shyguys.timer =
+        shyguy_vars->timer_min + randi(shyguy_vars->timer_rand);
 
     // This value really is overwritten in the game code.
     // Maybe a leftover hardcoded value from debugging?

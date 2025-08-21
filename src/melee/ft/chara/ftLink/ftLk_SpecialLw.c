@@ -1,10 +1,6 @@
-#include <platform.h>
-
-#include "ftLink/forward.h"
-#include "it/forward.h"
-#include <baselib/forward.h>
-
 #include "ftLk_SpecialLw.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
@@ -16,9 +12,15 @@
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_ItemThrow.h"
 #include "ftCommon/ftpickupitem.h"
+
+#include "ftLink/forward.h"
+#include "it/forward.h"
+
 #include "it/it_26B1.h"
 #include "it/items/it_27CF.h"
 #include "lb/lb_00B0.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 
@@ -66,7 +68,7 @@ static void spawnBomb(HSD_GObj* gobj)
     if (ftCheckThrowB0(fp)) {
         Vec3 pos;
         u8 _[4];
-        lb_8000B1CC(fp->parts[ftParts_8007500C(fp, FtPart_LThumbNb)].joint,
+        lb_8000B1CC(fp->parts[ftParts_GetBoneIndex(fp, FtPart_LThumbNb)].joint,
                     NULL, &pos);
         {
             Fighter_Part part = da->x48;

@@ -1,13 +1,13 @@
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ftCo_Jump.h"
 
 #include "math.h"
 
+#include <placeholder.h>
+
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0881.h"
@@ -16,6 +16,9 @@
 #include "ft/ftcommon.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_AirCatch.h"
 #include "ftCommon/ftCo_AttackAir.h"
 #include "ftCommon/ftCo_EscapeAir.h"
@@ -146,7 +149,7 @@ void ftCo_800CB110(Fighter_GObj* gobj, bool arg1, f32 jump_mul)
         ft_800881D8(fp, fp->ft_data->x4C_sfx->x10, SFX_VOLUME_MAX,
                     SFX_PAN_MID);
         if (fp->x197C != NULL) {
-            ft_80088148(fp, 0x11A, SFX_VOLUME_MAX, SFX_PAN_MID);
+            ft_PlaySFX(fp, 0x11A, SFX_VOLUME_MAX, SFX_PAN_MID);
         }
     }
 }

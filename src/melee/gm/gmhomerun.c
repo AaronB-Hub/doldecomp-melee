@@ -5,6 +5,8 @@
 #include "gm_unsplit.h"
 #include "gmvsdata.h"
 
+#include <melee/pl/forward.h>
+
 #include <sysdolphin/baselib/controller.h>
 #include <sysdolphin/baselib/memory.h>
 #include <sysdolphin/baselib/random.h>
@@ -42,7 +44,7 @@ MinorScene gm_803DF198_MinorScenes[] = {
         0,
         3,
         0,
-        (void (*)(MinorScene*)) gm_801B98E8,
+        gm_801B98E8,
         gm_801B999C,
         {
             MN_CSS,
@@ -65,11 +67,33 @@ MinorScene gm_803DF198_MinorScenes[] = {
     { -1 },
 };
 
-extern VsModeData gm_80497618;
-extern u8 gm_804D68F8;
-extern u8 gm_804D68F9;
+VsModeData gm_80497618;
+static u8 gm_804D68F8;
+static u8 gm_804D68F9;
 
-/// #gm_801B98E8
+void gm_801B98E8(MinorScene* scene)
+{
+    CSSData* css;
+    struct GameCache* game_cache;
+    VsModeData* vs = &gm_80497618;
+
+    css = gm_801A427C(scene);
+    if (gm_804D68F9 != 0) {
+        lb_8001C550();
+        lb_8001D164(0);
+        lb_8001CE00();
+    }
+    gm_801B06B0(css, 0x10, vs->data.players[0].c_kind, 1,
+                vs->data.players[0].color, vs->data.players[0].xA, 0,
+                gm_804D68F8);
+    game_cache = &lbDvd_8001822C()->game_cache;
+    lbDvd_800174BC();
+    game_cache->entries[1].char_id = CHKIND_SANDBAG;
+    game_cache->entries[1].color = 0;
+    game_cache->stage_id = 0x54;
+    lbDvd_80018254();
+    gm_804D68F9 = lbTime_8000AF74(gm_804D68F9, 1);
+}
 
 void gm_801B999C(MinorScene* scene)
 {
@@ -84,16 +108,14 @@ void gm_801B999C(MinorScene* scene)
     gm_80167A14(vs->data.players);
     gm_801B0730(temp_r3, &vs->data.players[0].c_kind, NULL,
                 &vs->data.players[0].color, &vs->data.players[0].xA, NULL);
-    vs->data.players[1].c_kind = 0x1F;
+    vs->data.players[1].c_kind = CHKIND_SANDBAG;
     vs->data.players[1].xE = 0xF;
     vs->data.players[1].x1C = 1.0f;
-    vs->data.players[1].slot_type = 1;
+    vs->data.players[1].slot_type = Gm_PKind_Cpu;
     vs->data.players[1].stocks = 1;
     vs->data.players[1].team = 1;
 }
 
-#pragma push
-#pragma dont_inline on
 void gm_801B9A3C(MinorScene* arg0)
 {
     StartMeleeData* data;
@@ -139,7 +161,6 @@ void gm_801B9A3C(MinorScene* arg0)
     gm_80181A00(data->players[0].c_kind, (u8) data->players[0].xA);
     gm_80180B18();
 }
-#pragma pop
 
 void gm_801B9DD8(MinorScene* arg0)
 {

@@ -1,8 +1,3 @@
-#include <platform.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ftCo_PassiveWall.h"
 
 #include "ftCo_AirCatch.h"
@@ -13,8 +8,13 @@
 #include "ftCo_ItemThrow.h"
 #include "ftCo_SpecialAir.h"
 
+#include <platform.h>
+
 #include "ef/efasync.h"
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0881.h"
@@ -25,6 +25,9 @@
 #include "ft/ftcoll.h"
 #include "ft/ftcommon.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_JumpAerial.h"
 #include "ftCommon/types.h"
@@ -110,7 +113,7 @@ void ftCo_800C1E64(Fighter_GObj* gobj, int msid, int timer, int vel_y_exponent,
     ft_800881D8(fp, fp->ft_data->x4C_sfx->x24, 0x7F, 0x40);
     ftCommon_8007EBAC(fp, 12, 0);
     if (timer == 0) {
-        ft_80088148(fp, 3, 0x7F, 0x40);
+        ft_PlaySFX(fp, 3, 0x7F, 0x40);
     }
     ftCo_800BFFD0(fp, 120, 0);
     ftColl_8007B760(gobj, p_ftCommonData->x764);
@@ -132,7 +135,7 @@ void ftCo_PassiveWall_Anim(Fighter_GObj* gobj)
     if (fp->mv.co.passivewall.timer != 0) {
         --fp->mv.co.passivewall.timer;
         if (fp->mv.co.passivewall.timer == 0) {
-            ft_80088148(fp, 8, 127, 64);
+            ft_PlaySFX(fp, 8, 127, 64);
             if (fp->mv.co.passivewall.x8) {
                 inlineA0(gobj);
             } else {

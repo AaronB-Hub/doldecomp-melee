@@ -30,7 +30,7 @@ S16Vec grLast_804D4968[1] = { { 0, 3, 0 } };
 
 static int* grNLa_804D6AD0;
 
-static void grLast_8021A620(int arg0)
+static void grLast_8021A620(bool arg0)
 {
     Ground_GObj* gobj;
     Ground* gp;
@@ -154,8 +154,8 @@ StageData grNLa_803E7F90 = {
     "/GrNLa.dat",
     grLast_8021A740,
     grLast_8021A620,
-    grLast_8021A7C4,
-    grLast_8021A7C8,
+    grLast_UnkStage0_OnLoad,
+    grLast_UnkStage0_OnStart,
     grLast_8021A7EC,
     grLast_8021C740,
     grLast_8021C748,
@@ -179,14 +179,14 @@ static void grLast_8021A740(void)
     Camera_800311CC(30000);
 }
 
-static void grLast_8021A7C4(void) {}
+static void grLast_UnkStage0_OnLoad(void) {}
 
-static void grLast_8021A7C8(void)
+static void grLast_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }
 
-static int grLast_8021A7EC(void)
+static bool grLast_8021A7EC(void)
 {
     return FALSE;
 }
@@ -962,7 +962,7 @@ static void grLast_8021C6AC(void)
     Ground_801C0574(&spC);
 }
 
-static DynamicsDesc* grLast_8021C740(int arg0)
+static DynamicsDesc* grLast_8021C740(enum_t arg0)
 {
     return NULL;
 }

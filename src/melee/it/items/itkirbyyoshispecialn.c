@@ -1,11 +1,12 @@
-#include <platform.h>
-
-#include "ftKirby/forward.h"
-
 #include "itkirbyyoshispecialn.h"
+
+#include <platform.h>
 
 #include "ft/chara/ftKirby/ftKb_Init.h"
 #include "ft/ftlib.h"
+
+#include "ftKirby/forward.h"
+
 #include "it/inlines.h"
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
@@ -15,12 +16,14 @@
 
 #include <common_structs.h>
 
-/* 2F2E68 */ static bool it_802F2E68(Item_GObj* gobj);
-/* 2F2E70 */ static void it_802F2E70(Item_GObj* gobj);
-/* 2F2E74 */ static bool it_802F2E74(Item_GObj* gobj);
+/* 2F2E68 */ static bool itKirbyyoshispecialn_UnkMotion0_Anim(Item_GObj* gobj);
+/* 2F2E70 */ static void itKirbyyoshispecialn_UnkMotion0_Phys(Item_GObj* gobj);
+/* 2F2E74 */ static bool itKirbyyoshispecialn_UnkMotion0_Coll(Item_GObj* gobj);
 
 ItemStateTable it_803F9490[] = {
-    { -1, it_802F2E68, it_802F2E70, it_802F2E74 },
+    { -1, itKirbyyoshispecialn_UnkMotion0_Anim,
+      itKirbyyoshispecialn_UnkMotion0_Phys,
+      itKirbyyoshispecialn_UnkMotion0_Coll },
 };
 
 /// @todo Shared code with #it_802F2BFC.
@@ -43,14 +46,14 @@ void it_802F2D98(Item_GObj* gobj, Fighter_GObj* owner_gobj)
     it_80273408(gobj);
 }
 
-bool it_802F2E68(Item_GObj* gobj)
+bool itKirbyyoshispecialn_UnkMotion0_Anim(Item_GObj* gobj)
 {
     return false;
 }
 
-void it_802F2E70(Item_GObj* gobj) {}
+void itKirbyyoshispecialn_UnkMotion0_Phys(Item_GObj* gobj) {}
 
-bool it_802F2E74(Item_GObj* gobj)
+bool itKirbyyoshispecialn_UnkMotion0_Coll(Item_GObj* gobj)
 {
     return false;
 }

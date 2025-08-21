@@ -1,6 +1,6 @@
-#include <platform.h>
-
 #include "ftNess/ftNs_AttackS4.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
@@ -18,7 +18,7 @@
 void ftNs_AttackS4_OnReflect(
     HSD_GObj* gobj) // Ness's F-Smash OnReflect callback
 {
-    ft_80088148(GET_FIGHTER(gobj), 0xE0U, 0x7FU, 0x40U);
+    ft_PlaySFX(GET_FIGHTER(gobj), 0xE0U, 0x7FU, 0x40U);
 };
 
 // 0x80114C24

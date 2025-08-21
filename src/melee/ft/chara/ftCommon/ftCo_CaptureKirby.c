@@ -1,14 +1,15 @@
-#include <platform.h>
-#include <placeholder.h>
-
-#include "ft/forward.h"
-
 #include "ftCo_CaptureKirby.h"
 
 #include "ftCo_Lift.h"
 
+#include <placeholder.h>
+#include <platform.h>
+
 #include "ft/chara/ftKirby/ftKb_Init.h"
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_0D14.h"
 #include "ft/ftanim.h"
 #include "ft/ftcommon.h"
@@ -54,7 +55,7 @@ static inline void inlineA0(Fighter_GObj* gobj)
             HSD_JObjGetScale(jobj, scale);
         }
         fp->x2226_b2 = true;
-        ftCommon_8007DBCC(fp, 0, ftKb_SpecialN_800F5AF0(fp->victim_gobj));
+        ftCommon_InitGrab(fp, 0, ftKb_SpecialN_800F5AF0(fp->victim_gobj));
     }
 }
 

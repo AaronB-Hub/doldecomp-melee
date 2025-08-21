@@ -1,6 +1,6 @@
-#include <placeholder.h>
-
 #include "gr/grticeclimber.h"
+
+#include <placeholder.h>
 
 #include "cm/camera.h"
 #include "ef/efsync.h"
@@ -52,8 +52,8 @@ StageData grTIc_803E8AF4 = {
     "/GrTIc.dat",
     grTIceClimber_80220F14,
     grTIceClimber_80220F10,
-    grTIceClimber_80220F84,
-    grTIceClimber_80220F88,
+    grTiceclimber_UnkStage0_OnLoad,
+    grTiceclimber_UnkStage0_OnStart,
     grTIceClimber_80220FAC,
     grTIceClimber_80221354,
     grTIceClimber_8022135C,
@@ -76,9 +76,9 @@ void grTIceClimber_80220F14(void)
     Ground_801C42AC();
 }
 
-void grTIceClimber_80220F84(void) {}
+void grTiceclimber_UnkStage0_OnLoad(void) {}
 
-void grTIceClimber_80220F88(void)
+void grTiceclimber_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }
@@ -171,7 +171,8 @@ void grTIceClimber_802211E4(Ground_GObj* gobj)
 
 void grTIceClimber_80221204(Ground_GObj* gobj) {}
 
-void grTIceClimber_80221208(Item_GObj* gobj, Ground* u1, Vec3* u2, HSD_GObj* u3, f32 u4)
+void grTIceClimber_80221208(Item_GObj* gobj, Ground* u1, Vec3* u2,
+                            HSD_GObj* u3, f32 u4)
 {
     Vec3 pos;
     Item* it = GET_ITEM(gobj);

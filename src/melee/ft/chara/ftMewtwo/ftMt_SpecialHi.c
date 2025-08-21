@@ -1,11 +1,12 @@
-#include <platform.h>
-
-#include "forward.h"
-
 #include "ftMt_SpecialHi.h"
+
+#include <platform.h>
 
 #include "ef/eflib.h"
 #include "ef/efsync.h"
+
+#include "forward.h"
+
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
@@ -398,7 +399,7 @@ static inline void ftMewtwo_SpecialHi_SetVars(HSD_GObj* gobj)
 
     fp->x221E_b0 = true;
 
-    ft_80088148(fp, 0x30DA1, SFX_VOLUME_MAX, SFX_PAN_MID);
+    ft_PlaySFX(fp, 0x30DA1, SFX_VOLUME_MAX, SFX_PAN_MID);
 }
 
 /// Mewtwo's grounded Teleport Zoom Motion State handler

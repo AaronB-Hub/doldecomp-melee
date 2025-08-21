@@ -1,7 +1,7 @@
-#include <platform.h>
-#include <placeholder.h>
-
 #include "ft/ftdrawcommon.h"
+
+#include <placeholder.h>
+#include <platform.h>
 
 #include "cm/camera.h"
 #include "ft/ft_0C88.h"
@@ -131,8 +131,8 @@ void ftDrawCommon_800805C8(HSD_GObj* gobj, s32 arg1, s32 arg2)
             phi_r26 = fighter + (0U * 0x4C);
             // phi_r30 = phi_r30;
             while (phi_r25 < (u8) fighter->hurt_capsules_len) {
-                if (lbColl_8000A584(phi_r26->hurt_capsules, 1, arg1,
-                                    ftCommon_8007F804(fighter),
+                if (lbColl_8000A584(&phi_r26->hurt_capsules[0].capsule, 1,
+                                    arg1, ftCommon_8007F804(fighter),
                                     fighter->cur_pos.z) != 0)
                 {
                     phi_r30 = 1U;
@@ -146,8 +146,8 @@ void ftDrawCommon_800805C8(HSD_GObj* gobj, s32 arg1, s32 arg2)
                 phi_r26 = fighter;
                 // phi_r30 = phi_r30;
                 while (phi_r25 < (u8) fighter->hurt_capsules_len) {
-                    if (lbColl_8000A244(phi_r26->hurt_capsules, arg1,
-                                        ftCommon_8007F804(fighter),
+                    if (lbColl_8000A244(&phi_r26->hurt_capsules[0].capsule,
+                                        arg1, ftCommon_8007F804(fighter),
                                         fighter->cur_pos.z) != 0)
                     {
                         phi_r30 = 1U;
@@ -164,7 +164,8 @@ void ftDrawCommon_800805C8(HSD_GObj* gobj, s32 arg1, s32 arg2)
                 phi_r26 = fighter;
                 // phi_r30 = phi_r30;
                 while (phi_r25 < fighter->hurt_capsules_len) {
-                    if (lbColl_8000A584(phi_r26->hurt_capsules, phi_r24, arg1,
+                    if (lbColl_8000A584(&phi_r26->hurt_capsules[0].capsule,
+                                        phi_r24, arg1,
                                         ftCommon_8007F804(fighter),
                                         fighter->cur_pos.z) != 0)
                     {
@@ -213,8 +214,9 @@ void ftDrawCommon_800805C8(HSD_GObj* gobj, s32 arg1, s32 arg2)
         while (phi_r25 < (unsigned) fighter->dynamics_num) {
             spAC = 0.0f;
             spA8 = 0.0f;
-            if (lb_800117F4(&phi_r26->dynamic_bone_sets[0].dyn_desc, &spAC,
-                            &spA8, phi_r26->dynamics_num, arg1) != 0)
+            if (lb_800117F4(&phi_r26->dynamic_bone_sets[0].dyn_desc,
+                            (GXColor*) &spAC, &spA8, phi_r26->dynamics_num,
+                            arg1) != 0)
             {
                 phi_r30 = 1U;
             }
@@ -226,7 +228,7 @@ void ftDrawCommon_800805C8(HSD_GObj* gobj, s32 arg1, s32 arg2)
         phi_r30 = 1U;
     }
     if ((fighter->x21FC_flag.b4 != 0) && (fighter->x2223_b5 != 0) &&
-        (lb_80014770(&fighter->dmg.x1930, arg1) != 0))
+        (lb_80014770(&fighter->dmg.x1930.x0, arg1) != 0))
     {
         phi_r30 = 1U;
     }

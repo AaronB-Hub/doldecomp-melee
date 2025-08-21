@@ -42,15 +42,15 @@ StageData grTLg_803E8E4C = {
     "/GrTLg.dat",
     grTLuigi_80221C14,
     grTLuigi_80221C10,
-    grTLuigi_80221C84,
-    grTLuigi_80221C88,
+    grTluigi_UnkStage0_OnLoad,
+    grTluigi_UnkStage0_OnStart,
     grTLuigi_80221CAC,
     grTLuigi_80221EE4,
     grTLuigi_80221EEC,
     1,
 };
 
-void grTLuigi_80221C10(int arg0) {}
+void grTLuigi_80221C10(bool arg0) {}
 
 void grTLuigi_80221C14(void)
 {
@@ -66,9 +66,9 @@ void grTLuigi_80221C14(void)
     Ground_801C42AC();
 }
 
-void grTLuigi_80221C84(void) {}
+void grTluigi_UnkStage0_OnLoad(void) {}
 
-void grTLuigi_80221C88(void)
+void grTluigi_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }
@@ -162,7 +162,7 @@ DynamicsDesc* grTLuigi_80221EE4(enum_t arg0)
     return NULL;
 }
 
-int grTLuigi_80221EEC(Vec3* arg0, int arg1, HSD_JObj* arg2)
+bool grTLuigi_80221EEC(Vec3* arg0, int arg1, HSD_JObj* arg2)
 {
     return true;
 }

@@ -1,24 +1,26 @@
-#include <platform.h>
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-#include "ftDonkey/forward.h"
-#include "ftKoopa/forward.h"
-#include "ftPopo/forward.h"
-#include "lb/forward.h"
-
 #include "ftCo_0A01.h"
 
 #include "ftCo_0B3E.h"
 #include "ftpickupitem.h"
 
+#include <placeholder.h>
+#include <platform.h>
+
 #include "ft/chara/ftPopo/ftPp_1211.h"
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_0877.h"
 #include "ft/ftlib.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+#include "ftDonkey/forward.h"
+#include "ftKoopa/forward.h"
+#include "ftPopo/forward.h"
+
 #include "gm/gm_unsplit.h"
 #include "gr/grbigblue.h"
 #include "gr/grcorneria.h"
@@ -30,6 +32,9 @@
 #include "it/inlines.h"
 #include "it/item.h"
 #include "it/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lbcollision.h"
 #include "mp/mpisland.h"
 #include "mp/mplib.h"
@@ -47,6 +52,7 @@ int ftCo_803C5A68[] = {
 };
 
 /* static */ extern StageBlastZone** ftCo_803C6594;
+/* 0A2638 */ static void ftCo_800B1DA0(Fighter* fp);
 
 #pragma force_active on
 
@@ -239,7 +245,7 @@ void ftCo_800A0CB0(Fighter* fp)
 void ftCo_800A0DA4(Fighter* fp)
 {
     Fighter* var_r31;
-    HurtCapsule* hurt;
+    FighterHurtCapsule* hurt;
     float temp_f0;
     float temp_f0_2;
     float temp_f0_3;
@@ -263,12 +269,12 @@ void ftCo_800A0DA4(Fighter* fp)
     var_f29 = 0.0f;
     var_f31 = 0.0f;
     var_f30 = 0.0f;
-    while (var_r30 < (int) fp->hurt_capsules_len) {
+    while (var_r30 < fp->hurt_capsules_len) {
         hurt = var_r31->hurt_capsules;
-        lbColl_800083C4(hurt);
+        lbColl_800083C4(&hurt->capsule);
         temp_f5 = fp->cur_pos.x;
-        temp_f4 = hurt->a_pos.x - temp_f5;
-        temp_f3 = hurt->scale * fp->x34_scale.y;
+        temp_f4 = hurt->capsule.a_pos.x - temp_f5;
+        temp_f3 = hurt->capsule.scale * fp->x34_scale.y;
         temp_f6 = fp->cur_pos.y;
         temp_f0 = temp_f4 - temp_f3;
         if (var_f31 > temp_f0) {
@@ -278,11 +284,11 @@ void ftCo_800A0DA4(Fighter* fp)
         if (var_f30 < temp_f0_2) {
             var_f30 = temp_f0_2;
         }
-        temp_f0_3 = (hurt->a_pos.y - temp_f6) + temp_f3;
+        temp_f0_3 = (hurt->capsule.a_pos.y - temp_f6) + temp_f3;
         if (var_f29 < temp_f0_3) {
             var_f29 = temp_f0_3;
         }
-        temp_f1 = hurt->b_pos.x - temp_f5;
+        temp_f1 = hurt->capsule.b_pos.x - temp_f5;
         temp_f0_4 = temp_f1 - temp_f3;
         if (var_f31 > temp_f0_4) {
             var_f31 = temp_f0_4;
@@ -291,7 +297,7 @@ void ftCo_800A0DA4(Fighter* fp)
         if (var_f30 < temp_f0_5) {
             var_f30 = temp_f0_5;
         }
-        temp_f0_6 = (hurt->b_pos.y - temp_f6) + temp_f3;
+        temp_f0_6 = (hurt->capsule.b_pos.y - temp_f6) + temp_f3;
         if (var_f29 < temp_f0_6) {
             var_f29 = temp_f0_6;
         }
@@ -501,10 +507,10 @@ bool ftCo_800A1F98(int x, float y)
 
 bool ftCo_800A2040(Fighter* fp)
 {
-    if (Player_8003248C(fp->player_id, fp->x221F_b4) != 1) {
+    if (Player_8003248C(fp->player_id, fp->x221F_b4) != Gm_PKind_Cpu) {
         return false;
     }
-    if ((signed) fp->x1A88.xC == 5) {
+    if (fp->x1A88.xC == 5) {
         return false;
     }
     return true;
@@ -1054,8 +1060,8 @@ Fighter* ftCo_800A4A40(Fighter* fp)
 
 /// #ftCo_800A50D4
 
-static inline void inlineD2(Fighter* var_r28, Fighter* fp,
-                            Fighter* temp_r31, Fighter* temp_r29)
+static inline void inlineD2(Fighter* var_r28, Fighter* fp, Fighter* temp_r31,
+                            Fighter* temp_r29)
 {
     f32 var_f31 = 0;
     f32 temp_f1;

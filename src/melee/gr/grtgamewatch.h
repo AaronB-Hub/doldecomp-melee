@@ -3,17 +3,16 @@
 
 #include <platform.h>
 
+#include "gr/forward.h"
 #include "lb/forward.h"
 #include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 
-#include "gr/forward.h"
-
 void grTGameWatch_80224110(bool);
 void grTGameWatch_80224114(void);
-void grTGameWatch_80224184(void);
-void grTGameWatch_80224188(void);
+void grTgamewatch_UnkStage0_OnLoad(void);
+void grTgamewatch_UnkStage0_OnStart(void);
 bool grTGameWatch_802241AC(void);
 HSD_GObj* grTGameWatch_802241B4(int);
 void grTGameWatch_8022429C(Ground_GObj*);
@@ -28,7 +27,7 @@ void grTGameWatch_80224368(Ground_GObj*);
 bool grTGameWatch_802243B8(Ground_GObj*);
 void grTGameWatch_802243C0(Ground_GObj*);
 void grTGameWatch_802243E0(Ground_GObj*);
-DynamicsDesc* grTGameWatch_802243E4(int);
+DynamicsDesc* grTGameWatch_802243E4(enum_t);
 bool grTGameWatch_802243EC(Vec3*, int, HSD_JObj*);
 
 #endif

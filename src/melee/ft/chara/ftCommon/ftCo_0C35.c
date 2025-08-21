@@ -1,9 +1,9 @@
-#include <platform.h>
-#include <placeholder.h>
-
 #include "ftCo_0C35.h"
 
 #include "ftCo_Damage.h"
+
+#include <placeholder.h>
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ftcommon.h"
@@ -67,7 +67,7 @@ void ftCo_800C37A0(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     if (fp->dmg.x18F4 != 0) {
-        Fighter_Part part = ftParts_8007500C(fp, FtPart_TransN);
+        Fighter_Part part = ftParts_GetBoneIndex(fp, FtPart_TransN);
         HSD_JObj* jobj = fp->parts[part].x4_jobj2;
         {
             float rot_y = M_PI *

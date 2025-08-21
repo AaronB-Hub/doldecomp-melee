@@ -1,14 +1,14 @@
-#include <platform.h>
-
-#include "forward.h"
-#include "lb/forward.h"
-
 #include "ftDk_SpecialN.h"
 
 #include "ftDk_Init.h"
 
+#include <platform.h>
+
 #include "ef/eflib.h"
 #include "ef/efsync.h"
+
+#include "forward.h"
+
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
@@ -22,6 +22,8 @@
 #include "ftCommon/ftCo_FallSpecial.h"
 #include "ftDonkey/types.h"
 
+#include "lb/forward.h"
+
 #include <common_structs.h>
 #include <dolphin/mtx.h>
 
@@ -30,7 +32,7 @@ static void setCallbacks(HSD_GObj* gobj)
     Fighter* fp = GET_FIGHTER(gobj);
     fp->take_dmg_cb = ftDk_Init_8010D774;
     fp->death2_cb = ftDk_Init_8010D774;
-    fp->x21F0 = ftDk_SpecialN_DestroyAllEffects;
+    fp->take_dmg_2_cb = ftDk_SpecialN_DestroyAllEffects;
     fp->pre_hitlag_cb = efLib_PauseAll;
     fp->post_hitlag_cb = efLib_ResumeAll;
 }
@@ -110,7 +112,7 @@ void ftDk_SpecialNStart_Anim(HSD_GObj* gobj)
 static void clearCallbacks(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    fp->x21F0 = NULL;
+    fp->take_dmg_2_cb = NULL;
     fp->pre_hitlag_cb = NULL;
     fp->post_hitlag_cb = NULL;
 }

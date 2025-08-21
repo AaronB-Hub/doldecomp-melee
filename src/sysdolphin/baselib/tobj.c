@@ -369,9 +369,9 @@ static void MakeTextureMtx(HSD_TObj* tobj)
     Vec3 trans;
     Quaternion rot;
 
-    u8 _[8];
-
     bool no_assert = false;
+
+    PAD_STACK(8);
 
     if (tobj->repeat_s && tobj->repeat_t) {
         no_assert = true;
@@ -1568,7 +1568,7 @@ void HSD_ImageDescFree(HSD_ImageDesc* idesc)
 }
 
 void HSD_ImageDescCopyFromEFB(HSD_ImageDesc* idesc, u16 origx, u16 origy,
-                              GXBool clear, int sync)
+                              GXBool clear, bool sync)
 {
     if (!idesc) {
         return;

@@ -1,8 +1,8 @@
-#include <platform.h>
-
 #include "ftMh_Poke.h"
 
 #include "ftMh_Wait1_2.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
@@ -48,7 +48,7 @@ void ftMh_Poke1_Anim(HSD_GObj* gobj)
                 Fighter* fp = GET_FIGHTER(gobj);
                 Fighter_ChangeMotionState(gobj, ftMh_MS_Poke2, 0, 0, 1, 0, 0);
                 ftAnim_8006EBA4(gobj);
-                ft_80088148(fp, 320007, 127, 64);
+                ft_PlaySFX(fp, 320007, 127, 64);
             }
         }
     }
@@ -64,7 +64,7 @@ void ftMh_Poke2_Anim(HSD_GObj* arg0)
 void ftMh_Poke1_IASA(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    if (Player_GetPlayerSlotType(fp->player_id) == 0) {
+    if (Player_GetPlayerSlotType(fp->player_id) == Gm_PKind_Human) {
         ftBossLib_8015BD20(gobj);
     }
 }

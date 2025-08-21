@@ -1,18 +1,21 @@
-#include <platform.h>
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "it/forward.h"
-
 #include "ithassam.h"
 
 #include "math.h"
 
+#include <placeholder.h>
+#include <platform.h>
+
 #include "cm/camera.h"
 #include "ef/eflib.h"
+
+#include "ft/forward.h"
+
 #include "ft/ftlib.h"
 #include "ft/inlines.h"
 #include "gm/gm_unsplit.h"
+
+#include "it/forward.h"
+
 #include "it/inlines.h"
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
@@ -28,29 +31,33 @@
 /* 2CDC5C */ static void it_802CDC5C(Item_GObj* gobj);
 /* 2CDC80 */ static void it_802CDC80(Item_GObj* gobj);
 /* 2CDCB4 */ static void it_802CDCB4(Item_GObj* gobj);
-/* 2CDD24 */ static bool it_802CDD24(Item_GObj* gobj);
-/* 2CDD78 */ static void it_802CDD78(Item_GObj* gobj);
-/* 2CDDD0 */ static bool it_802CDDD0(Item_GObj* gobj);
+/* 2CDD24 */ static bool itHassam_UnkMotion0_Anim(Item_GObj* gobj);
+/* 2CDD78 */ static void itHassam_UnkMotion0_Phys(Item_GObj* gobj);
+/* 2CDDD0 */ static bool itHassam_UnkMotion0_Coll(Item_GObj* gobj);
 /* 2CDE1C */ static Item_GObj* it_802CDE1C(Vec3* vec, Item_GObj* gobj);
 /* 2CDF28 */ static void it_802CDF28(Item_GObj* gobj);
 /* 2CE008 */ static void it_802CE008(Item_GObj* gobj);
-/* 2CE0C4 */ static bool it_802CE0C4(Item_GObj* gobj);
-/* 2CE308 */ static void it_802CE308(Item_GObj* gobj);
-/* 2CE3A8 */ static bool it_802CE3A8(Item_GObj* gobj);
+/* 2CE0C4 */ static bool itHassam_UnkMotion1_Anim(Item_GObj* gobj);
+/* 2CE308 */ static void itHassam_UnkMotion1_Phys(Item_GObj* gobj);
+/* 2CE3A8 */ static bool itHassam_UnkMotion1_Coll(Item_GObj* gobj);
 /* 2CE400 */ static void it_802CE400(Item_GObj* gobj);
-/* 2CE588 */ static bool it_802CE588(Item_GObj* gobj);
-/* 2CE5DC */ static void it_802CE5DC(Item_GObj* gobj);
-/* 2CE638 */ static bool it_802CE638(Item_GObj* gobj);
+/* 2CE588 */ static bool itHassam_UnkMotion2_Anim(Item_GObj* gobj);
+/* 2CE5DC */ static void itHassam_UnkMotion2_Phys(Item_GObj* gobj);
+/* 2CE638 */ static bool itHassam_UnkMotion2_Coll(Item_GObj* gobj);
 /* 2CE640 */ static void it_802CE640(Item_GObj* gobj);
-/* 2CE6A4 */ static bool it_802CE6A4(Item_GObj* gobj);
-/* 2CE6C8 */ static void it_802CE6C8(Item_GObj* gobj);
-/* 2CE6E8 */ static bool it_802CE6E8(Item_GObj* gobj);
+/* 2CE6A4 */ static bool itHassam_UnkMotion3_Anim(Item_GObj* gobj);
+/* 2CE6C8 */ static void itHassam_UnkMotion3_Phys(Item_GObj* gobj);
+/* 2CE6E8 */ static bool itHassam_UnkMotion3_Coll(Item_GObj* gobj);
 
 ItemStateTable it_803F7CF8[] = {
-    { 0, it_802CDD24, it_802CDD78, it_802CDDD0 },
-    { 1, it_802CE0C4, it_802CE308, it_802CE3A8 },
-    { 2, it_802CE588, it_802CE5DC, it_802CE638 },
-    { -1, it_802CE6A4, it_802CE6C8, it_802CE6E8 },
+    { 0, itHassam_UnkMotion0_Anim, itHassam_UnkMotion0_Phys,
+      itHassam_UnkMotion0_Coll },
+    { 1, itHassam_UnkMotion1_Anim, itHassam_UnkMotion1_Phys,
+      itHassam_UnkMotion1_Coll },
+    { 2, itHassam_UnkMotion2_Anim, itHassam_UnkMotion2_Phys,
+      itHassam_UnkMotion2_Coll },
+    { -1, itHassam_UnkMotion3_Anim, itHassam_UnkMotion3_Phys,
+      itHassam_UnkMotion3_Coll },
 };
 
 void it_802CDBE0(Item_GObj* gobj)
@@ -95,7 +102,7 @@ void it_802CDCB4(Item_GObj* gobj)
     it_8027A160(ip->xBBC_dynamicBoneTable->bones[2], ip);
 }
 
-bool it_802CDD24(Item_GObj* gobj)
+bool itHassam_UnkMotion0_Anim(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
 
@@ -106,7 +113,7 @@ bool it_802CDD24(Item_GObj* gobj)
     return false;
 }
 
-void it_802CDD78(Item_GObj* gobj)
+void itHassam_UnkMotion0_Phys(Item_GObj* gobj)
 {
     ItemAttr* temp_r4;
     Item* ip = GET_ITEM(gobj);
@@ -119,7 +126,7 @@ void it_802CDD78(Item_GObj* gobj)
     }
 }
 
-bool it_802CDDD0(Item_GObj* gobj)
+bool itHassam_UnkMotion0_Coll(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
 
@@ -218,7 +225,7 @@ void it_802CE008(Item_GObj* gobj)
     ip->xDD4_itemVar.hassam.x5C.z = ip->xDD4_itemVar.hassam.x5C.y = 0.0F;
 }
 
-bool it_802CE0C4(Item_GObj* gobj)
+bool itHassam_UnkMotion1_Anim(Item_GObj* gobj)
 {
     f32 prev_dir;
     Item* ip;
@@ -262,7 +269,7 @@ bool it_802CE0C4(Item_GObj* gobj)
     return false;
 }
 
-void it_802CE308(Item_GObj* gobj)
+void itHassam_UnkMotion1_Phys(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     itHassam_ItemVars* attr = ip->xC4_article_data->x4_specialAttributes;
@@ -279,7 +286,7 @@ void it_802CE308(Item_GObj* gobj)
     ip->x40_vel.z += ip->xDD4_itemVar.hassam.x5C.z;
 }
 
-bool it_802CE3A8(Item_GObj* gobj)
+bool itHassam_UnkMotion1_Coll(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
 
@@ -324,7 +331,7 @@ void it_802CE400(Item_GObj* gobj)
     HSD_JObjSetRotationY(jobj, 0.0F);
 }
 
-bool it_802CE588(Item_GObj* gobj)
+bool itHassam_UnkMotion2_Anim(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
 
@@ -335,7 +342,7 @@ bool it_802CE588(Item_GObj* gobj)
     return false;
 }
 
-void it_802CE5DC(Item_GObj* gobj)
+void itHassam_UnkMotion2_Phys(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
 
@@ -345,7 +352,7 @@ void it_802CE5DC(Item_GObj* gobj)
     ip->pos.z += ip->xDD4_itemVar.hassam.x5C.z;
 }
 
-bool it_802CE638(Item_GObj* gobj)
+bool itHassam_UnkMotion2_Coll(Item_GObj* gobj)
 {
     return false;
 }
@@ -360,18 +367,18 @@ void it_802CE640(Item_GObj* gobj)
     ip->exited_hitlag = efLib_ResumeAll;
 }
 
-bool it_802CE6A4(Item_GObj* gobj)
+bool itHassam_UnkMotion3_Anim(Item_GObj* gobj)
 {
     it_80279FF8(gobj);
     return false;
 }
 
-void it_802CE6C8(Item_GObj* gobj)
+void itHassam_UnkMotion3_Phys(Item_GObj* gobj)
 {
     it_8027A09C(gobj);
 }
 
-bool it_802CE6E8(Item_GObj* gobj)
+bool itHassam_UnkMotion3_Coll(Item_GObj* gobj)
 {
     return it_8027A118(gobj, it_802CDC80);
 }

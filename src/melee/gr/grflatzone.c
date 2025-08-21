@@ -2,9 +2,9 @@
 
 #include "gr/grdisplay.h"
 #include "gr/grdynamicattr.h"
+#include "gr/grlib.h"
 #include "gr/grmaterial.h"
 #include "gr/ground.h"
-#include "gr/grlib.h"
 #include "gr/inlines.h"
 #include "gr/stage.h"
 #include "gr/types.h"
@@ -44,8 +44,8 @@ StageData grFz_803E7A00 = {
     "/GrFz.dat",
     grFlatzone_80216E78,
     grFlatzone_80216E74,
-    grFlatzone_80216F38,
-    grFlatzone_80216F3C,
+    grFlatzone_UnkStage0_OnLoad,
+    grFlatzone_UnkStage0_OnStart,
     grFlatzone_80216F40,
     grFlatzone_802182B4,
     grFlatzone_802182BC,
@@ -82,7 +82,7 @@ static struct {
 // static s8 grFz_804D4928[8] = { 0x6A, 0x6F, 0x62, 0x6A, 0, 0, 0, 0 };
 static Vec3 grFz_803B8430;
 
-void grFlatzone_80216E74(int arg0)
+void grFlatzone_80216E74(bool arg0)
 {
     return;
 }
@@ -110,17 +110,17 @@ void grFlatzone_80216E78(void)
     Ground_801C3990(Stage_GetBlastZoneBottomOffset() - 50.0f);
 }
 
-void grFlatzone_80216F38(void)
+void grFlatzone_UnkStage0_OnLoad(void)
 {
     return;
 }
 
-void grFlatzone_80216F3C(void)
+void grFlatzone_UnkStage0_OnStart(void)
 {
     return;
 }
 
-int grFlatzone_80216F40(void)
+bool grFlatzone_80216F40(void)
 {
     return 0;
 }
@@ -775,12 +775,12 @@ void grFlatzone_80218260(void)
         }
     }
 }
-DynamicsDesc* grFlatzone_802182B4(int arg0)
+DynamicsDesc* grFlatzone_802182B4(enum_t arg0)
 {
     return NULL;
 }
 
-int grFlatzone_802182BC(Vec3* arg0, int arg1, HSD_JObj* arg2)
+bool grFlatzone_802182BC(Vec3* arg0, int arg1, HSD_JObj* arg2)
 {
     return 1;
 }

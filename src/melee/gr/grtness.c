@@ -1,12 +1,13 @@
 #include <platform.h>
 
-#include "lb/forward.h"
-
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
 
 #include <dolphin/mtx.h>
@@ -15,10 +16,10 @@
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-/* 2225D0 */ static void grTNess_802225D0(int);
+/* 2225D0 */ static void grTNess_802225D0(bool);
 /* 2225D4 */ static void grTNess_802225D4(void);
-/* 222644 */ static void grTNess_80222644(void);
-/* 222648 */ static void grTNess_80222648(void);
+/* 222644 */ static void grTness_UnkStage0_OnLoad(void);
+/* 222648 */ static void grTness_UnkStage0_OnStart(void);
 /* 22266C */ static bool grTNess_8022266C(void);
 /* 222674 */ static HSD_GObj* grTNess_80222674(int param_1);
 /* 22275C */ static void grTNess_8022275C(Ground_GObj* gobj);
@@ -60,12 +61,20 @@ static StageCallbacks grTNs_803E9030[] = {
 };
 
 StageData grTNs_803E908C = {
-    0x00000036,       grTNs_803E9030,   "/GrTNs.dat",     grTNess_802225D4,
-    grTNess_802225D0, grTNess_80222644, grTNess_80222648, grTNess_8022266C,
-    grTNess_802228A4, grTNess_802228AC, 0x00000001,
+    0x00000036,
+    grTNs_803E9030,
+    "/GrTNs.dat",
+    grTNess_802225D4,
+    grTNess_802225D0,
+    grTness_UnkStage0_OnLoad,
+    grTness_UnkStage0_OnStart,
+    grTNess_8022266C,
+    grTNess_802228A4,
+    grTNess_802228AC,
+    0x00000001,
 };
 
-static void grTNess_802225D0(int arg0)
+static void grTNess_802225D0(bool arg0)
 {
     return;
 }
@@ -83,12 +92,12 @@ static void grTNess_802225D4(void)
     Ground_801C42AC();
 }
 
-static void grTNess_80222644(void)
+static void grTness_UnkStage0_OnLoad(void)
 {
     return;
 }
 
-static void grTNess_80222648(void)
+static void grTness_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(false);
 }

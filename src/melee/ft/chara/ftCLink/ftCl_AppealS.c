@@ -1,9 +1,9 @@
-#include <platform.h>
-
 #include "ftCl_AppealS.h"
 
 #include "ftCl_Init.h"
 #include "inlines.h"
+
+#include <platform.h>
 
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
@@ -27,7 +27,7 @@ void ftCl_AppealS_Anim(HSD_GObj* gobj)
 
     if (fp0->cmd_vars[1] == 1 && fp1->fv.lk.x18 == NULL) {
         HSD_GObj* item_gobj = it_802C8B28(
-            gobj, &fp0->cur_pos, ftParts_8007500C(fp1, FtPart_LThumbNb),
+            gobj, &fp0->cur_pos, ftParts_GetBoneIndex(fp1, FtPart_LThumbNb),
             fp0->facing_dir);
         fp0->fv.lk.x18 = item_gobj;
         if (item_gobj != NULL) {

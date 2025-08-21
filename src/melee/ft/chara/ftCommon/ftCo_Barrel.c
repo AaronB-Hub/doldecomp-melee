@@ -1,22 +1,29 @@
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ftCo_Barrel.h"
 
+#include <placeholder.h>
+
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_0D14.h"
 #include "ft/ftcoll.h"
 #include "ft/ftcommon.h"
 #include "ft/ftlib.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_Damage.h"
 #include "ftCommon/ftCo_Lift.h"
+#include "ftCommon/inlines.h"
+#include "ftCommon/types.h"
 #include "it/items/ittarucann.h"
 #include "lb/lbcollision.h"
 #include "mp/mpcoll.h"
+
+/* 0C9290 */ static void fn_800C9290(Fighter_GObj* gobj);
 
 void ftCo_Barrel_Death2_Cb(Fighter_GObj* gobj)
 {
@@ -104,9 +111,8 @@ void fn_800C9290(Fighter_GObj* gobj)
 void ftCo_800C92E4(Fighter_GObj* gobj, Vec3* arg1, Vec3* arg2,
                    lbColl_80008D30_arg1* arg3, float kb_angle)
 {
-    Fighter* fp;
-    HitCapsule hit;
-    fp = GET_FIGHTER(gobj);
+    Fighter* fp = GET_FIGHTER(gobj);
+    struct SmallerHitCapsule hit;
 
     {
         HSD_JObj* jobj = GET_JOBJ(gobj);
@@ -120,18 +126,8 @@ void ftCo_800C92E4(Fighter_GObj* gobj, Vec3* arg1, Vec3* arg2,
     }
 
     mpColl_80043680(&fp->coll_data, arg2);
-    lbColl_80008D30(&hit, arg3);
-    if (kb_angle < 0.0F) {
-        kb_angle += 360.0F;
-    }
-    kb_angle = fp->facing_dir < 0.0F ? kb_angle : 180.0F - kb_angle;
-
-    fp->dmg.kb_applied = ftColl_80079EA8(fp, &hit, hit.unk_count);
-    fp->dmg.x1848_kb_angle = kb_angle;
-    fp->dmg.facing_dir_1 = fp->facing_dir;
-    fp->dmg.x184c_damaged_hurtbox = 0;
-    fp->dmg.x1854_collpos = fp->cur_pos;
-    fp->dmg.x1860_element = hit.element;
+    lbColl_80008D30((HitCapsule*) &hit, arg3);
+    ftCo_Barrel_ApplyKnockback(fp, kb_angle, (HitCapsule*) &hit);
     ftColl_800787B4(fp->mv.co.barrel.x8, gobj, 0);
     fp->x21EC = fn_800C9290;
     ftCo_8008DCE0(gobj, 0x5B, 0.0F);

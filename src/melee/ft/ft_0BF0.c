@@ -1,11 +1,14 @@
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ft_0BF0.h"
 
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ftparts.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftFox/types.h"
 #include "ftMario/ftMr_SpecialN.h"
 #include "it/items/itdrmariopill.h"
@@ -24,13 +27,13 @@ void ftCo_800BF034(Fighter_GObj* gobj)
     case FTKIND_FOX: {
         ftFox_DatAttrs* da = fp->dat_attrs;
         fp->item_gobj =
-            it_802AE994(gobj, ftParts_8007500C(fp, FtPart_RThumbNb),
+            it_802AE994(gobj, ftParts_GetBoneIndex(fp, FtPart_RThumbNb),
                         da->x20_FOX_BLASTER_GUN_ITKIND);
         return;
     }
     case FTKIND_NESS: {
         fp->item_gobj =
-            it_802AD590(gobj, ftParts_8007500C(fp, FtPart_RThumbNb));
+            it_802AD590(gobj, ftParts_GetBoneIndex(fp, FtPart_RThumbNb));
         return;
     }
     }
@@ -47,19 +50,19 @@ void ftCo_800BF108(Fighter_GObj* gobj)
     case FTKIND_FOX: {
         ftFox_DatAttrs* da = fp->dat_attrs;
         fp->item_gobj =
-            it_802AE994(gobj, ftParts_8007500C(fp, FtPart_RThumbNb),
+            it_802AE994(gobj, ftParts_GetBoneIndex(fp, FtPart_RThumbNb),
                         da->x20_FOX_BLASTER_GUN_ITKIND);
         return;
     }
     case FTKIND_NESS: {
         fp->item_gobj =
-            it_802AD590(gobj, ftParts_8007500C(fp, FtPart_RThumbNb));
+            it_802AD590(gobj, ftParts_GetBoneIndex(fp, FtPart_RThumbNb));
         return;
     }
     case FTKIND_DRMARIO: {
         fp->item_gobj = it_802C09C4(
             gobj, &fp->cur_pos, ftMr_SpecialN_VitaminRandom(gobj), 49, 2,
-            ftParts_8007500C(fp, FtPart_RThumbNb), fp->facing_dir);
+            ftParts_GetBoneIndex(fp, FtPart_RThumbNb), fp->facing_dir);
         return;
     }
     }

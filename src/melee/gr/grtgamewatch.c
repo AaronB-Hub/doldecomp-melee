@@ -29,8 +29,8 @@ StageData grTGw_803E9754 = {
     "/GrTGw.dat",
     grTGameWatch_80224114,
     grTGameWatch_80224110,
-    grTGameWatch_80224184,
-    grTGameWatch_80224188,
+    grTgamewatch_UnkStage0_OnLoad,
+    grTgamewatch_UnkStage0_OnStart,
     grTGameWatch_802241AC,
     grTGameWatch_802243E4,
     grTGameWatch_802243EC,
@@ -56,12 +56,12 @@ void grTGameWatch_80224114(void)
     Ground_801C42AC();
 }
 
-void grTGameWatch_80224184(void)
+void grTgamewatch_UnkStage0_OnLoad(void)
 {
     return;
 }
 
-void grTGameWatch_80224188(void)
+void grTgamewatch_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }
@@ -174,7 +174,7 @@ void grTGameWatch_802243E0(Ground_GObj* gobj)
     return;
 }
 
-DynamicsDesc* grTGameWatch_802243E4(int unused)
+DynamicsDesc* grTGameWatch_802243E4(enum_t unused)
 {
     return NULL;
 }

@@ -29,8 +29,9 @@
 /* 306954 */ UNK_RET un_80306954(UNK_PARAMS);
 /* 306A0C */ UNK_RET un_80306A0C(UNK_PARAMS);
 /* 306A48 */ UNK_RET un_80306A48(UNK_PARAMS);
-/* 306B18 */ UNK_RET un_80306B18(UNK_PARAMS);
-/* 306BB8 */ UNK_RET un_80306BB8(UNK_PARAMS);
+/* 306B18 */ HSD_GObjProc* un_80306B18(HSD_GObj* gobj, s32 anim_frame,
+                                       s32 val1, s32 val2);
+/* 306BB8 */ void un_80306BB8(HSD_GObj* gobj);
 /* 306C5C */ UNK_RET un_80306C5C(UNK_PARAMS);
 /* 306CF4 */ void Toy_RemoveUserData(void*);
 /* 306D14 */ UNK_RET un_80306D14(UNK_PARAMS);
@@ -77,7 +78,7 @@
 /* 311F5C */ UNK_RET un_80311F5C(UNK_PARAMS);
 /* 312018 */ void un_80312018_OnFrame(void);
 /* 312050 */ UNK_RET un_80312050(UNK_PARAMS);
-/* 3122D0 */ UNK_RET un_803122D0_OnInit(UNK_PARAMS);
+/* 3122D0 */ void un_803122D0_OnInit(void);
 /* 31234C */ void un_8031234C(s32);
 
 #endif

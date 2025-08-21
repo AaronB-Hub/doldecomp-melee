@@ -1,6 +1,9 @@
+#include "mnsound.h"
 
+#include "gm/gm_1601.h"
 #include "gm/gmmain_lib.h"
 #include "lb/lbarchive.h"
+#include "lb/lbcardgame.h"
 #include "mn/inlines.h"
 #include "mn/mnmain.h"
 #include "mn/types.h"
@@ -19,18 +22,13 @@
 #include <baselib/memory.h>
 #include <baselib/sislib.h>
 
-void mnSound_802492CC(HSD_GObj*);
-
-Vec3 mnSound_803EEED8[] = { { 0.0f, 199.0f, 0.0f },  { 0.0f, 29.0f, 0.0f },
-                            { 30.0f, 59.0f, 30.0f }, { 10.0f, 15.0f, -0.1f },
-                            { 0.0f, 5.0f, -0.1f },   { 0.0f, 3.0f, -0.1f },
-                            { 4.0f, 7.0f, -0.1f } };
-
-void gm_801602C0(u8);   /* extern */
-void lb_8001CE00(void); /* extern */
-
-static StaticModelDesc mnSound_804A08A8;
-static HSD_GObj* mnSound_804D6C30;
+/* 3EEED8 */ Vec3 mnSound_803EEED8[] = {
+    { 0.0f, 199.0f, 0.0f },  { 0.0f, 29.0f, 0.0f }, { 30.0f, 59.0f, 30.0f },
+    { 10.0f, 15.0f, -0.1f }, { 0.0f, 5.0f, -0.1f }, { 0.0f, 3.0f, -0.1f },
+    { 4.0f, 7.0f, -0.1f }
+};
+/* 4A08A8 */ static StaticModelDesc mnSound_804A08A8;
+/* 4D6C30 */ static HSD_GObj* mnSound_804D6C30;
 
 static void mnSound_VolumeAnim(HSD_JObj* jobj, s32 sound_music_mix,
                                s32 anim_id)
@@ -202,7 +200,7 @@ void fn_80249A1C(HSD_GObj* arg0)
     mn_8022ED6C(sp3C, &mnSound_803EEED8[menu->unk1 + 4]);
 }
 
-void mnSound_80249C08(HSD_GObj* unused)
+void mnSound_80249C08(int unused)
 {
     HSD_GObj* gobj = GObj_Create(HSD_GOBJ_CLASS_ITEM, 7U, 0x80U);
     HSD_JObj* jobj;
@@ -264,7 +262,7 @@ void mnSound_80249C08(HSD_GObj* unused)
     }
 }
 
-void mnSound_8024A09C(HSD_GObj* arg0)
+void mnSound_8024A09C(int arg0)
 {
     s32 spC;
     HSD_GObjProc* temp_r3;

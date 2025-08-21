@@ -1,16 +1,17 @@
 #ifndef GALE01_272560
 #define GALE01_272560
 
-#include <platform.h>
 #include <placeholder.h>
+#include <platform.h>
 
 #include "ft/forward.h"
 #include "it/forward.h"
-#include <baselib/forward.h>
 
 #include "it/itCharItems.h"
 #include "it/items/types.h"
 #include "lb/types.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/gx.h>
 
@@ -82,7 +83,7 @@
 /* 274C78 */ bool it_80274C78(Item_GObj*);
 /* 274C88 */ void it_80274C88(Item_GObj*);
 /* 274CAC */ void it_80274CAC(Item_GObj*);
-/* 274D04 */ void it_80274D04(Item_GObj*, Vec3*);
+/* 274D04 */ void it_80274D04(Item_GObj*, struct lb_80014638_arg1_t*);
 /* 274D6C */ void it_80274D6C(Item_GObj*);
 /* 274DAC */ void it_80274DAC(Item_GObj*);
 /* 274DFC */ void it_80274DFC(Item_GObj*);
@@ -242,7 +243,7 @@
 /* 27C794 */ bool it_8027C794(Item_GObj*);
 /* 27C79C */ bool it_8027C79C(Item_GObj*);
 /* 27C824 */ bool it_8027C824(Item_GObj*, s32 (*arg1)(Item_GObj*));
-/* 27C8B0 */ void it_8027C8B0(Item_GObj*);
+/* 27C8B0 */ void it_2725_Logic9_Destroyed(Item_GObj*);
 /* 27C8D0 */ void it_8027C8D0(Vec3*, Vec3*, f32);
 /* 27C9D8 */ void it_8027C9D8(Item*);
 /* 27CA7C */ bool it_8027CA7C(HSD_GObj*);

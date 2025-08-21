@@ -1,6 +1,3 @@
-#include <platform.h>
-#include <placeholder.h>
-
 #include "ftCo_Damage.h"
 
 #include "ftCo_0C35.h"
@@ -19,6 +16,9 @@
 #include "ftCo_PassiveStand.h"
 #include "ftCo_PassiveWall.h"
 #include "ftCo_Wait.h"
+
+#include <placeholder.h>
+#include <platform.h>
 
 #include "cm/camera.h"
 #include "ef/efasync.h"
@@ -248,7 +248,7 @@ static void inlineA0(Fighter_GObj* gobj, float f1, float f2)
 static void inlineA1(Fighter_GObj* gobj)
 {
     Fighter* fp = gobj->user_data;
-    ftParts_8007592C(fp, ftParts_8007500C(fp, FtPart_XRotN),
+    ftParts_8007592C(fp, ftParts_GetBoneIndex(fp, FtPart_XRotN),
                      fp->facing_dir *
                          atan2f(fp->self_vel.x + fp->x8c_kb_vel.x,
                                 fp->self_vel.y + fp->x8c_kb_vel.y));
@@ -456,7 +456,8 @@ block_62:
 block_63:
     M2C_FIELD(fp, s32*, 0x2344) = var_r0;
     M2C_FIELD(fp, s8*, 0x2359) = 0;
-    M2C_FIELD(fp, void (**)(Fighter_GObj*), 0x21D0) = ftCo_Damage_OnEveryHitlag;
+    M2C_FIELD(fp, void (**)(Fighter_GObj*), 0x21D0) =
+        ftCo_Damage_OnEveryHitlag;
     fp->x670_timer_lstick_tilt_x = 0xFE;
     fp->x671_timer_lstick_tilt_y = 0xFE;
     M2C_FIELD(fp, void (**)(Fighter_GObj*), 0x21D8) = ftCo_Damage_OnExitHitlag;
@@ -531,7 +532,7 @@ block_83:
         return;
     }
     if ((u32) fp->dmg.x1860_element == 5U) {
-        ftCo_80090B60(gobj);
+        ftCo_DamageIce_Init(gobj);
     }
 }
 
@@ -924,7 +925,7 @@ void ftCo_8008EC90(Fighter_GObj* gobj)
                fp->motion_id == ftCo_MS_DamageIce)
     {
         ftCo_8008DCE0(gobj, ftCo_MS_DamageIce, fp->facing_dir);
-        ftCo_80091030(gobj);
+        ftCo_DamageIce_HitWhileFrozen(gobj);
     } else if (!ftCo_800C74F4(gobj)) {
         ftCommon_8007DB58(gobj);
         ftCo_8008E908(gobj, facing_dir);
@@ -1150,7 +1151,7 @@ static void doFlyRoll(Fighter_GObj* gobj)
     float trajectory =
         fp->facing_dir * atan2f(fp->self_vel.x + fp->x8c_kb_vel.x,
                                 fp->self_vel.y + fp->x8c_kb_vel.y);
-    ftParts_8007592C(fp, ftParts_8007500C(fp, FtPart_XRotN), trajectory);
+    ftParts_8007592C(fp, ftParts_GetBoneIndex(fp, FtPart_XRotN), trajectory);
 }
 
 void ftCo_DamageFly_Phys(Fighter_GObj* gobj)

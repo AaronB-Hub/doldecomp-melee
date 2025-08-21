@@ -1,11 +1,11 @@
-#include <placeholder.h>
-
-#include "ft/forward.h"
-#include "ftCommon/forward.h"
-
 #include "ftCo_Dash.h"
 
+#include <placeholder.h>
+
 #include "ft/fighter.h"
+
+#include "ft/forward.h"
+
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0892.h"
@@ -13,6 +13,9 @@
 #include "ft/ftcommon.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
+
+#include "ftCommon/forward.h"
+
 #include "ftCommon/ftCo_AttackDash.h"
 #include "ftCommon/ftCo_AttackS4.h"
 #include "ftCommon/ftCo_Escape.h"
@@ -65,7 +68,7 @@ void ftCo_Dash_Enter(Fighter_GObj* gobj, int arg1)
     ftCommon_800804A0(fp, fp->mv.ca.specials.grav);
     fp->mv.co.dash.x4 = arg1;
     if (fp->x197C != NULL) {
-        ft_80088148(fp, 0x118, 0x7F, 0x40);
+        ft_PlaySFX(fp, 0x118, 0x7F, 0x40);
     }
 }
 

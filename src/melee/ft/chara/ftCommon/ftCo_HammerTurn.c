@@ -1,9 +1,9 @@
-#include <platform.h>
-
 #include "ftCo_HammerTurn.h"
 
 #include "ftCo_HammerJump.h"
 #include "ftCo_HammerWait.h"
+
+#include <platform.h>
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
@@ -33,7 +33,7 @@ void ftCo_800C57B4(Fighter_GObj* gobj)
     Fighter* fp = GET_FIGHTER(gobj);
     flags = ftCo_800C54C4(fp);
     ftCo_Turn_Enter(gobj, ftCo_MS_HammerTurn, flags, 0, p_ftCommonData->x6B0,
-                  ftCo_800C548C(fp));
+                    ftCo_800C548C(fp));
     ftCo_800C4E94(fp);
 }
 
@@ -42,7 +42,7 @@ void ftCo_HammerTurn_Anim(Fighter_GObj* gobj)
     Fighter* fp = GET_FIGHTER(gobj);
     ftCo_800C4F64(gobj);
     if (fp->mv.co.walk.fast_anim_frame) {
-        Fighter_Part part = ftParts_8007500C(fp, FtPart_TransN);
+        Fighter_Part part = ftParts_GetBoneIndex(fp, FtPart_TransN);
         HSD_JObj* jobj = fp->parts[part].x4_jobj2;
         --fp->mv.co.walk.fast_anim_frame;
         if (!fp->x2222_b6) {

@@ -1,13 +1,14 @@
 #ifndef GALE01_028B9C
 #define GALE01_028B9C
 
-#include <platform.h>
 #include <placeholder.h>
+#include <platform.h>
 
 #include "cm/forward.h"
-#include <baselib/forward.h>
 
 #include "dolphin/gx/GXStruct.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 #include <baselib/cobj.h>
@@ -52,7 +53,7 @@
 /* 02E158 */ UNK_RET Camera_8002E158(UNK_PARAMS);
 /* 02E234 */ UNK_RET Camera_8002E234(UNK_PARAMS);
 /* 02E490 */ void Camera_8002E490(void*);
-/* 02E6FC */ void Camera_8002E6FC(u8);
+/* 02E6FC */ void Camera_8002E6FC(int);
 /* 02E818 */ void Camera_8002E818(Vec*);
 /* 02E948 */ void Camera_8002E948(bool (*)(Vec*));
 /* 02EA64 */ void Camera_8002EA64(Vec*);

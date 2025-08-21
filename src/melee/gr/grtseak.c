@@ -1,25 +1,27 @@
 #include <platform.h>
 
-#include "lb/forward.h"
-#include <baselib/forward.h>
-
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
 #include "gr/inlines.h"
 #include "gr/types.h"
+
+#include "lb/forward.h"
+
 #include "lb/lb_00F9.h"
+
+#include <baselib/forward.h>
 
 #include <dolphin/mtx.h>
 #include <dolphin/os/OSError.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-/* 223864 */ static void grTSeak_80223864(int);
+/* 223864 */ static void grTSeak_80223864(bool);
 /* 223868 */ static void grTSeak_80223868(void);
-/* 2238D8 */ static void grTSeak_802238D8(void);
-/* 2238DC */ static void grTSeak_802238DC(void);
+/* 2238D8 */ static void grTseak_UnkStage0_OnLoad(void);
+/* 2238DC */ static void grTseak_UnkStage0_OnStart(void);
 /* 223900 */ static bool grTSeak_80223900(void);
 /* 223908 */ static HSD_GObj* grTSeak_80223908(s32);
 /* 2239F0 */ static void grTSeak_802239F0(Ground_GObj*);
@@ -68,15 +70,15 @@ StageData grTSk_803E9514 = {
     "/GrTSk.dat",
     grTSeak_80223868,
     grTSeak_80223864,
-    grTSeak_802238D8,
-    grTSeak_802238DC,
+    grTseak_UnkStage0_OnLoad,
+    grTseak_UnkStage0_OnStart,
     grTSeak_80223900,
     grTSeak_80223B38,
     grTSeak_80223B40,
     1,
 };
 
-void grTSeak_80223864(int unk0) {}
+void grTSeak_80223864(bool unk0) {}
 
 void grTSeak_80223868(void)
 {
@@ -92,9 +94,9 @@ void grTSeak_80223868(void)
     Ground_801C42AC();
 }
 
-void grTSeak_802238D8(void) {}
+void grTseak_UnkStage0_OnLoad(void) {}
 
-void grTSeak_802238DC(void)
+void grTseak_UnkStage0_OnStart(void)
 {
     grZakoGenerator_801CAE04(0);
 }

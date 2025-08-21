@@ -1,10 +1,11 @@
+#include "ft/ftparts.h"
+
 #include <placeholder.h>
+
+#include "ft/fighter.h"
 
 #include "ft/forward.h"
 
-#include "ft/ftparts.h"
-
-#include "ft/fighter.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
 #include "lb/lbrefract.h"
@@ -291,13 +292,13 @@ int ftParts_80074A74(HSD_GObj* arg0, int arg1)
 
 /// #ftParts_80074E58
 
-Fighter_Part ftParts_8007500C(Fighter* fp, Fighter_Part part)
+Fighter_Part ftParts_GetBoneIndex(Fighter* fp, Fighter_Part part)
 {
     return ftPartsTable[fp->kind]->part_to_joint[part];
 }
 
 int ftParts_80075028(size_t to_table_idx, size_t from_table_idx,
-                    size_t joint_idx)
+                     size_t joint_idx)
 {
     FighterPartsTable* from_table = ftPartsTable[from_table_idx];
     if (joint_idx < from_table->parts_num) {
