@@ -165,7 +165,7 @@ void fn_801701AC(void)
     lbl_804D65A0 = 0;
 }
 
-u8 fn_801701B8(void)
+int fn_801701B8(void)
 {
     return lbl_804D65A0;
 }
@@ -477,7 +477,7 @@ u16 gm_80172F00(u32 arg0)
 
 /// #fn_80173098
 
-u8 gm_80173224(int arg0, int arg1)
+u8 gm_80173224(u8 arg0, int arg1)
 {
     u8 var_r4 = 0x21;
     if (arg1 != 0) {
