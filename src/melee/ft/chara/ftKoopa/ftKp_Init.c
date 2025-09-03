@@ -1,4 +1,6 @@
 #include "ftKoopa/ftKp_Init.h"
+#include "ftCommon/ftCo_CaptureCut.h"
+#include "ftCommon/ftCo_Throw.h"
 
 #include <placeholder.h>
 
@@ -6,7 +8,7 @@
 
 #include "ft/fighter.h"
 #include "ft/ft_0892.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcamera.h"
 #include "ft/ftcoll.h"
@@ -19,14 +21,13 @@
 #include "ftCommon/ftCo_CaptureDamageKoopa.h"
 #include "ftCommon/ftCo_CaptureKoopa.h"
 #include "ftCommon/ftCo_Fall.h"
+#include "ftCommon/ftCo_Thrown.h"
 #include "ftCommon/ftCo_ThrownKoopa.h"
 #include "ftKoopa/types.h"
 
 #include "it/forward.h"
 
 #include "it/it_26B1.h"
-
-#include "lb/forward.h"
 
 MotionState ftKp_Init_MotionStateTable[ftKp_MS_SelfCount] = {
     {

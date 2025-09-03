@@ -11,7 +11,7 @@
 #include "ft/forward.h"
 
 #include "ft/ft_0892.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcoll.h"
 #include "ft/ftparts.h"
@@ -171,9 +171,7 @@ void ftYs_GuardHold_Anim(HSD_GObj* gobj)
 
     if (ftCo_800925A4(gobj)) {
         spawnEffect(gobj);
-    } else if (fp->mv.ys.unk2.xC != 0 ||
-               (!(fp->x221B_b0 & 1) && !(fp->x2218_b3)))
-    {
+    } else if (fp->mv.ys.unk2.xC || (!fp->x221B_b0 && !fp->reflecting)) {
         ftCo_80092BE8(gobj);
     } else {
         ftYs_Init_8012B8A4(gobj);
@@ -269,9 +267,15 @@ void ftYs_GuardDamage_Anim(HSD_GObj* gobj)
 
 void ftYs_GuardDamage_IASA(HSD_GObj* arg0) {}
 
-/// #ftYs_GuardDamage_Phys
+void ftYs_GuardDamage_Phys(Fighter_GObj* gobj)
+{
+    ftCo_GuardSetOff_Phys(gobj);
+}
 
-/// #ftYs_GuardDamage_Coll
+void ftYs_GuardDamage_Coll(Fighter_GObj* gobj)
+{
+    ftCo_GuardSetOff_Coll(gobj);
+}
 
 void ftYs_Shield_8012C850(HSD_GObj* gobj)
 {
@@ -296,11 +300,20 @@ void ftYs_Shield_8012CACC(HSD_GObj* arg0) {}
 
 /// #ftYs_GuardOn_1_Anim
 
-/// #ftYs_GuardOn_1_IASA
+void ftYs_GuardOn_1_IASA(Fighter_GObj* gobj)
+{
+    ftCo_GuardReflect_IASA(gobj);
+}
 
-/// #ftYs_GuardOn_1_Phys
+void ftYs_GuardOn_1_Phys(Fighter_GObj* gobj)
+{
+    ftCo_GuardReflect_Phys(gobj);
+}
 
-/// #ftYs_GuardOn_1_Coll
+void ftYs_GuardOn_1_Coll(Fighter_GObj* gobj)
+{
+    ftCo_GuardReflect_Coll(gobj);
+}
 
 bool ftYs_Shield_8012CC1C(HSD_GObj* gobj)
 {

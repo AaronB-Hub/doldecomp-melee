@@ -15,7 +15,7 @@
 #include "ft/ft_0881.h"
 #include "ft/ft_0892.h"
 #include "ft/ft_0C88.h"
-#include "ft/ft_0D14.h"
+#include "ft/ft_0DF0.h"
 #include "ft/ftchangeparam.h"
 #include "ft/ftcolanim.h"
 #include "ft/ftmaterial.h"
@@ -38,10 +38,8 @@
 #include "it/items/itsword.h"
 #include "lb/lb_00F9.h"
 #include "mp/mplib.h"
-#include "pl/pl_040D.h"
 #include "pl/player.h"
 #include "pl/plbonuslib.h"
-#include "un/un_2FC9.h"
 #include "vi/vi1202.h"
 
 #include <common_structs.h>
@@ -1441,8 +1439,8 @@ void ftCommon_8007EFC8(HSD_GObj* gobj, void (*arg1)(HSD_GObj*))
     dst->x2220_b6 = src->x2220_b6;
     dst->x2008 = src->x2008;
     ftLib_SetScale(dst_gobj, src->x34_scale.y);
-    if (src->x2223_b7) {
-        ftCo_800C8348(dst_gobj, src->x2028, src->x202C);
+    if (src->is_metal) {
+        ftCo_800C8348(dst_gobj, src->metal_timer, src->metal_health);
         ftCo_800C8540(gobj);
     }
     if (src->x2226_b4) {
@@ -1498,15 +1496,15 @@ void ftCommon_8007F578(HSD_GObj* gobj)
     }
 }
 
-void ftCommon_8007F5CC(HSD_GObj* gobj, s32 arg1)
+void ftCommon_8007F5CC(Item_GObj* gobj, bool arg1)
 {
     Fighter* fp = gobj->user_data;
-    HSD_GObj* item = fp->item_gobj;
+    Item_GObj* item = fp->item_gobj;
 
-    u8 _[8];
+    PAD_STACK(8);
 
     if (item != NULL && fp->x221E_b3 != arg1) {
-        if (arg1 == 0) {
+        if (!arg1) {
             ftCommon_8007F578(gobj);
         } else if (item != NULL) {
             if (ftData_OnItemVisible[fp->kind] != NULL) {

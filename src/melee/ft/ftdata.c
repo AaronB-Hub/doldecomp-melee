@@ -14,8 +14,8 @@
 #include "ft/ft_0C31.h"
 #include "ft/ft_0CD1.h"
 #include "ft/ft_0CDD.h"
-#include "ft/ft_0CEE.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
+#include "ft/ft_0D31.h"
 #include "ft/ftcamera.h"
 #include "ft/ftcliffcommon.h"
 #include "ft/ftcolanim.h"
@@ -32,6 +32,7 @@
 
 #include "ftCommon/forward.h"
 
+#include "ftCommon/ftCo_AppealS.h"
 #include "ftCommon/ftCo_Attack1.h"
 #include "ftCommon/ftCo_AttackAir.h"
 #include "ftCommon/ftCo_AttackDash.h"
@@ -45,6 +46,7 @@
 #include "ftCommon/ftCo_BarrelWait.h"
 #include "ftCommon/ftCo_Bury.h"
 #include "ftCommon/ftCo_CaptureCaptain.h"
+#include "ftCommon/ftCo_CaptureCut.h"
 #include "ftCommon/ftCo_CaptureDamageKoopa.h"
 #include "ftCommon/ftCo_CaptureKirby.h"
 #include "ftCommon/ftCo_CaptureKoopa.h"
@@ -60,6 +62,7 @@
 #include "ftCommon/ftCo_DamageBind.h"
 #include "ftCommon/ftCo_DamageFall.h"
 #include "ftCommon/ftCo_DamageIce.h"
+#include "ftCommon/ftCo_DamageScrew.h"
 #include "ftCommon/ftCo_DamageSong.h"
 #include "ftCommon/ftCo_Dash.h"
 #include "ftCommon/ftCo_Down.h"
@@ -83,10 +86,20 @@
 #include "ftCommon/ftCo_HammerTurn.h"
 #include "ftCommon/ftCo_HammerWait.h"
 #include "ftCommon/ftCo_HammerWalk.h"
+#include "ftCommon/ftCo_ItemParasolDamageFall.h"
+#include "ftCommon/ftCo_ItemParasolFall.h"
+#include "ftCommon/ftCo_ItemParasolFallSpecial.h"
+#include "ftCommon/ftCo_ItemParasolOpen.h"
+#include "ftCommon/ftCo_ItemScrew.h"
 #include "ftCommon/ftCo_ItemThrow.h"
 #include "ftCommon/ftCo_Jump.h"
 #include "ftCommon/ftCo_JumpAerial.h"
+#include "ftCommon/ftCo_KinokoGiantEnd.h"
+#include "ftCommon/ftCo_KinokoGiantStart.h"
+#include "ftCommon/ftCo_KinokoSmallEnd.h"
+#include "ftCommon/ftCo_KinokoSmallStart.h"
 #include "ftCommon/ftCo_KneeBend.h"
+#include "ftCommon/ftCo_Landing.h"
 #include "ftCommon/ftCo_LandingAir.h"
 #include "ftCommon/ftCo_Lift.h"
 #include "ftCommon/ftCo_MissFoot.h"
@@ -105,8 +118,13 @@
 #include "ftCommon/ftCo_ShieldBreakFly.h"
 #include "ftCommon/ftCo_ShieldBreakStand.h"
 #include "ftCommon/ftCo_Shouldered.h"
+#include "ftCommon/ftCo_Squat.h"
+#include "ftCommon/ftCo_SquatRv.h"
+#include "ftCommon/ftCo_SquatWait.h"
 #include "ftCommon/ftCo_StopCeil.h"
 #include "ftCommon/ftCo_StopWall.h"
+#include "ftCommon/ftCo_Throw.h"
+#include "ftCommon/ftCo_Thrown.h"
 #include "ftCommon/ftCo_ThrownKirby.h"
 #include "ftCommon/ftCo_ThrownKoopa.h"
 #include "ftCommon/ftCo_ThrownMewtwo.h"
@@ -1317,47 +1335,15 @@ ftData_UnkModelStruct ftData_UnkIntBoolFunc0 = {
     },
 };
 
-HSD_GObjEvent ftData_UnkCallbackPairs0[][FTKIND_MAX] = {
-    {
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        ftKb_Init_UnkCallbackPairs0_0,
-        ftKb_Init_UnkCallbackPairs0_1,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-        NULL,
-    },
-    {
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-        NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-    }
+struct {
+    HSD_GObjEvent x0;
+    void (*x4)(Fighter_GObj*, int, float frame);
+} ftData_UnkCallbackPairs0[FTKIND_MAX] = {
+    { NULL, NULL },
+    { NULL, NULL },
+    { NULL, NULL },
+    { NULL, NULL },
+    { ftKb_Init_UnkCallbackPairs0_0, ftKb_Init_UnkCallbackPairs0_1 },
 };
 
 /// Costume and Joint Strings

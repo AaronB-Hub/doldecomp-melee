@@ -110,6 +110,13 @@ union ftCommon_MotionVars {
         /* fp+2344 */ float x4;
     } fallaerial;
     struct {
+        /* fp+2340 */ int x0;
+        /* fp+2344 */ float x4;
+    } squat;
+    struct {
+        /* fp+2340 */ bool allow_interrupt;
+    } landing;
+    struct {
         /* fp+2340 */ bool x0;
     } attack1;
     struct {
@@ -155,6 +162,14 @@ union ftCommon_MotionVars {
     struct {
         /* fp+2340 */ bool x0; // itemget action is heavy type?
     } itemget;
+    struct {
+        /* fp+2340 */ UNK_T x0;
+        /* fp+2344 */ int x4;
+        /* fp+2348 */ float x8;
+        /* fp+234C */ HSD_GObj* victim;
+        /* fp+2350 */ float self_vel_y;
+        /* fp+2354 */ float self_vel_x;
+    } fighterthrow;
     struct {
         /* fp+2340 */ float facing_dir;
         /* fp+2344 */ float x4;
@@ -376,6 +391,15 @@ union ftCommon_MotionVars {
         /* fp+2348 */ u8 pad_x48[0x68 - 0x48];
         /* fp+2368 */ int x68;
     } unk_deadup;
+    struct {
+        /* fp+2340 */ bool unk_bool;
+        /* fp+2344 */ float anim_timer;
+        /* fp+2348 */ UNK_T x8;
+        /* fp+234C */ u8 xC;
+    } thrown;
+    struct {
+        /* fp+2340 */ FtMotionId prev_msid;
+    } parasol_open;
 };
 
 /// @todo Fake, need to find real size of #HitCapsule

@@ -3,11 +3,17 @@
 
 #include <placeholder.h>
 
+#include <melee/ft/forward.h>
 #include <melee/gm/forward.h>
 #include <sysdolphin/baselib/forward.h>
 
+typedef enum Gm_DecType {
+    Gm_DecType_Flag,  ///< true/false boolean player bonus
+    Gm_DecType_Point, ///< integer-valued player bonus
+} Gm_DecType;
+
 /* 16F180 */ int fn_8016F180(int);
-/* 16F1B8 */ int gmDecisionGetType(int kind);
+/* 16F1B8 */ Gm_DecType gmDecisionGetType(int kind);
 /* 16F1F0 */ short fn_8016F1F0(int idx);
 /* 16F208 */ int gm_8016F208(int);
 /* 16F280 */ int fn_8016F280(int);
@@ -27,14 +33,14 @@
 /* 1701C0 */ UNK_RET fn_801701C0(UNK_PARAMS);
 /* 171A88 */ int fn_80171A88(void);
 /* 171AD4 */ UNK_RET fn_80171AD4(UNK_PARAMS);
-/* 171B00 */ UNK_RET fn_80171B00(UNK_PARAMS);
-/* 171B2C */ UNK_RET fn_80171B2C(UNK_PARAMS);
+/* 171B00 */ bool fn_80171B00(int);
+/* 171B2C */ bool fn_80171B2C(int);
 /* 171B64 */ UNK_RET fn_80171B64(UNK_PARAMS);
 /* 171BA4 */ UNK_RET fn_80171BA4(UNK_PARAMS);
 /* 171DC4 */ void fn_80171DC4(HSD_GObj*);
 /* 1720B4 */ int gm_801720B4(void);
 /* 1720F8 */ int gm_801720F8(void);
-/* 172140 */ UNK_RET gm_80172140(UNK_PARAMS);
+/* 172140 */ int gm_80172140(UNK_PARAMS);
 /* 172174 */ UNK_RET gm_80172174(UNK_PARAMS);
 /* 17219C */ UNK_RET gm_8017219C(UNK_PARAMS);
 /* 1721EC */ bool gm_801721EC(void);
@@ -59,7 +65,7 @@
 /* 172700 */ bool fn_80172700(void);
 /* 172734 */ bool fn_80172734(void);
 /* 172768 */ bool fn_80172768(void);
-/* 17279C */ UNK_RET fn_8017279C(UNK_PARAMS);
+/* 17279C */ bool fn_8017279C(int, u16);
 /* 17280C */ UNK_RET fn_8017280C(UNK_PARAMS);
 /* 172898 */ void gm_80172898(int);
 /* 17297C */ UNK_RET gm_8017297C(UNK_PARAMS);
@@ -73,27 +79,27 @@
 /* 172DD4 */ u8 gm_80172DD4(UNK_T);
 /* 172E74 */ u8 gm_80172E74(void);
 /* 172F00 */ u16 gm_80172F00(u32);
-/* 172FAC */ UNK_RET fn_80172FAC(UNK_PARAMS);
-/* 173098 */ u8 fn_80173098(u8);
-/* 173224 */ u8 gm_80173224(u8, int);
-/* 1732D8 */ UNK_RET gm_801732D8(UNK_PARAMS);
-/* 17335C */ UNK_RET gm_8017335C(UNK_PARAMS);
-/* 1733D8 */ UNK_RET gm_801733D8(UNK_PARAMS);
-/* 17341C */ UNK_RET gm_8017341C(UNK_PARAMS);
+/* 172FAC */ bool fn_80172FAC(void);
+/* 173098 */ u8 fn_80173098(int);
+/* 173224 */ u8 gm_80173224(int, int);
+/* 1732D8 */ CharacterKind gm_801732D8(u8);
+/* 17335C */ int gm_8017335C(void);
+/* 1733D8 */ int gm_801733D8(void);
+/* 17341C */ int gm_8017341C(void);
 /* 173460 */ u8 gm_80173460(s8);
 /* 173498 */ u16 gm_80173498(UNK_PARAMS);
-/* 1734D0 */ u16 gm_801734D0(int);
+/* 1734D0 */ u16 gm_801734D0(u32);
 /* 173510 */ bool fn_80173510(void);
 /* 1735F0 */ bool fn_801735F0(void);
 /* 173644 */ bool fn_80173644(void);
 /* 17367C */ bool fn_8017367C(void);
 /* 1736DC */ UNK_T gm_801736DC(void);
 /* 1736E8 */ void gm_801736E8(u8, u8, u8, u8, u8, u8);
-/* 173754 */ int gm_80173754(s8, u8);
+/* 173754 */ bool gm_80173754(s8, u8);
 /* 1737D8 */ u8 gm_801737D8(void);
 /* 1737E8 */ void gm_801737E8_OnLoad(void);
 /* 173834 */ UNK_RET fn_80173834(UNK_PARAMS);
-/* 17390C */ UNK_RET gm_8017390C(u8, int);
+/* 17390C */ UNK_RET gm_8017390C(int, int);
 /* 173AA4 */ UNK_RET gm_80173AA4(UNK_PARAMS);
 /* 173B30 */ UNK_RET gm_80173B30(int);
 /* 173BC4 */ UNK_RET gm_80173BC4(s8);

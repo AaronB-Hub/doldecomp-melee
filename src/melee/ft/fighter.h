@@ -12,6 +12,10 @@
 #include <dolphin/mtx.h>
 #include <baselib/objalloc.h>
 
+extern struct Fighter_804D64FC_t {
+    u8** cmdscripts;
+}* Fighter_804D64FC;
+
 /* 0679B0 */ void Fighter_800679B0(void);
 /* 067A84 */ void Fighter_FirstInitialize_80067A84(void);
 /* 067ABC */ void Fighter_LoadCommonData(void);
@@ -65,7 +69,6 @@
 /* 459080 */ extern HSD_ObjAllocData fighter_x2040_alloc_data;
 /* 4590AC */ extern HSD_ObjAllocData fighter_x59C_alloc_data;
 /* 4598B8 */ extern ftData* gFtDataList[FTKIND_MAX];
-/* 4D64FC */ extern UNK_T Fighter_804D64FC;
 /* 4D6500 */ extern UNK_T Fighter_804D6500;
 /* 4D6504 */ extern HSD_Joint* Fighter_804D6504;
 /* 4D6508 */ extern u8* Fighter_804D6508;
@@ -76,12 +79,25 @@
 /* 4D651C */ extern float* Fighter_804D651C;
 /* 4D6520 */ extern float* Fighter_804D6520;
 /* 4D6524 */ extern float* Fighter_804D6524;
-/* 4D6528 */ extern UNK_T Fighter_804D6528;
+
+/* 4D6528 */ extern struct Fighter_804D6528_t {
+    Vec2* x0;
+    int x4;
+}* Fighter_804D6528;
+
 /* 4D6530 */ extern Vec2** Fighter_804D6530;
 /* 4D6534 */ extern UNK_T Fighter_804D6534;
 /* 4D6538 */ extern struct Fighter_804D653C_t* Fighter_804D6538;
 /* 4D653C */ extern struct Fighter_804D653C_t* Fighter_804D653C;
-/* 4D6540 */ extern int** Fighter_804D6540;
+/* 4D6540 */ extern struct Fighter_804D6540_t {
+    struct Fighter_804D6540_x0_t {
+        u8 x0;
+        u8 x1;
+        u8 x2;
+        u8 x3;
+    }* x0;
+    int x4;
+}** Fighter_804D6540;
 /* 4D6544 */ extern FighterPartsTable** ftPartsTable;
 /* 4D6548 */ extern UNK_T Fighter_804D6548;
 /* 4D654C */ extern UNK_T Fighter_804D654C;

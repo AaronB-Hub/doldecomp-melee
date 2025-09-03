@@ -8,10 +8,10 @@
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
-#include "ft/ft_0D14.h"
 #include "ft/ftanim.h"
 #include "ft/ftcommon.h"
 #include "ft/ftparts.h"
+#include "ftCommon/ftCo_Landing.h"
 #include "ftCommon/types.h"
 #include "ftLink/types.h"
 
@@ -59,7 +59,7 @@ bool ftCo_800C3A14(Fighter_GObj* gobj)
 bool ftCo_800C3B10(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    if (fp->x2228_b6) {
+    if (fp->used_tether) {
         return false;
     }
     if (fp->kind != FTKIND_LINK && fp->kind != FTKIND_CLINK &&
@@ -77,7 +77,7 @@ bool ftCo_800C3B10(Fighter_GObj* gobj)
     }
     if (fp->input.held_inputs & HSD_PAD_LR && fp->input.x668 & HSD_PAD_A) {
         ftCo_800C3BE8(gobj);
-        fp->x2228_b6 = true;
+        fp->used_tether = true;
         return true;
     }
     return false;
@@ -295,6 +295,7 @@ void ftCo_AirCatch_Coll(Fighter_GObj* gobj)
 {
     PAD_STACK(8);
     if (ft_80081D0C(gobj) != GA_Ground) {
-        ftCo_800D5AEC(gobj, 42, 0, 0, 0, 1);
+        ftCo_Landing_Enter(gobj, ftCo_MS_Landing, false, Ft_MF_None, 0.0F,
+                           1.0F);
     }
 }

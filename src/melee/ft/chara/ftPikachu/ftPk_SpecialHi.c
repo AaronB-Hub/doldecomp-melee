@@ -7,7 +7,7 @@
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcliffcommon.h"
 #include "ft/ftcommon.h"
@@ -17,6 +17,7 @@
 #include "ftCommon/forward.h"
 
 #include "ftCommon/ftCo_FallSpecial.h"
+#include "ftCommon/ftCo_Landing.h"
 #include "ftCommon/ftCo_Pass.h"
 #include "ftPikachu/types.h"
 #include "lb/lb_00B0.h"
@@ -773,7 +774,7 @@ void ftPk_SpecialAirHiEnd_Coll(HSD_GObj* gobj)
     u8 _[8];
 
     if (ft_8008239C(gobj, fp->facing_dir, box)) {
-        ftCo_800D5CB0(gobj, 0, pika_attr->xB0);
+        ftCo_LandingFallSpecial_Enter(gobj, false, pika_attr->xB0);
     } else if (!ftCliffCommon_80081298(gobj)) {
         /// @todo Fix weird control flow.
         return;

@@ -8,7 +8,7 @@
 
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftchangeparam.h"
 #include "ft/ftwalkcommon.h"
 #include "ft/inlines.h"
@@ -16,6 +16,7 @@
 
 #include "ftCommon/forward.h"
 
+#include "ftCommon/ftCo_AppealS.h"
 #include "ftCommon/ftCo_Attack1.h"
 #include "ftCommon/ftCo_AttackHi3.h"
 #include "ftCommon/ftCo_AttackHi4.h"
@@ -27,6 +28,7 @@
 #include "ftCommon/ftCo_Guard.h"
 #include "ftCommon/ftCo_Jump.h"
 #include "ftCommon/ftCo_SpecialS.h"
+#include "ftCommon/ftCo_Squat.h"
 
 bool ftCo_Walk_CheckInput(Fighter_GObj* gobj)
 {
@@ -57,7 +59,7 @@ void ftCo_Walk_Enter(Fighter_GObj* gobj, f32 arg8)
     f32 accel_mul = 1.0F;
     float* anim_vars = &fp->x2DC;
 
-    if (fp->x2223_b7) {
+    if (fp->is_metal) {
         accel_mul = *Fighter_804D651C;
     }
 

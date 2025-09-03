@@ -11,13 +11,14 @@
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0892.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcliffcommon.h"
 #include "ft/ftcoll.h"
 #include "ft/ftcommon.h"
 #include "ft/types.h"
 #include "ftCommon/ftCo_FallSpecial.h"
+#include "ftCommon/ftCo_Landing.h"
 #include "ftCommon/ftCo_Pass.h"
 #include "ftMewtwo/types.h"
 #include "lb/lb_00B0.h"
@@ -365,7 +366,7 @@ void ftMt_SpecialHi_GroundToAir(HSD_GObj* gobj)
                               NULL);
 
     fp->x2223_b4 = true;
-    fp->x221E_b0 = true;
+    fp->invisible = true;
 }
 
 /// Mewtwo's air -> ground Teleport Zoom Motion State handler
@@ -377,7 +378,7 @@ void ftMt_SpecialAirHi_AirToGround(HSD_GObj* gobj)
     Fighter_ChangeMotionState(gobj, ftMt_MS_SpecialHiLost, transition_flags1,
                               fp->cur_anim_frame, 0, 0, NULL);
 
-    fp->x221E_b0 = true;
+    fp->invisible = true;
 }
 
 static inline void ftMewtwo_SpecialHi_SetVars(HSD_GObj* gobj)
@@ -397,7 +398,7 @@ static inline void ftMewtwo_SpecialHi_SetVars(HSD_GObj* gobj)
 
     ftColl_8007B62C(gobj, 2);
 
-    fp->x221E_b0 = true;
+    fp->invisible = true;
 
     ft_PlaySFX(fp, 0x30DA1, SFX_VOLUME_MAX, SFX_PAN_MID);
 }
@@ -600,7 +601,8 @@ void ftMt_SpecialAirHi_Coll(HSD_GObj* gobj)
     ftMewtwoAttributes* mewtwoAttrs = getFtSpecialAttrsD(fp);
 
     if (ft_CheckGroundAndLedge(gobj, CLIFFCATCH_O(fp))) {
-        ftCo_800D5CB0(gobj, 0, mewtwoAttrs->x74_MEWTWO_TELEPORT_LANDING_LAG);
+        ftCo_LandingFallSpecial_Enter(
+            gobj, false, mewtwoAttrs->x74_MEWTWO_TELEPORT_LANDING_LAG);
         return;
     }
 
@@ -628,7 +630,7 @@ static inline void ftMewtwo_SpecialHiLost_SetVars(HSD_GObj* gobj)
     fp->self_vel.y = 0;
     fp->self_vel.x = 0;
     fp->gr_vel = 0;
-    fp->x221E_b0 = false;
+    fp->invisible = false;
     fp->accessory4_cb = ftMt_SpecialHi_SetEndGFX;
 }
 

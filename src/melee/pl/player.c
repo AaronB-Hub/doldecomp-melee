@@ -5,7 +5,7 @@
 #include "ft/forward.h"
 
 #include "ft/ft_0877.h"
-#include "ft/ft_0D14.h"
+#include "ft/ft_0D31.h"
 #include "ft/ftdata.h"
 #include "ft/ftdemo.h"
 #include "ft/ftlib.h"
@@ -477,12 +477,12 @@ void Player_SetSlottype(s32 slot, Gm_PKind value)
     player->slot_type = value;
 }
 
-s8 Player_800325C8(s32 slot, bool b)
+s8 Player_800325C8(CharacterKind kind, bool b)
 {
     if (!b) {
-        return ftMapping_list[slot].internal_id;
+        return ftMapping_list[kind].internal_id;
     } else if (b == 1) {
-        return ftMapping_list[slot].extra_internal_id;
+        return ftMapping_list[kind].extra_internal_id;
     }
 
     return -1;
@@ -1571,19 +1571,19 @@ int Player_GetFlagsBit4(int slot)
 u8 Player_GetFlagsBit5(s32 slot)
 {
     StaticPlayer* player;
-    u8 bit5;
+    u8 is_metal;
     Player_CheckSlot(slot);
     player = &player_slots[slot];
-    bit5 = player->flags.b5;
-    return bit5;
+    is_metal = player->flags.is_metal;
+    return is_metal;
 }
 
-void Player_SetFlagsBit5(s32 slot, u8 bit5)
+void Player_SetFlagsBit5(s32 slot, u8 is_metal)
 {
     StaticPlayer* player;
     Player_CheckSlot(slot);
     player = &player_slots[slot];
-    player->flags.b5 = bit5;
+    player->flags.is_metal = is_metal;
 }
 
 u8 Player_GetFlagsBit6(s32 slot)
@@ -1772,7 +1772,7 @@ pl_StaleMoveTableExt_t* Player_GetStaleMoveTableIndexPtr2(s32 slot)
     return stale_move_table;
 }
 
-s32 Player_80036394(s32 slot)
+FighterKind Player_80036394(s32 slot)
 {
     StaticPlayer* player;
     HSD_GObj* entity;
@@ -1998,7 +1998,7 @@ void Player_InitOrResetPlayer(s32 slot)
     player->flags.b2 = 0;
     player->flags.b3 = 0;
     player->flags.b4 = 0;
-    player->flags.b5 = 0;
+    player->flags.is_metal = false;
     player->flags.b6 = 0;
     player->flags.b7 = 0;
 

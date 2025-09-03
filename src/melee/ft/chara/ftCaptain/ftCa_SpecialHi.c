@@ -6,7 +6,7 @@
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcliffcommon.h"
 #include "ft/ftcommon.h"
@@ -16,6 +16,9 @@
 #include "ftCommon/ftCo_CaptureCaptain.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_FallSpecial.h"
+#include "ftCommon/ftCo_Landing.h"
+#include "ftCommon/ftCo_Throw.h"
+#include "ftCommon/ftCo_Thrown.h"
 
 #include <common_structs.h>
 #include <dolphin/mtx.h>
@@ -125,7 +128,8 @@ static void doAirColl(HSD_GObj* gobj)
     ftCaptain_DatAttrs* da = fp->dat_attrs;
     if (ft_CheckGroundAndLedge(gobj, 0)) {
         if (fp->mv.ca.specialhi.x2_b1) {
-            ftCo_800D5CB0(gobj, 0, da->specialhi_landing_lag);
+            ftCo_LandingFallSpecial_Enter(gobj, false,
+                                          da->specialhi_landing_lag);
         } else {
             ft_80083B68(gobj);
         }
@@ -286,7 +290,7 @@ void ftCa_SpecialHiThrow0_Coll(HSD_GObj* gobj)
     Fighter* fp = GET_FIGHTER(gobj);
     ftCaptain_DatAttrs* da = fp->dat_attrs;
     if (ft_80081D0C(gobj)) {
-        ftCo_800D5CB0(gobj, 0, da->specialhi_landing_lag);
+        ftCo_LandingFallSpecial_Enter(gobj, false, da->specialhi_landing_lag);
     }
 }
 

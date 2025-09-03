@@ -7,6 +7,7 @@
 
 #include "ft/ftanim.h"
 #include "ft/types.h"
+#include "gm/gm_16AE.h"
 #include "it/it_26B1.h"
 
 #include <common_structs.h>
@@ -266,11 +267,22 @@ static inline int ftGetFacingDirInt(Fighter* fp)
 /// @todo Fix naming.
 #define gmScriptEventCast(p_event, type) ((type*) p_event)
 #define gmScriptEventUpdatePtr(event, type)                                   \
-    (event = (void*) ((uintptr_t) event + (sizeof(type))))
+    (event = (void*) ((uintptr_t) event + 4))
 
-inline ftCmdScript* getCmdScript(Fighter* fp)
+inline CommandInfo* getCmdScript(Fighter* fp)
 {
     return &fp->x3E4_fighterCmdScript;
+}
+
+static inline bool canUseCstick(Fighter* fp)
+{
+    /// Returns true if single-button mode is off,
+    /// and the held item allows using the C-stick.
+    if (!gm_8016B0FC() || it_8026B30C(fp->item_gobj) == 0) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 #endif

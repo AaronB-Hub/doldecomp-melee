@@ -675,7 +675,7 @@ void mnCharSel_8025EE8C(u8 idx)
             mnCharSel_8025DB34(1);
         }
     } else {
-        if (mnCharSel_804D6CB0->data.data.rules.x8 != 0) {
+        if (mnCharSel_804D6CB0->data.data.rules.is_teams) {
             temp_f31 = mnCharSel_803F0A48.mode_info[idx].mode_teams_frame;
             lb_80011E24(mnCharSel_804D6CC0, &sp10, 0x24, -1);
             HSD_ForeachAnim(sp10, JOBJ_TYPE, TOBJ_MASK, HSD_AObjReqAnim,
@@ -929,7 +929,7 @@ void mnCharSel_802669F4_OnFrame(void)
         mn_8022F138(1, 8);
         HSD_SisLib_803A5E70();
         mn_8022F268();
-        gm_801A42F8(1);
+        gm_801A42F8(MJ_MENU);
         gm_801A4B60();
         return;
     }

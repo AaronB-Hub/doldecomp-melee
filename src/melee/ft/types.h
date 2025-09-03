@@ -8,6 +8,7 @@
 
 #include "ft/forward.h" // IWYU pragma: export
 
+#include "ft/ftwaitanim.h"
 #include "ftCaptain/types.h"
 #include "ftCommon/types.h"
 #include "ftDonkey/types.h"
@@ -37,6 +38,7 @@
 #include "it/forward.h"
 
 #include "lb/lbanim.h"
+#include "lb/lbcommand.h"
 #include "lb/types.h"
 
 #include <baselib/forward.h>
@@ -44,81 +46,83 @@
 #include <common_structs.h>
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
+#include <melee/ft/dobjlist.h>
 
 #define FTPART_INVALID 0xFF
 
 // Table in PlCo.dat
-typedef struct _FighterPartsTable {
+struct FighterPartsTable {
     u8* joint_to_part;
     u8* part_to_joint;
     u32 parts_num;
-} FighterPartsTable;
+};
 
 // Points to data in PlCo.dat
 struct ftCommonData {
-    /* +0 */ float x0;
-    /* +4 */ float x4;
-    /* +8 */ float x8_someStickThreshold;
-    /* +C */ float xC;
-    /* +10 */ float x10;
-    /* +14 */ float x14;
-    /* +18 */ float x18;
-    /* +1C */ int x1C;
-    /* +20 */ float x20;
-    /* +24 */ float x24;
-    /* +28 */ float x28;
-    /* +2C */ float x2C;
-    /* +30 */ float x30;
-    /* +34 */ float x34;
-    /* +38 */ float x38_someLStickXThreshold;
-    /* +3C */ float x3C;
-    /* +40 */ int x40;
-    /* +44 */ float x44;
-    /* +48 */ float x48;
-    /* +4C */ float x4C;
-    /* +50 */ float x50;
-    /* +54 */ float x54;
-    /* +58 */ float x58_someLStickXThreshold;
-    /* +5C */ float x5C;
-    /* +60 */ float x60_someFrictionMul;
-    /* +64 */ UNK_T x64;
-    /* +68 */ float x68;
-    /* +6C */ float x6C;
-    /* +70 */ float tap_jump_threshold;
-    /* +6C */ int x74;
-    /* +78 */ float x78;
-    /* +7C */ float tap_jump_release_threshold;
-    /* +80 */ float x80;
-    /* +84 */ u8 x84[4];
-    /* +88 */ float x88;
-    /* +8C */ int x8C;
-    /* +90 */ u8 x90[0x98 - 0x90];
-    /* +98 */ float x98;
-    /* +9C */ float x9C;
-    /* +A0 */ float xA0;
-    /* +A4 */ float xA4;
-    /* +A8 */ float xA8;
-    /* +AC */ float attackhi3_stick_threshold_y;
-    /* +B0 */ float xB0;
-    /* +B4 */ float xB4;
-    /* +B8 */ float xB8;
-    /* +BC */ float xBC;
-    /* +C0 */ float xC0;
-    /* +C4 */ float xC4;
-    /* +C8 */ float xC8;
-    /* +CC */ float xCC;
-    /* +D0 */ float xD0;
-    /* +D4 */ float xD4;
-    /* +D8 */ float xD8;
-    /* +DC */ float xDC;
-    /* +E0 */ float xE0;
-    /* +E4 */ int xE4;
-    /* +E8 */ float xE8;
-    /* +EC */ float xEC;
-    /* +F0 */ float xF0;
-    /* +F4 */ float xF4;
-    /* +F8 */ float xF8;
-    /* +FC */ int xFC;
+    /*   +0 */ float x0;
+    /*   +4 */ float x4;
+    /*   +8 */ float x8_someStickThreshold;
+    /*   +C */ float xC;
+    /*  +10 */ float x10;
+    /*  +14 */ float x14;
+    /*  +18 */ float x18;
+    /*  +1C */ int x1C;
+    /*  +20 */ float x20;
+    /*  +24 */ float x24;
+    /*  +28 */ float x28;
+    /*  +2C */ float x2C;
+    /*  +30 */ float x30;
+    /*  +34 */ float x34;
+    /*  +38 */ float x38_someLStickXThreshold;
+    /*  +3C */ float x3C;
+    /*  +40 */ int x40;
+    /*  +44 */ float x44;
+    /*  +48 */ float x48;
+    /*  +4C */ float x4C;
+    /*  +50 */ float x50;
+    /*  +54 */ float x54;
+    /*  +58 */ float x58_someLStickXThreshold;
+    /*  +5C */ float x5C;
+    /*  +60 */ float x60_someFrictionMul;
+    /*  +64 */ UNK_T x64;
+    /*  +68 */ float x68;
+    /*  +6C */ float x6C;
+    /*  +70 */ float tap_jump_threshold;
+    /*  +6C */ int x74;
+    /*  +78 */ float x78;
+    /*  +7C */ float tap_jump_release_threshold;
+    /*  +80 */ float x80;
+    /*  +84 */ u8 x84[4];
+    /*  +88 */ float x88;
+    /*  +8C */ int x8C;
+    /*  +90 */ float x90;
+    /*  +94 */ float x94;
+    /*  +98 */ float x98;
+    /*  +9C */ float x9C;
+    /*  +A0 */ float xA0;
+    /*  +A4 */ float xA4;
+    /*  +A8 */ float xA8;
+    /*  +AC */ float attackhi3_stick_threshold_y;
+    /*  +B0 */ float xB0;
+    /*  +B4 */ float xB4;
+    /*  +B8 */ float xB8;
+    /*  +BC */ float xBC;
+    /*  +C0 */ float xC0;
+    /*  +C4 */ float xC4;
+    /*  +C8 */ float xC8;
+    /*  +CC */ float xCC;
+    /*  +D0 */ float xD0;
+    /*  +D4 */ float xD4;
+    /*  +D8 */ float xD8;
+    /*  +DC */ float xDC;
+    /*  +E0 */ float xE0;
+    /*  +E4 */ int xE4;
+    /*  +E8 */ float xE8;
+    /*  +EC */ float xEC;
+    /*  +F0 */ float xF0;
+    /*  +F4 */ float xF4;
+    /*  +F8 */ float xF8;
+    /*  +FC */ int xFC;
     /* +100 */ float x100;
     /* +104 */ float kb_min;
     /* +108 */ UNK_T x108;
@@ -272,8 +276,8 @@ struct ftCommonData {
     /* +360 */ UNK_T x360;
     /* +364 */ UNK_T x364;
     /* +368 */ UNK_T x368;
-    /* +36C */ UNK_T x36C;
-    /* +370 */ UNK_T x370;
+    /* +36C */ float x36C;
+    /* +370 */ float x370;
     /* +374 */ UNK_T x374;
     /* +378 */ UNK_T x378;
     /* +37C */ UNK_T x37C;
@@ -286,7 +290,7 @@ struct ftCommonData {
     /* +398 */ UNK_T x398;
     /* +39C */ UNK_T x39C;
     /* +3A0 */ UNK_T x3A0;
-    /* +3A4 */ UNK_T x3A4;
+    /* +3A4 */ float grab_timer_decrement;
     /* +3A8 */ float x3A8;
     /* +3AC */ UNK_T x3AC;
     /* +3B0 */ float x3B0;
@@ -295,7 +299,7 @@ struct ftCommonData {
     /* +3BC */ UNK_T x3BC;
     /* +3C0 */ int x3C0;
     /* +3C4 */ UNK_T x3C4;
-    /* +3C8 */ UNK_T x3C8;
+    /* +3C8 */ float x3C8;
     /* +3CC */ int x3CC;
     /* +3D0 */ float x3D0;
     /* +3D4 */ float x3D4;
@@ -403,10 +407,10 @@ struct ftCommonData {
     /* +580 */ int x580;
     /* +584 */ int x584;
     /* +588 */ int x588;
-    /* +58C */ UNK_T x58C;
-    /* +590 */ UNK_T x590;
-    /* +594 */ UNK_T x594;
-    /* +598 */ UNK_T x598;
+    /* +58C */ float x58C;
+    /* +590 */ float x590;
+    /* +594 */ float open_parasol_threshold;
+    /* +598 */ float close_parasol_threshold;
     /* +59C */ float x59C;
     /* +5A0 */ float x5A0;
     /* +5A4 */ int x5A4;
@@ -489,7 +493,7 @@ struct ftCommonData {
     /* +6D8 */ void* x6D8[1];
     /* +6DC */ GXColor x6DC_colorsByPlayer[4];
     /* +6EC */ u8 x6EC[0x6F0 - 0x6EC];
-    /* +6F0 */ float unk_armor;
+    /* +6F0 */ float metal_armor;
     /* +6F4 */ int x6F4_unkDamage;
     /* +6F8 */ int x6F8;
     /* +6FC */ int x6FC;
@@ -527,7 +531,7 @@ struct ftCommonData {
     /* +7BC */ float x7BC;
     /* +7C0 */ float x7C0;
     /* +7C4 */ float kb_smashcharge_mul;
-    /* +7C8 */ int x7C8;
+    /* +7C8 */ float x7C8;
     /* +7CC */ int x7CC;
     /* +7D0 */ int x7D0;
     /* +7D4 */ float hit_weight_mul;
@@ -538,7 +542,9 @@ struct ftCommonData {
     /* +7E8 */ u32 unk_kb_angle_min;
     /* +7EC */ u32 unk_kb_angle_max;
     /* +7F0 */ int x7F0;
-    /* +7F4 */ u8 x7F4[0x800 - 0x7F4];
+    /* +7F4 */ float x7F4;
+    /* +7F8 */ float x7F8;
+    /* +7FC */ float x7FC;
     /* +800 */ float x800;
     /* +804 */ u8 x804[4];
     /* +804 */ Vec3 x808;
@@ -566,11 +572,6 @@ struct FtSFX {
     int x2C;
     int x30;
     int x34;
-};
-
-struct DObjList {
-    usize_t count;
-    HSD_DObj** data;
 };
 
 typedef struct {
@@ -603,7 +604,8 @@ struct ftData {
     }* x0;
     /*  +4 */ void* ext_attr;
     /*  +8 */ struct ftData_x8 {
-        /*  +0 */ u8 x0[0x8];
+        /*  +0 */ u32 x0;
+        /*  +4 */ u8 x4[0x4];
         /*  +8 */ struct ftData_x8_x8 {
             /*  +8 */ u32 x8;
             /*  +C */ u16** xC;
@@ -618,28 +620,39 @@ struct ftData {
     /* +10 */ u8* x10;
     /* +14 */ struct S_TEMP4* x14;
     /* +18 */ u8* x18;
-    /* +1C */ UNK_T x1C;
+    /* +1C */ struct ftData_x1C {
+        u16 x0;
+        u16 x2;
+        u8* x4; ///< an array of Fighter part indices
+        HSD_AnimJoint** x8;
+    }** x1C;
     /* +20 */ struct {
         /* +0 */ UNK_T x0;
         /* +4 */ HSD_Joint* x8;
     }* x20;
     /* +24 */ UNK_T x24;
-    /* +28 */ UNK_T x28;
+    /* +28 */ WaitStruct* x28;
     /* +2C */ struct ftDynamics* x2C;
     /* +30 */ UNK_T x30;
     /* +34 */ struct ftData_x34 {
         /* +0 */ Fighter_Part x0;
         /* +4 */ float scale;
     }* x34;
-    /* +38 */ UNK_T x38;
+    /* +38 */ struct ftData_x38 {
+        int x0;
+        Vec3 x4;
+        float x10;
+    }* x38;
     /* +3C */ struct UnkFloat6_Camera* x3C;
     /* +40 */ UNK_T _40;
     /* +44 */ ftData_x44_t* x44;
-    /* +48 */ UNK_T* x48_items;
+    /* +48 */ UNK_T* x48_items; ///< @todo might be similar to KirbyHat? see
+                                ///< ftPr_Init_8013C360
     /* +4C */ FtSFX* x4C_sfx;
     /* +50 */ u8 x50[0x54 - 0x50];
     /* +54 */ int x54;
     /* +58 */ void* x58;
+    /* +5C */ HSD_Joint* x5C;
 };
 
 typedef struct _ThrowFlags {
@@ -753,16 +766,34 @@ typedef struct ftCo_DatAttrs {
 struct FighterBone {
     /* +0 */ HSD_JObj* joint;
     /* +4 */ HSD_JObj* x4_jobj2; // used for interpolation
-    /* +8:0 */ u8 flags_b0 : 1;
-    /* +8:1 */ u8 flags_b1 : 1;
-    /* +8:2 */ u8 flags_b2 : 1;
-    /* +8:3 */ u8 flags_b3 : 1;
-    /* +8:4 */ u8 flags_b4 : 1;
-    /* +8:5 */ u8 flags_b5 : 1;
-    /* +8:6 */ u8 flags_b6 : 1;
-    /* +8:7 */ u8 flags_b7 : 1;
-    /* +9 */ u8 x9_pad[3];
-    /* +C */ u8 xC;
+    union {
+        struct {
+            /* +8:0 */ u8 flags_b0 : 1;
+            /* +8:1 */ u8 flags_b1 : 1;
+            /* +8:2 */ u8 flags_b2 : 1;
+            /* +8:3 */ u8 flags_b3 : 1;
+            /* +8:4 */ u8 flags_b4 : 1;
+            /* +8:5 */ u8 flags_b5 : 1;
+            /* +8:6 */ u8 flags_b6 : 1;
+            /* +8:7 */ u8 flags_b7 : 1;  ///< jobj lighting flag
+            /* +9:0 */ u8 flags2_b0 : 1; ///< jobj texgen flag
+            /* +9:1 */ u8 flags2_b1 : 1; ///< jobj specular flag
+            /* +9:2 */ u8 flags2_b2 : 1;
+            /* +9:3 */ u8 flags2_b3 : 1;
+            /* +9:4 */ u8 flags2_b4 : 1;
+            /* +9:5 */ u8 flags2_b5 : 1;
+            /* +9:6 */ u8 flags2_b6 : 1;
+            /* +9:7 */ u8 flags2_b7 : 1;
+        };
+        u16 flags8;
+    };
+    union {
+        struct {
+            /* +C */ u8 xC;
+            /* +D */ u8 xD : 7;
+        };
+        u32 flagsC;
+    };
 };
 STATIC_ASSERT(sizeof(struct FighterBone) == 0x10);
 
@@ -777,13 +808,13 @@ STATIC_ASSERT(sizeof(struct FighterBone) == 0x10);
     /// speed multiplier?
     /* fp+2124 */ float x2124_frameSpeedMul;
     /* fp+2128 */ s32 x2128;
-    /* fp+212C */ s8 x212C;
-    /* fp+212D */ s8 x212D;
+    /* fp+212C */ u8 x212C;
+    /* fp+212D */ u8 x212D;
     /* fp+212E */ s8 x212E;
     /* fp+212F */ s8 x212F;
     /// bool for smash sfx?
     /* fp+2130 */ s32 x2130_sfxBool;
-    /* fp+2134 */ s8 x2134_vibrateFrame;
+    /* fp+2134 */ u8 x2134_vibrateFrame;
     /* fp+2135 */ s8 x2135;
     /* fp+2136 */ s8 x2136;
     /* fp+2137 */ s8 x2137;
@@ -905,14 +936,6 @@ struct ftSubactionList {
     u8 x0_opcode;
 };
 
-struct ftCmdScript {
-    float x3E4_scriptEventTimer;         // 0x3E4
-    float x3E8_scriptFrameTimer;         // 0x3E8
-    ftSubactionList* x3EC_scriptCurrent; // 0x3EC
-    s32 x3F0_scriptLoopNum;              // 0x3F0
-    void* x3F4_scriptReturn;             // 0x3F4
-};
-
 struct ftDeviceUnk3 {
     UNK_T x0;
     u32 x4;
@@ -936,54 +959,65 @@ struct Fighter_x1A88_xFC_t {
     /*  +0 */ HSD_Pad x0;
     /*  +4 */ u8 x4;
     /*  +5 */ u8 x5;
-    /*  +6 */ u8 x6;
-    /*  +7 */ u8 x7;
-    /*  +8 */ u8 x8;
-    /*  +9 */ u8 x9;
+    /*  +6 */ u8 lstickX;
+    /*  +7 */ u8 lstickY;
+    /*  +8 */ u8 cstickX;
+    /*  +9 */ u8 cstickY;
     /*  +A */ u8 xA;
     /*  +B */ u8 xB;
     /*  +C */ Vec3 cur_pos;
     /* +18 */ float facing_dir;
-    /* +1C */ struct Fighter_x1A88_xFC_t* x1C;
-    /* +20 */ u8 x20[0x348 - 0x20];
 };
-STATIC_ASSERT(sizeof(struct Fighter_x1A88_xFC_t) == 0x348);
+STATIC_ASSERT(sizeof(struct Fighter_x1A88_xFC_t) == 0x1C);
 
 struct Fighter_x1A88_t {
     /*   +0 */ HSD_Pad x0;
-    /*   +4 */ s8 x4;
-    /*   +5 */ u8 x5;
-    /*   +6 */ u8 x6;
-    /*   +7 */ u8 x7;
-    /*   +8 */ u8 x8;
-    /*   +9 */ u8 x9;
-    /*   +A */ u8 xA;
-    /*   +B */ u8 xB;
+    /*   +4 */ s8 lstickX;
+    /*   +5 */ s8 lstickY;
+    /*   +6 */ s8 cstickX;
+    /*   +7 */ s8 cstickY;
+    /*   +8 */ u8 ltrigger;
+    /*   +9 */ u8 rtrigger; ///< R trigger analog value, 0 to 255
     /*   +C */ enum_t xC;
-    /*  +10 */ int x10;
+    /*  +10 */ int level; ///< CPU level, 0-9
     /*  +14 */ int x14;
     /*  +18 */ int x18;
     /*  +1C */ int x1C;
     /*  +20 */ int x20;
-    /*  +24 */ u8 x24[0x34 - 0x24];
+    /*  +24 */ int x24;
+    /*  +28 */ int x28;
+    /*  +2C */ int x2C;
+    /*  +30 */ int x30;
     /*  +34 */ float x34;
     /*  +38 */ float x38;
-    /*  +3C */ UNK_T x3C;
-    /*  +40 */ UNK_T x40;
+    /*  +3C */ float x3C;
+    /*  +40 */ float x40;
     /*  +44 */ Fighter* x44;
     /*  +48 */ UNK_T x48;
-    /*  +4C */ void* x4C;
+    /*  +4C */ Item* x4C;
     /*  +50 */ int x50;
     /*  +54 */ Vec2 x54;
     /*  +5C */ float x5C;
     /*  +60 */ int x60;
     /*  +64 */ Vec2 x64;
-    /*  +64 */ u8 x6C[0x7C - 0x6C];
+    /*  +6C */ Vec2 x6C;
+    /*  +74 */ Vec2 x74;
     /*  +7C */ int x7C;
-    /*  +80 */ u8 x80[0xF8 - 0x80];
+    /*  +80 */ int x80;
+    /*  +84 */ int x84;
+    /*  +88 */ int x88;
+    /*  +8C */ int x8C;
+    /*  +90 */ int x90;
+    /*  +94 */ int x94;
+    /*  +98 */ Vec3 x98;
+    /*  +A4 */ int xA4;
+    /*  +A8 */ u8 pad_xA8[0xC8 - 0xA8];
+    /*  +C8 */ u8 xC8;
+    /*  +C9 */ u8 pad_xC9[0xEC - 0xC9];
+    /*  +EC */ u8 xEC;
+    /*  +ED */ u8 pad_xED[0xF8 - 0xED];
     /*  +F8:0 */ u8 xF8_b0 : 1;
-    /*  +F8:1 */ u8 xF8_b1 : 1;
-    /*  +F8:2 */ u8 xF8_b2 : 1;
+    /*  +F8:1 */ u8 xF8_b12 : 2;
     /*  +F8:3 */ u8 xF8_b3 : 1;
     /*  +F8:4 */ u8 xF8_b4 : 1;
     /*  +F8:5 */ u8 xF8_b5 : 1;
@@ -1000,8 +1034,7 @@ struct Fighter_x1A88_t {
     /*  +FA:0 */ u8 xFA_b0 : 1;
     /*  +FA:1 */ u8 xFA_b1 : 1;
     /*  +FA:2 */ u8 xFA_b2 : 1;
-    /*  +FA:3 */ u8 xFA_b3 : 1;
-    /*  +FA:4 */ u8 xFA_b4 : 1;
+    /*  +FA:3 */ u8 xFA_b34 : 2;
     /*  +FA:5 */ u8 xFA_b5 : 1;
     /*  +FA:6 */ u8 xFA_b6 : 1;
     /*  +FA:7 */ u8 xFA_b7 : 1;
@@ -1013,25 +1046,20 @@ struct Fighter_x1A88_t {
     /*  +FB:5 */ u8 xFB_b5 : 1;
     /*  +FB:6 */ u8 xFB_b6 : 1;
     /*  +FB:7 */ u8 xFB_b7 : 1;
-    /*  +FC */ struct Fighter_x1A88_xFC_t xFC;
+    /*  +FC */ struct Fighter_x1A88_xFC_t xFC[30];
     /* +444 */ struct Fighter_x1A88_xFC_t* x444;
     /* +448 */ struct Fighter_x1A88_xFC_t* x448;
-    /* +44C */ UNK_T x44C;
-    /* +450 */ UNK_T x450;
-    /* +454 */ u32 x454;
-    /* +458 */ u8 x458[0x554 - 0x458];
-    /* +554 */ union Fighter_x1A88_x544_t {
-        struct {
-            u8 x0_u8;
-        };
-        u32 x0_u32;
-        void* x0_p;
-    } x554;
+    /* +44C */ u32 command_duration;
+    /* +450 */ s8* csP; ///< command script pointer, for reading commands
+    /* +454 */ s8 buffer[0x100]; ///< command script buffer area
+    /* +554 */ s8* write_pos; ///< where to write commands in the buffer area
     /* +558 */ float x558;
-    /* +558 */ u8 x55C[0x568 - 0x55C];
+    /* +55C */ float x55C;
+    /* +560 */ float x560;
+    /* +564 */ float x564;
     /* +568 */ float x568;
     /* +56C */ float x56C;
-    /* +570 */ UNK_T x570;
+    /* +570 */ float x570;
     /* +574 */ float half_width;
     /* +578 */ float half_height;
 };
@@ -1129,11 +1157,7 @@ struct Fighter {
     /*  fp+2EC */ float x2EC;
     /*  fp+2F0 */ BoneDynamicsDesc dynamic_bone_sets[Ft_Dynamics_NumMax];
     /*  fp+3E0 */ int dynamics_num;
-    /*  fp+3E4 */ ftCmdScript x3E4_fighterCmdScript;
-    /*  fp+3F8 */ UNK_T x3F8;
-    /*  fp+3FC */ UNK_T x3FC;
-    /*  fp+400 */ UNK_T x400;
-    /*  fp+404 */ UNK_T x404;
+    /*  fp+3E4 */ CommandInfo x3E4_fighterCmdScript;
     /*  fp+408 */ ColorOverlay x408;
     /*  fp+488 */ ColorOverlay x488;
     /*  fp+508 */ ColorOverlay x508;
@@ -1168,7 +1192,8 @@ struct Fighter {
     /*  fp+5A0 */ struct Fighter_x59C_t* x5A0;
     /*  fp+5A4 */ UNK_T x5A4;
     /*  fp+5A8 */ UNK_T x5A8;
-    /*  fp+5AC */ u8 _5AC[0x5B8 - 0x5AC];
+    /*  fp+5AC */ u32 x5AC;
+    /*  fp+5B0 */ u8 _5B0[0x5B8 - 0x5B0];
     /*  fp+5B8 */ s32 x5B8;
     /*  fp+5BC */ UNK_T x5BC;
     /*  fp+598 */ u8 filler_x598[0x5C8 - 0x5C0];
@@ -1178,19 +1203,9 @@ struct Fighter {
     /*  fp+5D4 */ HSD_TObj* costume_tobjs[5];
     /*  fp+5E8 */ FighterBone* parts;
     /*  fp+5EC */ DObjList dobj_list;
-    union {
-        struct {
-            s8 x0, x1;
-        }
-        /// @todo This is nonsense. Used by #ftParts_80074A74.
-        x5F4_arr[2];
-        struct {
-            /*  fp+5F4 */ s8 x5F4;
-            /*  fp+5F5 */ s8 x5F5;
-            /*  fp+5F6 */ s8 x5F6;
-            /*  fp+5F7 */ s8 x5F7;
-        };
-    };
+    /*  fp+5F4 */ struct {
+        s8 x0, x1;
+    } x5F4_arr[2];
     /*  fp+5F8 */ s8 x5F8;
     /*  fp+5FC */ u8 filler_x5FC[0x60C - 0x5F9];
     /*  fp+60C */ void* x60C;
@@ -1267,7 +1282,14 @@ struct Fighter {
     /*  fp+8A4 */ float x8A4_animBlendFrames;
     /*  fp+8A8 */ float x8A8_unk;
     /*  fp+8AC */ HSD_JObj* x8AC_animSkeleton;
-    /*  fp+8AC */ u8 filler_x8AC[0x914 - 0x8B0];
+    /*  fp+8B0 */ struct Fighter_x8B0_t {
+        int x0;
+        float x4;
+        float x8;
+        float xC;
+        s8 x10;
+        s8 x11;
+    } x8B0[5];
     /*  fp+914 */ HitCapsule x914[4];
     /*  fp+DF4 */ HitCapsule xDF4[2];
     /* fp+1064 */ HitCapsule x1064_thrownHitbox;
@@ -1276,11 +1298,23 @@ struct Fighter {
     /* fp+119E */ u8 hurt_capsules_len;
     /* fp+119F */ u8 x119F;
     /* fp+11A0 */ FighterHurtCapsule hurt_capsules[15];
-    /* fp+1614 */ UNK_T x1614;
-    /* fp+1618 */ u8 filler_x1618[0x166C - 0x1618];
-    /* fp+166C */ u8 x166C;
-    /* fp+1670 */ UNK_T x1670;
-    /* fp+1674 */ u8 filler_x1674[0x1828 - 0x1674];
+    /* fp+1614 */ struct Fighter_x1614_t {
+        f32 x0;
+        HSD_JObj* x4;
+        Vec3 x8;
+        Vec3 x14;
+        Vec3 x20;
+    } x1614[2];
+    /* fp+166C */ u8 x166C; ///< number of valid entries in x1670 array
+    /* fp+1670 */ struct Fighter_x1670_t {
+        /* +00 */ Vec3 v1;
+        /* +0C */ float v2;
+        /* +10 */ HSD_JObj* jobj;
+        /* +14 */ float x14;
+        /* +18 */ Vec3 x18;
+        /* +24 */ u8 pad[0x28 - 0x24];
+    } x1670[1]; ///< @todo figure out proper size
+    /* fp+1674 */ u8 filler_x1674[0x1828 - 0x1670 - 0x28];
     /* fp+1828 */ enum_t x1828;
     /* fp+182C */ struct dmg {
         /* fp+182C */ float x182c_behavior;
@@ -1298,10 +1332,10 @@ struct Fighter {
         /* fp+1864 */ int x1864;
         /* fp+1868 */ HSD_GObj* x1868_source;
         /* fp+186C */ int x186c;
-        /* fp+1870 */ int x1870;
+        /* fp+1870 */ struct DmgLogEntry* x1870;
         /* fp+1874 */ int x1874;
         /* fp+1878 */ int x1878;
-        /* fp+187C */ int x187c;
+        /* fp+187C */ float x187c;
         /* fp+1880 */ int x1880;
         /* fp+1884 */ int x1884;
         /* fp+1888 */ int x1888;
@@ -1427,13 +1461,13 @@ struct Fighter {
     /* fp+2021 */ s8 x2021;
     /* fp+2022 */ s8 x2022;
     /* fp+2024 */ s32 x2024;
-    /* fp+2028 */ s32 x2028;
-    /* fp+202C */ s32 x202C;
+    /* fp+2028 */ int metal_timer;
+    /* fp+202C */ int metal_health;
     /* fp+2030 */ s32 x2030;
     /* fp+2034 */ s32 x2034;
     /* fp+2038 */ s32 x2038;
-    /* fp+203C */ s32 x203C;
-    /* fp+2040 */ void* x2040;
+    /* fp+203C */ u32 x203C;
+    /* fp+2040 */ HSD_DObj** x2040;
     /* fp+203C */ u8 filler_x203C[0x2064 - 0x2044];
     /* fp+2064 */ int x2064_ledgeCooldown;
     /* fp+2068 */ s32 x2068_attackID;
@@ -1478,7 +1512,7 @@ struct Fighter {
     /* fp+2101:7 */ u8 x2101_bits_8 : 1;
     /* fp+2102 */ s8 x2102;
     /* fp+2103 */ s8 x2103;
-    /* fp+2104 */ s32 x2104;
+    /* fp+2104 */ int x2104;
     /* fp+2108 */ int capture_timer;
     /* fp+210C */ u8 wall_jump_input_timer;
     /* fp+210C */ u8 filler_x210C[3];
@@ -1529,7 +1563,7 @@ struct Fighter {
     /* fp+21E8 */ HSD_GObjEvent death3_cb;
     /* fp+21EC */ HSD_GObjEvent x21EC;
     /* fp+21F0 */ HSD_GObjEvent take_dmg_2_cb;
-    /* fp+21F4 */ HSD_GObjEvent x21F4;
+    /* fp+21F4 */ HSD_GObjEvent hurtbox_detect_cb;
     /* fp+21F8 */ HSD_GObjEvent x21F8;
     /* fp+21FC */ UnkFlagStruct x21FC_flag;
     /* fp+21FC */ u8 filler_x21FC[0x2200 - 0x21FD];
@@ -1552,7 +1586,7 @@ struct Fighter {
     /* fp+2218:0 */ u8 allow_interrupt : 1;
     /* fp+2218:1 */ u8 x2218_b1 : 1;
     /* fp+2218:2 */ u8 x2218_b2 : 1;
-    /* fp+2218:3 */ u8 x2218_b3 : 1;
+    /* fp+2218:3 */ u8 reflecting : 1;
     /* fp+2218:4 */ u8 x2218_b4 : 1;
     /* fp+2218:5 */ u8 x2218_b5 : 1;
     /* fp+2218:6 */ u8 x2218_b6 : 1;
@@ -1602,7 +1636,7 @@ struct Fighter {
     /* fp+221D:6 */ u16 x221D_b6 : 1;
     /* fp+221D:7 */ u16 x221D_b7 : 1;
 
-    /* fp+221E:0 */ u8 x221E_b0 : 1;
+    /* fp+221E:0 */ u8 invisible : 1;
     /* fp+221E:1 */ u8 x221E_b1 : 1;
     /* fp+221E:2 */ u8 x221E_b2 : 1;
     /* fp+221E:3 */ u8 x221E_b3 : 1;
@@ -1631,13 +1665,13 @@ struct Fighter {
     /* fp+2221:1 */ u8 x2221_b1 : 1;
     /* fp+2221:2 */ u8 x2221_b2 : 1;
     /* fp+2221:3 */ u8 x2221_b3 : 1;
-    /* fp+2221:4 */ u8 x2221_b4 : 1;
-    /* fp+2221:5 */ u8 x2221_b5 : 1;
-    /* fp+2221:6 */ u8 x2221_b6 : 1;
+    /* fp+2221:4 */ u8 x2221_b4 : 1; ///< parasol-related
+    /* fp+2221:5 */ u8 x2221_b5 : 1; ///< parasol-related
+    /* fp+2221:6 */ u8 x2221_b6 : 1; ///< parasol-related
     /* fp+2221:7 */ u8 x2221_b7 : 1;
 
-    /* fp+2222:0 */ u8 x2222_b0 : 1;
-    /* fp+2222:1 */ u8 x2222_b1 : 1;
+    /* fp+2222:0 */ u8 x2222_b0 : 1;      ///< can cargo grab? only set for DK
+    /* fp+2222:1 */ u8 can_multijump : 1; ///< set for Kirby and Jigglypuff
     /* fp+2222:2 */ u8 x2222_b2 : 1;
     /* fp+2222:3 */ u8 x2222_b3 : 1;
     /* fp+2222:4 */ u8 x2222_b4 : 1;
@@ -1651,8 +1685,8 @@ struct Fighter {
     /* fp+2223:3 */ u8 x2223_b3 : 1;
     /* fp+2223:4 */ u8 x2223_b4 : 1;
     /* fp+2223:5 */ u8 x2223_b5 : 1;
-    /* fp+2223:6 */ u8 x2223_b6 : 1;
-    /* fp+2223:7 */ u8 x2223_b7 : 1;
+    /* fp+2223:6 */ u8 is_always_metal : 1; ///< e.g. classic metal mario
+    /* fp+2223:7 */ u8 is_metal : 1;
 
     /* fp+2224:0 */ u8 x2224_b0 : 1;
     /* fp+2224:1 */ u8 x2224_b1 : 1;
@@ -1661,7 +1695,7 @@ struct Fighter {
     /* fp+2224:4 */ u8 x2224_b4 : 1;
     /* fp+2224:5 */ u8 x2224_b5 : 1;
     /* fp+2224:6 */ u8 x2224_b6 : 1;
-    /* fp+2224:7 */ u8 x2224_b7 : 1;
+    /* fp+2224:7 */ u8 can_walljump : 1;
 
     /* fp+2225:0 */ u8 x2225_b0 : 1;
     /* fp+2225:1 */ u8 x2225_b1 : 1;
@@ -1695,7 +1729,7 @@ struct Fighter {
     /* fp+2228:2 */ u8 x2228_b2 : 1;
     /* fp+2228:3 */ u8 x2228_b3 : 2;
     /* fp+2228:5 */ u8 x2228_b5 : 1;
-    /* fp+2228:6 */ u8 x2228_b6 : 1;
+    /* fp+2228:6 */ u8 used_tether : 1;
     /* fp+2228:7 */ u8 x2228_b7 : 1;
 
     /* fp+2229:0 */ u8 x2229_b0 : 1;
@@ -1789,69 +1823,6 @@ struct UnkFloat6_Camera {
     Vec3 xC;
 };
 
-struct FtCmdState {
-    float x0; // timer
-    float x4; // frame
-    union {
-        char* x8; // script
-        struct {
-            union {
-                s16 x0;
-                struct {
-                    u8 x0_b0 : 1;
-                    u8 x0_b1 : 1;
-                    u8 x0_b2 : 1;
-                    u8 x0_b3 : 1;
-                    u8 x0_b4 : 1;
-                    u8 x0_b5 : 1;
-                    u8 x0_b6 : 1;
-                    u8 x0_b7 : 1;
-                    u8 x1_b0 : 1;
-                    u8 x1_b1 : 1;
-                    u8 x1_b2 : 1;
-                    u8 x1_b3 : 1;
-                    u8 x1_b4 : 1;
-                    u8 x1_b5 : 1;
-                    u8 x1_b6 : 1;
-                    u8 x1_b7 : 1;
-                };
-                struct {
-                    u8 x0_b0_8 : 6;
-                    u16 x0_b0_2 : 8;
-                    u32 x0_b0_3 : 18;
-                };
-                struct {
-                    u32 x0_6_26_1 : 6;
-                    u32 x0_6_26_2 : 26;
-                };
-            };
-            union {
-                s16 x2;
-                struct {
-                    u8 x2_b0 : 1;
-                    u8 x2_b1 : 1;
-                    u8 x2_b2 : 1;
-                    u8 x2_b3 : 1;
-                    u8 x2_b4 : 1;
-                    u8 x2_b5 : 1;
-                    u8 x2_b6 : 1;
-                    u8 x2_b7 : 1;
-                    u8 x3_b0 : 1;
-                    u8 x3_b1 : 1;
-                    u8 x3_b2 : 1;
-                    u8 x3_b3 : 1;
-                    u8 x3_b4 : 1;
-                    u8 x3_b5 : 1;
-                    u8 x3_b6 : 1;
-                    u8 x3_b7 : 1;
-                };
-            };
-        }* x8_bits;
-    };
-    int xC;        // stack_depth
-    void*(x10[5]); // stack
-};
-
 typedef struct ftData_UnkModelStruct {
     Fighter_ModelEvent model_events[FTKIND_MAX];
     HSD_JObj* (*getter[FTKIND_MAX])(HSD_GObj*);
@@ -1884,14 +1855,14 @@ typedef struct ftDynamics {
 
 typedef struct KirbyHatStruct {
     /*  +0 */ HSD_Joint* hat_joint;
-    /*  +4 */ s32 joint_num;
+    /*  +4 */ u32 joint_num;
     /*  +8 */ void* hat_vis_table;
     /*  +C */ ftDynamics* hat_dynamics[5];
 } KirbyHatStruct;
 
 typedef struct Kirby_Unk {
     /*  +0 */ HSD_Joint* x0;
-    /*  +4 */ HSD_Joint** x4;
+    /*  +4 */ HSD_Joint* x4;
     /*  +8 */ UNK_T x8;
     /*  +C */ UNK_T xC;
     /* +10 */ ftDynamics* x10;
@@ -1905,5 +1876,25 @@ struct ft_80459B88_t {
     /* +4 */ KirbyHatStruct* hats[FTKIND_MAX];
 };
 STATIC_ASSERT(sizeof(struct ft_80459B88_t) == 0x88);
+
+typedef struct DmgLogEntry {
+    /*  +0 */ enum EntityKind x0;
+    /*  +4 */ FighterKind kind;
+    /*  +8 */ HSD_GObj* gobj;
+    /// @todo Might be a fake union
+    /*  +C */ union {
+        HitCapsule* hit0;
+        DynamicsDesc* unk_anim0;
+    };
+    /// @todo Might be a fake union
+    /* +10 */ union {
+        HitCapsule* hit1;
+        FighterHurtCapsule* hurt1;
+    };
+    /* +14 */ Vec3 pos;
+    /* +20 */ int x20;
+    /* +24 */ size_t size_of_xC;
+} DmgLogEntry;
+STATIC_ASSERT(sizeof(struct DmgLogEntry) == 0x28);
 
 #endif

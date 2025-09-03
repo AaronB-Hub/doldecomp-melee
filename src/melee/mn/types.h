@@ -56,11 +56,11 @@ struct PlayerInitData {
     /*0x07*/ u8 sub_color; // subcolor
     /*0x08*/ s8 handicap;  // handicap
     /*0x09*/ u8 team;      // team
-    /*0x0A*/ s8 xA;        // nametag
+    /*0x0A*/ u8 xA;        // nametag
     /*0x0B*/ u8 xB;
     /*0x0C*/ u8 xC_b0 : 1; ///< rumble enabled
     u8 xC_b1 : 1;
-    u8 xC_b2 : 1;
+    u8 xC_b2 : 1; ///< metal
     u8 xC_b3 : 1;
     u8 xC_b4 : 1; ///< invisible
     u8 xC_b5 : 1;
@@ -138,7 +138,7 @@ struct StartMeleeRules {
 
     u8 x6;
     u8 x7; // end graphic / SFX type
-    u8 x8; // is teams
+    u8 is_teams;
     u8 x9;
     u8 xA;
     s8 xB; // item frequency

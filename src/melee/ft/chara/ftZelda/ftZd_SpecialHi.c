@@ -7,7 +7,6 @@
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
-#include "ft/ft_0D14.h"
 #include "ft/ftanim.h"
 #include "ft/ftcliffcommon.h"
 #include "ft/ftcoll.h"
@@ -15,6 +14,7 @@
 #include "ft/ftparts.h"
 #include "ft/types.h"
 #include "ftCommon/ftCo_FallSpecial.h"
+#include "ftCommon/ftCo_Landing.h"
 #include "ftCommon/ftCo_Pass.h"
 #include "ftZelda/types.h"
 #include "lb/lb_00B0.h"
@@ -384,7 +384,7 @@ void ftZd_SpecialHi_80139F6C(HSD_GObj* gobj)
                               0, 0, NULL);
 
     fp->x2223_b4 = true;
-    fp->x221E_b0 = true;
+    fp->invisible = true;
 }
 
 void ftZd_SpecialHi_80139FE8(HSD_GObj* gobj)
@@ -395,7 +395,7 @@ void ftZd_SpecialHi_80139FE8(HSD_GObj* gobj)
     Fighter_ChangeMotionState(gobj, 350, transition_flags1, fp->cur_anim_frame,
                               0, 0, NULL);
 
-    fp->x221E_b0 = true;
+    fp->invisible = true;
 }
 
 void ftZd_SpecialHi_8013A058(HSD_GObj* gobj)
@@ -481,7 +481,7 @@ void ftZd_SpecialHi_8013A058(HSD_GObj* gobj)
                 fp->x2223_b4 = 1;
 
                 ftColl_8007B62C(gobj, 2);
-                fp->x221E_b0 = 1;
+                fp->invisible = true;
                 return;
             }
         }
@@ -574,7 +574,7 @@ void ftZd_SpecialHi_8013A244(HSD_GObj* gobj)
 
     ftColl_8007B62C(gobj, 2);
 
-    fp->x221E_b0 = 1;
+    fp->invisible = true;
 }
 
 void ftZd_SpecialHi_Anim(HSD_GObj* gobj)
@@ -653,7 +653,7 @@ void ftZd_SpecialAirHi_Coll(HSD_GObj* gobj)
         }
 
         if (ft_CheckGroundAndLedge(gobj, ledge_grab_dir) != 0) {
-            ftCo_800D5CB0(gobj, 0, attributes->x6C);
+            ftCo_LandingFallSpecial_Enter(gobj, false, attributes->x6C);
             return;
         }
     }
@@ -687,7 +687,7 @@ void ftZd_SpecialHi_8013A6A8(HSD_GObj* gobj)
         fp1->self_vel.y = 0;
         fp1->self_vel.x = 0;
         fp1->gr_vel = 0;
-        fp1->x221E_b0 = false;
+        fp1->invisible = false;
         fp1->accessory4_cb = &ftZd_SpecialHi_8013979C;
     }
 
@@ -711,7 +711,7 @@ void ftZd_SpecialHi_8013A764(HSD_GObj* gobj)
         fp1->self_vel.y = 0;
         fp1->self_vel.x = 0;
         fp1->gr_vel = 0;
-        fp1->x221E_b0 = false;
+        fp1->invisible = false;
         fp1->accessory4_cb = &ftZd_SpecialHi_8013979C;
     }
 

@@ -6,6 +6,7 @@
 #include "ft_081B.h"
 #include "ft_0852.h"
 #include "ft_0877.h"
+#include "ft_0D31.h"
 #include "ftaction.h"
 #include "ftanim.h"
 #include "ftcamera.h"
@@ -26,7 +27,8 @@
 #include "ft/ft_0C31.h"
 #include "ft/ft_0C88.h"
 #include "ft/ft_0C8C.h"
-#include "ft/ft_0D14.h"
+#include "ftCommon/ftCo_Attack100.h"
+#include "ft/ft_0DF0.h"
 #include "ft/ftafterimage.h"
 #include "ft/ftchangeparam.h"
 #include "ft/ftcolanim.h"
@@ -48,6 +50,10 @@
 #include "ftCommon/ftCo_HammerWait.h"
 #include "ftCommon/ftCo_ItemThrow.h"
 #include "ftCommon/ftCo_Jump.h"
+#include "ftCommon/ftCo_KinokoGiantEnd.h"
+#include "ftCommon/ftCo_KinokoGiantStart.h"
+#include "ftCommon/ftCo_KinokoSmallEnd.h"
+#include "ftCommon/ftCo_KinokoSmallStart.h"
 #include "ftCommon/ftCo_Rebound.h"
 #include "ftCommon/ftCo_ShieldBreakFly.h"
 #include "ftCommon/ftCo_SpecialS.h"
@@ -57,7 +63,6 @@
 #include "ftPeach/types.h"
 #include "gm/gm_unsplit.h"
 #include "gr/stage.h"
-#include "gr/types.h"
 #include "if/ifmagnify.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
@@ -74,7 +79,6 @@
 #include "pl/player.h"
 #include "pl/plbonuslib.h"
 #include "pl/pltrick.h"
-#include "un/un_2FC9.h"
 #include "vi/vi1202.h"
 
 #include <common_structs.h>
@@ -123,7 +127,7 @@ u32 Fighter_804D64F8 = 0;
 #define g_spawnNumCounter Fighter_804D64F8
 
 // the following seems to be an array, initialized in reverse in
-UNK_T Fighter_804D64FC = NULL;
+struct Fighter_804D64FC_t* Fighter_804D64FC = NULL;
 UNK_T Fighter_804D6500 = NULL;
 HSD_Joint* Fighter_804D6504 = NULL;
 u8* Fighter_804D6508 = NULL;
@@ -134,13 +138,13 @@ UNK_T Fighter_804D6518 = NULL;
 float* Fighter_804D651C = NULL;
 float* Fighter_804D6520 = NULL;
 float* Fighter_804D6524 = NULL;
-UNK_T Fighter_804D6528 = NULL;
+struct Fighter_804D6528_t* Fighter_804D6528 = NULL;
 UNK_T Fighter_804D652C = NULL;
 Vec2** Fighter_804D6530 = NULL;
 UNK_T Fighter_804D6534 = NULL;
 struct Fighter_804D653C_t* Fighter_804D6538 = NULL;
 struct Fighter_804D653C_t* Fighter_804D653C = NULL;
-int** Fighter_804D6540 = NULL;
+struct Fighter_804D6540_t** Fighter_804D6540 = NULL;
 FighterPartsTable** ftPartsTable = NULL;
 UNK_T Fighter_804D6548 = NULL;
 UNK_T Fighter_804D654C = NULL;
@@ -277,10 +281,10 @@ void Fighter_UnkInitReset_80067C98(Fighter* fp)
     fp->x221D_b2 = 0;
     fp->x221E_b7 = 0;
     fp->x2220_b7 = 0;
-    fp->x2221_b4 = 0;
-    fp->x2221_b5 = 0;
-    fp->x2221_b6 = 1;
-    fp->x2221_b7 = 0;
+    fp->x2221_b4 = false;
+    fp->x2221_b5 = false;
+    fp->x2221_b6 = true;
+    fp->x2221_b7 = false;
 
     fp->x61D = 255;
 
@@ -443,9 +447,9 @@ void Fighter_UnkInitReset_80067C98(Fighter* fp)
     fp->shield_unk1 = 0;
     fp->x19BC_shieldDamageTaken3 = 6;
 
-    fp->x221F_b6 = 0;
-    fp->x2218_b3 = 0;
-    fp->x2218_b4 = 0;
+    fp->x221F_b6 = false;
+    fp->reflecting = false;
+    fp->x2218_b4 = false;
     fp->ReflectAttr.x1A3C_damageOver = 0;
     fp->ReflectAttr.x1A2C_reflectHitDirection = 0;
     fp->x2218_b6 = false;
@@ -475,9 +479,10 @@ void Fighter_UnkInitReset_80067C98(Fighter* fp)
     fp->death3_cb = NULL;
     fp->x221E_b4 = true;
     fp->x197C = 0;
-    fp->x2223_b7 = false;
-    fp->x2028 = 0;
-    fp->x202C = 0;
+
+    fp->is_metal = false;
+    fp->metal_timer = 0;
+    fp->metal_health = 0;
 
     ftCo_800C88A0(fp);
 
@@ -699,7 +704,7 @@ void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct S_TEMP1* argdata)
     fp->x61C = argdata->unk5;
     fp->x618_player_id = Player_GetPlayerId(fp->player_id);
     fp->x61A_controller_index = Player_GetControllerIndex(fp->player_id);
-    fp->x2223_b6 = Player_GetFlagsBit5(fp->player_id);
+    fp->is_always_metal = Player_GetFlagsBit5(fp->player_id);
     fp->x2226_b3 = Player_GetFlagsBit6(fp->player_id);
     fp->x2226_b6 = Player_GetFlagsBit7(fp->player_id);
     fp->x2225_b5 = Player_GetMoreFlagsBit1(fp->player_id);
@@ -752,7 +757,7 @@ void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct S_TEMP1* argdata)
     fp->x594_s32 = 0;
     fp->x21FC_flag.u8 = 1;
 
-    fp->x221E_b0 = 0;
+    fp->invisible = false;
     fp->x221E_b1 = 0;
     fp->x221E_b2 = 0;
     fp->x221F_b1 = 0;
@@ -772,7 +777,7 @@ void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct S_TEMP1* argdata)
 
     fp->x2221_b2 = 0;
 
-    fp->no_normal_motion = 0;
+    fp->no_normal_motion = false;
     fp->x2229_b6 = 0;
     fp->no_kb = 0;
 
@@ -780,12 +785,12 @@ void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct S_TEMP1* argdata)
     fp->x222A_b1 = 0;
 
     fp->x2228_b5 = 0;
-    fp->x2228_b6 = 0;
+    fp->used_tether = false;
 
     fp->x2221_b3 = 0;
 
-    fp->x2222_b0 = 0;
-    fp->x2222_b1 = 0;
+    fp->x2222_b0 = false;
+    fp->can_multijump = false;
     fp->x2222_b4 = 0;
     fp->x2222_b5 = 0;
     fp->x2222_b6 = 0;
@@ -794,7 +799,7 @@ void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct S_TEMP1* argdata)
 
     fp->x40 = 0.0f;
 
-    fp->x2224_b7 = 0;
+    fp->can_walljump = false;
 
     fp->x60C = 0;
 
@@ -986,8 +991,8 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
         ftAnim_80070654(gobj);
     }
 
-    if ((flags & Ft_MF_SkipParasol) == 0) {
-        fp->x2221_b4 = 0;
+    if (!(flags & Ft_MF_SkipParasol)) {
+        fp->x2221_b4 = false;
         if ((ftGetParasolStatus(gobj) != -1) &&
             (ftGetParasolStatus(gobj) != 6))
         {
@@ -1055,14 +1060,14 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
     fp->shield_unk1 = 0.0f;
 
     fp->x221D_b5 = 0;
-    fp->x2218_b3 = 0;
+    fp->reflecting = false;
     fp->x2218_b6 = 0;
     fp->x221C_b4 = 0;
 
     fp->x1A6A = 0;
 
     fp->x221D_b7 = 0;
-    fp->x221E_b0 = 0;
+    fp->invisible = false;
     fp->x221E_b1 = 0;
     fp->x221E_b2 = 0;
     fp->x221F_b1 = 0;
@@ -1084,7 +1089,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
     ftCo_800DEEA8(gobj);
 
     fp->smash_attrs.x2138_smashSinceHitbox = -1.0f;
-    fp->x2224_b4 = 0;
+    fp->x2224_b4 = false;
 
     if ((flags & Ft_MF_SkipItemVis) == 0) {
         fp->x221E_b3 = 1;
@@ -1137,7 +1142,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
         fp->x2227_b5 = false;
         pl_80040330(fp->player_id, fp->x221F_b4, fp->x2140);
         fp->x2140 = 0;
-        fp->x2228_b6 = false;
+        fp->used_tether = false;
         fp->x2180 = 6;
     }
 
@@ -1263,9 +1268,9 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
                 } else {
                     ftData_80085CD8(fp, fp, fp->anim_id);
                 }
-                fp->x3E4_fighterCmdScript.x3EC_scriptCurrent =
-                    unk_struct_x18->xC;
-                fp->x3E4_fighterCmdScript.x3F0_scriptLoopNum = 0;
+                fp->x3E4_fighterCmdScript.u =
+                    (union CmdUnion*) unk_struct_x18->xC;
+                fp->x3E4_fighterCmdScript.loop_count = 0;
 
                 if (anim_start) {
                     if (fp->x590 != 0U) {
@@ -1288,8 +1293,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
                         fp->x6D8.x = fp->x6D8.y = fp->x6D8.z = 0.0F;
                         fp->x6CC = fp->x6C0;
                     }
-                    fp->x3E4_fighterCmdScript.x3E4_scriptEventTimer =
-                        -anim_start;
+                    fp->x3E4_fighterCmdScript.timer = -anim_start;
                 } else {
                     if (fp->x590 != 0U) {
                         ftAnim_8006EBE8(gobj, anim_start, anim_speed,
@@ -1297,7 +1301,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
                                         : (anim_blend)        ? anim_blend
                                                               : *unk_byte_ptr);
                     }
-                    fp->x3E4_fighterCmdScript.x3E4_scriptEventTimer = 0.0f;
+                    fp->x3E4_fighterCmdScript.timer = 0.0f;
                 }
 
                 ftAnim_8006E9B4(gobj);
@@ -1360,7 +1364,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
             fp->x594_s32 = 0;
             ftAnim_80070758(jobj);
             ftAnim_80070758(fp->x8AC_animSkeleton);
-            fp->x3E4_fighterCmdScript.x3EC_scriptCurrent = 0;
+            fp->x3E4_fighterCmdScript.u = NULL;
             fp->x8A4_animBlendFrames = 0;
             fp->x8A8_unk = 0;
         }
@@ -1378,20 +1382,20 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
         fp->coll_cb = new_motion_state->coll_cb;
         fp->cam_cb = new_motion_state->cam_cb;
 
-        fp->accessory1_cb = 0;
-        fp->accessory4_cb = 0;
-        fp->deal_dmg_cb = 0;
-        fp->shield_hit_cb = 0;
-        fp->reflect_hit_cb = 0;
-        fp->hitlag_cb = 0;
-        fp->x21CC = 0;
-        fp->post_hitlag_cb = 0;
-        fp->pre_hitlag_cb = 0;
-        fp->take_dmg_cb = 0;
-        fp->take_dmg_2_cb = 0;
-        fp->x21F4 = 0;
-        fp->x21F8 = 0;
-        fp->death2_cb = 0;
+        fp->accessory1_cb = NULL;
+        fp->accessory4_cb = NULL;
+        fp->deal_dmg_cb = NULL;
+        fp->shield_hit_cb = NULL;
+        fp->reflect_hit_cb = NULL;
+        fp->hitlag_cb = NULL;
+        fp->x21CC = NULL;
+        fp->post_hitlag_cb = NULL;
+        fp->pre_hitlag_cb = NULL;
+        fp->take_dmg_cb = NULL;
+        fp->take_dmg_2_cb = NULL;
+        fp->hurtbox_detect_cb = NULL;
+        fp->x21F8 = NULL;
+        fp->death2_cb = NULL;
     }
 }
 
@@ -1527,12 +1531,11 @@ void Fighter_8006A360(Fighter_GObj* gobj)
             }
         }
 
-        if (fp->x2223_b7) {
-            if (fp->x2028) {
-                fp->x2028--;
-                if (!fp->x2028 || fp->x202C <= 0) {
-                    ftCo_800C8540(gobj);
-                }
+        if (fp->is_metal && fp->metal_timer != 0) {
+            fp->metal_timer--;
+            if (fp->metal_timer == 0 || fp->metal_health <= 0) {
+                // Exit fighter metal mode
+                ftCo_800C8540(gobj);
             }
         }
 
@@ -1584,12 +1587,12 @@ void Fighter_8006A360(Fighter_GObj* gobj)
             if (fp->x2104) {
                 fp->x2104--;
                 if (fp->x2104 == 0) {
-                    fp->x2221_b4 = 0;
+                    fp->x2221_b4 = false;
 
                     if (fp->item_gobj &&
                         itGetKind(fp->item_gobj) == It_Kind_Peach_Parasol)
                     {
-                        fp->x2221_b5 = 1;
+                        fp->x2221_b5 = true;
                         ftCo_800968C8(gobj);
                     } else {
                         ftCo_80095744(gobj, 0);
@@ -2634,8 +2637,8 @@ void Fighter_TakeDamage_8006CC7C(Fighter* fp, float damage_amount)
 {
     if (!fp->x2226_b4 || fp->x2226_b3) {
         fp->dmg.x1830_percent += damage_amount;
-        if (fp->x2028) {
-            fp->x202C -= damage_amount;
+        if (fp->metal_timer != 0) {
+            fp->metal_health -= damage_amount;
         }
 
         if (fp->x2034) {
@@ -2938,8 +2941,8 @@ void Fighter_ProcessHit_8006D1EC(Fighter_GObj* gobj)
                     ftData_OnAbsorb[fp->kind](gobj);
                 }
             } else if (fp->unk_gobj != NULL) {
-                if (fp->x21F4) {
-                    fp->x21F4(gobj);
+                if (fp->hurtbox_detect_cb) {
+                    fp->hurtbox_detect_cb(gobj);
                 }
             }
         }

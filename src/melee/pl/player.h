@@ -109,7 +109,7 @@ typedef struct _StaticPlayer {
         u8 b2 : 1;
         u8 b3 : 1;
         u8 b4 : 1;
-        u8 b5 : 1;
+        u8 is_metal : 1;
         u8 b6 : 1;
         u8 b7 : 1;
     } flags;
@@ -170,7 +170,7 @@ void Player_SetPlayerCharacter(s32 slot, CharacterKind value);
 Gm_PKind Player_GetPlayerSlotType(s32 slot);
 Gm_PKind Player_8003248C(s32 slot, bool arg1);
 void Player_SetSlottype(s32 slot, Gm_PKind value);
-s8 Player_800325C8(s32 slot, bool b);
+s8 Player_800325C8(CharacterKind, bool b);
 s8 Player_80032610(s32 slot, bool arg1);
 void Player_LoadPlayerCoords(s32 slot, Vec3* out_vec);
 void Player_80032768(s32 slot, Vec3* arg_vec);
@@ -264,8 +264,8 @@ void Player_UnsetFlagsBit1(int slot);
 s32 Player_GetFlagsBit3(s32 slot);
 void Player_SetFlagsBit3(s32 slot, u8 bit3);
 int Player_GetFlagsBit4(int slot);
-u8 Player_GetFlagsBit5(s32 slot);
-void Player_SetFlagsBit5(s32 slot, u8 bit5);
+u8 Player_GetFlagsBit5(s32 slot); ///< player is metal
+void Player_SetFlagsBit5(s32 slot, u8 is_metal); ///< player is metal
 u8 Player_GetFlagsBit6(s32 slot);
 void Player_SetFlagsBit6(s32 slot, u8 bit6);
 u8 Player_GetFlagsBit7(s32 slot);
@@ -292,7 +292,7 @@ pl_800386D8_t* Player_GetTotalAttackCountPtr(int slot);
 StaleMoveTable* Player_GetStaleMoveTableIndexPtr(s32 slot);
 int* Player_GetUnk6A8Ptr(int slot);
 pl_StaleMoveTableExt_t* Player_GetStaleMoveTableIndexPtr2(s32 slot);
-s32 Player_80036394(s32 slot);
+FighterKind Player_80036394(s32 slot);
 s32 Player_80036428(s32 slot);
 void Player_SetUnk45(s32 slot, int unk45);
 u8 Player_GetUnk45(s32 slot);

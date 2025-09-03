@@ -36,14 +36,16 @@
                                          FighterKind victim_kind);
 /* 0EEF04 */ void ftKb_UnkMtxFunc0(Fighter_GObj* gobj, int, Mtx);
 /* 0EF028 */ HSD_JObj* ftKb_Init_UnkMotionStates6(Fighter_GObj* gobj);
-/* 0EF040 */ UNK_RET ftKb_SpecialN_800EF040(UNK_PARAMS);
-/* 0EF0E4 */ UNK_RET ftKb_SpecialN_800EF0E4(UNK_PARAMS);
-/* 0EF35C */ UNK_RET ftKb_SpecialN_800EF35C(UNK_PARAMS);
-/* 0EF438 */ UNK_RET ftKb_SpecialN_800EF438(UNK_PARAMS);
+/* 0EF040 */ UNK_RET ftKb_SpecialN_800EF040(Fighter_GObj*, int,
+                                            KirbyHatStruct*);
+/* 0EF0E4 */ UNK_RET ftKb_SpecialN_800EF0E4(Fighter_GObj*, int, u8*);
+/* 0EF35C */ UNK_RET ftKb_SpecialN_800EF35C(Fighter_GObj*, int, u8*);
+/* 0EF438 */ UNK_RET ftKb_SpecialN_800EF438(Fighter_GObj*, KirbyHatStruct*);
 /* 0EF69C */ UNK_RET ftKb_SpecialN_800EF69C(UNK_PARAMS);
 /* 0EF87C */ void ftKb_UnkIntBoolFunc0(Fighter*, int, bool);
 /* 0EF9BC */ void ftKb_Init_UnkCallbackPairs0_0(Fighter_GObj* gobj);
-/* 0EF9FC */ void ftKb_Init_UnkCallbackPairs0_1(Fighter_GObj* gobj);
+/* 0EF9FC */ void ftKb_Init_UnkCallbackPairs0_1(Fighter_GObj* gobj, int,
+                                                float);
 /* 0EFA40 */ void ftKb_SpecialN_800EFA40(Fighter_GObj* gobj);
 /* 0EFAF0 */ void ftKb_SpecialN_800EFAF0(Fighter_GObj* gobj);
 /* 0EFB4C */ void ftKb_SpecialN_800EFB4C(Fighter_GObj* gobj);
@@ -239,6 +241,7 @@
 /* 0F6070 */ void ftKb_SpecialN_800F6070(Fighter_GObj* gobj);
 /* 0F6388 */ void ftKb_SpecialN_800F6388(Fighter_GObj* gobj);
 /* 0F63EC */ void ftKb_SpecialN_800F63EC(Fighter_GObj* gobj);
+/* 0F6588 */ void fn_800F6588(Fighter_GObj* gobj);
 /* 0F6BB0 */ void ftKb_SpecialS_800F6BB0(Fighter_GObj* gobj);
 /* 0F70A0 */ void ftKb_SpecialN_Anim(Fighter_GObj* gobj);
 /* 0F71CC */ void ftKb_SpecialAirN_Anim(Fighter_GObj* gobj);
@@ -772,6 +775,8 @@
 /* 109B00 */ void fn_80109B00(Fighter_GObj* gobj);
 /* 109B7C */ void fn_80109B7C(Fighter_GObj* gobj);
 /* 109BF8 */ void fn_80109BF8(Fighter_GObj* gobj);
+/* 109C74 */ void fn_80109C74(Fighter_GObj* gobj);
+/* 109CF0 */ void fn_80109CF0(Fighter_GObj* gobj);
 /* 109D6C */ void ftKb_YsSpecialN1_Anim(Fighter_GObj* gobj);
 /* 109DB8 */ void ftKb_YsSpecialAirNCapture2_Anim(Fighter_GObj* gobj);
 /* 109E04 */ void ftKb_YsSpecialAirNCapture1_Anim(Fighter_GObj* gobj);
