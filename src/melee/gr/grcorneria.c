@@ -34,7 +34,10 @@ bool grCorneria_801DD52C(void)
 
 /// #grCorneria_801DD534
 
-/// #grCorneria_801DD620
+void grCorneria_801DD620(Ground_GObj* gobj)
+{
+    grAnime_801C8138((HSD_GObj*) gobj, GET_GROUND(gobj)->map_id, 0);
+}
 
 bool grCorneria_801DD64C(Ground_GObj* arg)
 {
@@ -177,11 +180,17 @@ bool grCorneria_801DFBC4(Ground_GObj* arg)
     return false;
 }
 
-/// #grCorneria_801DFBCC
+void grCorneria_801DFBCC(Ground_GObj* arg) {
+    grCorneria_801DED50(arg);
+}
 
 void grCorneria_801DFBEC(Ground_GObj* arg) {}
 
-/// #grCorneria_801DFBF0
+void grCorneria_801DFBF0(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138((HSD_GObj*) gobj, gp->map_id, 0);
+}
 
 bool grCorneria_801DFC1C(Ground_GObj* arg)
 {

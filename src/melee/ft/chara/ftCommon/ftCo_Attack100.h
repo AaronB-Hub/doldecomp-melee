@@ -1,17 +1,21 @@
 #ifndef GALE01_0D67C4
 #define GALE01_0D67C4
 
-#include "ft/forward.h"
+#include <melee/ft/forward.h>
+#include <melee/it/forward.h>
+void fn_800DAA40(Fighter_GObj*, Fighter_GObj*);
 
-/* 0D67C4 */ s32 ftCo_800D67C4(Fighter*);
-/* 0D6824 */ bool ftCo_800D6824(Fighter_GObj* gobj);
-/* 0D688C */ s32 ftCo_800D688C(Fighter*);
+/* 0D67C4 */ bool ftCo_800D67C4(Fighter*);
+/* 0D6824 */ bool ftCo_800D6824(Fighter_GObj*);
+/* 0D688C */ bool ftCo_800D688C(Fighter*);
 /* 0D68C0 */ bool ftCo_800D68C0(Fighter_GObj* gobj);
-/* 0D6928 */ s32 ftCo_800D6928(Fighter*);
+/* 0D6928 */ bool ftCo_800D6928(Fighter*);
 /* 0D695C */ bool ftCo_Attack100_CheckInput(Fighter_GObj* gobj);
 /* 0D69C4 */ bool ftCo_800D69C4(Fighter_GObj* gobj);
 /* 0D6A50 */ bool ftCo_Attack_800D6A50(Fighter_GObj* gobj);
-/* 0D6B00 */ void ftCo_800D6B00(Fighter_GObj*, s32);
+/* 0D6AC4 */ void fn_800D6AC4(Fighter_GObj*);
+/* 0D6B00 */ void ftCo_800D6B00(Fighter_GObj*, enum_t msid);
+/* 0D6B8C */ void fn_800D6B8C(Fighter_GObj*);
 /* 0D6C0C */ void ftCo_Attack100Start_Anim(Fighter_GObj* gobj);
 /* 0D6C60 */ void ftCo_800D6C60(Fighter_GObj*, HSD_GObjEvent callback);
 /* 0D6D48 */ void ftCo_Attack100Loop_Anim(Fighter_GObj* gobj);
@@ -23,6 +27,7 @@
 /* 0D6EF8 */ void ftCo_Attack100Start_Coll(Fighter_GObj* gobj);
 /* 0D6F18 */ void ftCo_Attack100Loop_Coll(Fighter_GObj* gobj);
 /* 0D6F38 */ void ftCo_Attack100End_Coll(Fighter_GObj* gobj);
+/* 0D6F58 */ void fn_800D6F58(Fighter_GObj* gobj, Item_GObj* item_gobj);
 /* 0D705C */ bool ftCo_800D705C(Fighter_GObj* gobj);
 /* 0D7100 */ bool ftCo_800D7100(Fighter_GObj* gobj);
 /* 0D71D8 */ void ftCo_800D71D8(Fighter_GObj* gobj);
@@ -36,14 +41,22 @@
 /* 0D767C */ void ftCo_JumpAerialF1_Coll(Fighter_GObj* gobj);
 /* 0D76B8 */ void ft_800D76B8(Fighter_GObj*);
 /* 0D7770 */ void ft_800D7770(Fighter_GObj*);
+/* 0D7830 */ void fn_800D7830(Fighter_GObj* gobj);
+/* 0D78B0 */ void fn_800D78B0(Fighter_GObj* gobj);
 /* 0D79AC */ void ftCo_ItemScopeStart_Anim(Fighter_GObj* gobj);
 /* 0D79B0 */ void ftCo_ItemScopeAirStart_Anim(Fighter_GObj* gobj);
+/* 0D79B4 */ void fn_800D79B4(Fighter_GObj*, void (*)(Fighter_GObj*),
+                              void (*)(Fighter_GObj*, int));
 /* 0D7AEC */ void ftCo_ItemScopeStart_IASA(Fighter_GObj* gobj);
 /* 0D7B1C */ void ftCo_ItemScopeAirStart_IASA(Fighter_GObj* gobj);
 /* 0D7B4C */ void ftCo_ItemScopeStart_Phys(Fighter_GObj* gobj);
 /* 0D7B6C */ void ftCo_ItemScopeAirStart_Phys(Fighter_GObj* gobj);
 /* 0D7B8C */ void ftCo_ItemScopeStart_Coll(Fighter_GObj* gobj);
 /* 0D7BB4 */ void ftCo_ItemScopeAirStart_Coll(Fighter_GObj* gobj);
+/* 0D7BDC */ void fn_800D7BDC(Fighter_GObj*);
+/* 0D7C60 */ void fn_800D7C60(Fighter_GObj*);
+/* 0D7CEC */ void fn_800D7CEC(Fighter_GObj* gobj);
+/* 0D7D70 */ void fn_800D7D70(Fighter_GObj* gobj);
 /* 0D7DFC */ void ftCo_ItemScopeRapid_Anim(Fighter_GObj* gobj);
 /* 0D7F10 */ void ftCo_ItemScopeAirRapid_Anim(Fighter_GObj* gobj);
 /* 0D8024 */ void ftCo_ItemScopeRapid_IASA(Fighter_GObj* gobj);
@@ -52,6 +65,11 @@
 /* 0D8084 */ void ftCo_ItemScopeAirRapid_Phys(Fighter_GObj* gobj);
 /* 0D80A4 */ void ftCo_ItemScopeRapid_Coll(Fighter_GObj* gobj);
 /* 0D80CC */ void ftCo_ItemScopeAirRapid_Coll(Fighter_GObj* gobj);
+/* 0D8140 */ void fn_800D8140(Fighter_GObj*, int);
+/* 0D81D0 */ void fn_800D81D0(Fighter_GObj*, int);
+/* 0D8268 */ void fn_800D8268(Fighter_GObj* gobj);
+/* 0D82EC */ void fn_800D82EC(Fighter_GObj* gobj);
+/* 0D8378 */ void fn_800D8378(Fighter_GObj* gobj);
 /* 0D83AC */ void ftCo_ItemScopeFire_Anim(Fighter_GObj* gobj);
 /* 0D83F4 */ void ftCo_ItemScopeAirFire_Anim(Fighter_GObj* gobj);
 /* 0D843C */ void ftCo_ItemScopeFire_IASA(Fighter_GObj* gobj);
@@ -60,6 +78,7 @@
 /* 0D8464 */ void ftCo_ItemScopeAirFire_Phys(Fighter_GObj* gobj);
 /* 0D8484 */ void ftCo_ItemScopeFire_Coll(Fighter_GObj* gobj);
 /* 0D84AC */ void ftCo_ItemScopeAirFire_Coll(Fighter_GObj* gobj);
+/* 0D8838 */ void fn_800D8838(Fighter_GObj* gobj);
 /* 0D88B8 */ void ftCo_ItemScopeEnd_Anim(Fighter_GObj* gobj);
 /* 0D88D8 */ void ftCo_ItemScopeAirEnd_Anim(Fighter_GObj* gobj);
 /* 0D88F8 */ void ftCo_ItemScopeEnd_IASA(Fighter_GObj* gobj);
@@ -80,9 +99,12 @@
 /* 0D8D88 */ void ftCo_Catch_Phys(Fighter_GObj* gobj);
 /* 0D8DD0 */ void ftCo_CatchDash_Phys(Fighter_GObj* gobj);
 /* 0D8E08 */ void ftCo_Catch_Coll(Fighter_GObj* gobj);
+/* 0D8E30 */ void fn_800D8E30(Fighter_GObj* gobj);
 /* 0D8E6C */ void ftCo_CatchDash_Coll(Fighter_GObj* gobj);
 /* 0D8E94 */ bool fn_800D8E94(Fighter_GObj* gobj);
 /* 0D8EC8 */ bool fn_800D8EC8(Fighter_GObj*);
+/* 0D9228 */ bool fn_800D9228(Fighter_GObj*);
+/* 0D9230 */ bool fn_800D9930(Fighter_GObj*);
 /* 0D94D8 */ void ftCo_800D94D8(Fighter_GObj* gobj);
 /* 0D952C */ bool fn_800D952C(Fighter_GObj* gobj);
 /* 0D9558 */ bool fn_800D9558(Fighter_GObj*);
@@ -96,11 +118,13 @@
 /* 0DA31C */ void ftCo_CatchWait_IASA(Fighter_GObj* gobj);
 /* 0DA3D0 */ void ftCo_CatchWait_Phys(Fighter_GObj* gobj);
 /* 0DA418 */ void ftCo_CatchWait_Coll(Fighter_GObj* gobj);
+/* 0DA440 */ void fn_800DA440(Fighter_GObj* gobj);
 /* 0DA490 */ void fn_800DA490(Fighter_GObj* gobj);
 /* 0DA568 */ void ftCo_CatchAttack_Anim(Fighter_GObj* gobj);
 /* 0DA5A4 */ void ftCo_CatchAttack_IASA(Fighter_GObj* gobj);
 /* 0DA5A8 */ void ftCo_CatchAttack_Phys(Fighter_GObj* gobj);
 /* 0DA5F0 */ void ftCo_CatchAttack_Coll(Fighter_GObj* gobj);
+/* 0DA618 */ void fn_800DA618(Fighter_GObj* gobj);
 /* 0DA668 */ void fn_800DA668(Fighter_GObj* gobj);
 /* 0DA698 */ void ftCo_800DA698(Fighter_GObj* gobj, bool);
 /* 0DA744 */ void ftCo_CatchCut_Anim(Fighter_GObj* gobj);
@@ -110,6 +134,7 @@
 /* 0DA824 */ float ftCo_800DA824(Fighter*);
 /* 0DAC70 */ void ftCo_CapturePulledHi_Anim(Fighter_GObj* gobj);
 /* 0DAC74 */ void ftCo_CapturePulledHi_IASA(Fighter_GObj* gobj);
+/* 0DAC78 */ void fn_800DAC78(Fighter_GObj*, Vec3*);
 /* 0DADE8 */ void ftCo_CapturePulledHi_Phys(Fighter_GObj* gobj);
 /* 0DAE94 */ void ftCo_CapturePulledHi_Coll(Fighter_GObj* gobj);
 /* 0DB004 */ void ftCo_CapturePulledLw_Anim(Fighter_GObj* gobj);
@@ -142,10 +167,13 @@
 /* 0DC328 */ void ftCo_CaptureDamageHi_IASA(Fighter_GObj* gobj);
 /* 0DC32C */ void ftCo_CaptureDamageHi_Phys(Fighter_GObj* gobj);
 /* 0DC34C */ void ftCo_CaptureDamageHi_Coll(Fighter_GObj* gobj);
+/* 0DC384 */ void fn_800DC384(Fighter_GObj* gobj);
 /* 0DC3A4 */ void ftCo_800DC3A4(Fighter_GObj* gobj);
+/* 0DC404 */ void fn_800DC404(Fighter_GObj*);
 /* 0DC468 */ void ftCo_CaptureDamageLw_Anim(Fighter_GObj* gobj);
 /* 0DC4AC */ void ftCo_CaptureDamageLw_IASA(Fighter_GObj* gobj);
 /* 0DC4B0 */ void ftCo_CaptureDamageLw_Phys(Fighter_GObj* gobj);
 /* 0DC5EC */ void ftCo_CaptureDamageLw_Coll(Fighter_GObj* gobj);
+/* 0DC624 */ void fn_800DC624(HSD_GObj* gobj);
 
 #endif

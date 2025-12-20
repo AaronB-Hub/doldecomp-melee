@@ -120,6 +120,10 @@ union ftCommon_MotionVars {
         /* fp+2340 */ bool x0;
     } attack1;
     struct {
+        /* fp+2340 */ bool x0;
+        /* fp+2344 */ bool x4;
+    } attack100;
+    struct {
         /* fp+2340 */ int x0;
     } attackdash;
     struct {
@@ -189,10 +193,10 @@ union ftCommon_MotionVars {
     struct {
         /* fp+2340 */ int x0;
         /* fp+2344 */ float x4;
-        /* fp+2348 */ float x8;
+        /* fp+2348 */ float mobility;
         /* fp+234C */ int xC;
         /* fp+2350 */ bool x10;
-        /* fp+2354 */ float x14;
+        /* fp+2354 */ float landing_lag;
         /* fp+2358 */ bool allow_interrupt;
     } fallspecial;
     struct {
@@ -347,7 +351,20 @@ union ftCommon_MotionVars {
         /* fp+2340 */ Item_GObj* x0;
     } captureleadead;
     struct {
+        /* fp+2340 */ int x0;
+        /* fp+2344 */ float x4;
+        /* fp+2348 */ u8 pad_x8[0x18 - 0x8];
+        /* fp+2358 */ HSD_JObj* x18;
+    } capturedamage;
+    struct {
         /* fp+2340 */ bool timer;
+        /* fp+2344 */ float x4;
+        /* fp+2348 */ Vec3 x8;
+        /* fp+2354 */ Vec3 x14;
+        /* fp+2360 */ float x20;
+        /* fp+2364 */ float x24;
+        /* fp+2368 */ float x28;
+        /* fp+236C */ ftCollisionBox x2C;
     } entry;
     struct {
         /* fp+2340 */ Item_GObj* x0;
@@ -400,6 +417,17 @@ union ftCommon_MotionVars {
     struct {
         /* fp+2340 */ FtMotionId prev_msid;
     } parasol_open;
+    struct {
+        /* fp+2340 */ int x0;
+        /* fp+2344 */ int x4;
+        /* fp+2344 */ float x8;
+    } swing;
+    struct {
+        /* fp+2340 */ int x0;
+        /* fp+2344 */ int x4;
+        /* fp+2348 */ int x8;
+        /* fp+234C */ Vec xC;
+    } throw;
 };
 
 /// @todo Fake, need to find real size of #HitCapsule

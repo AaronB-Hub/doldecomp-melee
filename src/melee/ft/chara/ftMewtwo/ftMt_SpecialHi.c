@@ -157,8 +157,8 @@ void ftMt_SpecialAirHiStart_Phys(HSD_GObj* gobj)
         Fighter* fp1 = fp0;
         ftMewtwoAttributes* mewtwoAttrs = getFtSpecialAttrsD(fp0);
 
-        ftCommon_8007D494(fp1, mewtwoAttrs->x48_MEWTWO_TELEPORT_GRAVITY,
-                          mewtwoAttrs->x4C_MEWTWO_TELEPORT_TERMINAL_VELOCITY);
+        ftCommon_Fall(fp1, mewtwoAttrs->x48_MEWTWO_TELEPORT_GRAVITY,
+                      mewtwoAttrs->x4C_MEWTWO_TELEPORT_TERMINAL_VELOCITY);
     }
 
     ftCommon_8007CEF4(fp0);
@@ -251,7 +251,7 @@ void ftMt_SpecialAirHiLost_IASA(HSD_GObj* gobj) {}
 // Mewtwo's grounded Teleport Zoom Physics callback
 void ftMt_SpecialHiLost_Phys(HSD_GObj* gobj)
 {
-    ftCommon_8007CB74(gobj);
+    ftCommon_ApplyGroundMovement(gobj);
 }
 
 // Mewtwo's aerial Teleport Zoom Physics callback
@@ -268,7 +268,9 @@ void ftMt_SpecialHiLost_Coll(HSD_GObj* gobj)
 
         if (!ft_80082708(gobj)) {
             u32 env_flags = collData->env_flags;
-            if (env_flags & MPCOLL_RIGHTWALL || env_flags & MPCOLL_LEFTWALL) {
+            if (env_flags & Collide_LeftWallMask ||
+                env_flags & Collide_RightWallMask)
+            {
                 ftCommon_8007D60C(fp1);
                 ftMt_SpecialAirHiLost_Enter(gobj);
                 return;
@@ -277,7 +279,9 @@ void ftMt_SpecialHiLost_Coll(HSD_GObj* gobj)
             }
         } else {
             u32 env_flags = collData->env_flags;
-            if (env_flags & MPCOLL_RIGHTWALL || env_flags & MPCOLL_LEFTWALL) {
+            if (env_flags & Collide_LeftWallMask ||
+                env_flags & Collide_RightWallMask)
+            {
                 ftMt_SpecialHiLost_Enter(gobj);
             }
         }
@@ -327,7 +331,7 @@ void ftMt_SpecialAirHiLost_Coll(HSD_GObj* gobj)
             return;
         }
 
-        if ((collData->env_flags & MPCOLL_CEIL) &&
+        if ((collData->env_flags & Collide_CeilingMask) &&
             (lbVector_AngleXY(&collData->ceiling.normal, &fp1->self_vel) >
              deg_to_rad *
                  (90.0f + mewtwoAttrs->x68_MEWTWO_TELEPORT_ANGLE_CLAMP)))
@@ -335,16 +339,18 @@ void ftMt_SpecialAirHiLost_Coll(HSD_GObj* gobj)
             ftMt_SpecialAirHiLost_Enter(gobj);
         }
 
-        if (collData->env_flags & MPCOLL_RIGHTWALL &&
-            (lbVector_AngleXY(&collData->right_wall.normal, &fp1->self_vel) >
+        if (collData->env_flags & Collide_LeftWallMask &&
+            (lbVector_AngleXY(&collData->left_facing_wall.normal,
+                              &fp1->self_vel) >
              deg_to_rad *
                  (90.0f + mewtwoAttrs->x68_MEWTWO_TELEPORT_ANGLE_CLAMP)))
         {
             ftMt_SpecialAirHiLost_Enter(gobj);
         }
 
-        if (collData->env_flags & MPCOLL_LEFTWALL &&
-            lbVector_AngleXY(&collData->left_wall.normal, &fp1->self_vel) >
+        if (collData->env_flags & Collide_RightWallMask &&
+            lbVector_AngleXY(&collData->right_facing_wall.normal,
+                             &fp1->self_vel) >
                 deg_to_rad *
                     (90.0f + mewtwoAttrs->x68_MEWTWO_TELEPORT_ANGLE_CLAMP))
         {
@@ -441,7 +447,7 @@ void ftMt_SpecialHi_Enter(HSD_GObj* gobj)
               (float) M_PI_2) &&
             (ftCo_8009A134(gobj) == false))
         {
-            ftCommon_8007D9FC(fp);
+            ftCommon_UpdateFacing(fp);
 
             vel = atan2f(fp->input.lstick.y,
                          fp->input.lstick.x * fp->facing_dir);
@@ -502,7 +508,7 @@ void ftMt_SpecialAirHi_Enter(HSD_GObj* gobj)
 
         /// @todo Express as a fraction or something.
         if (stick_x > stick_epsilon) {
-            ftCommon_8007D9FC(fp);
+            ftCommon_UpdateFacing(fp);
         }
 
         floatVar =
@@ -576,9 +582,9 @@ void ftMt_SpecialAirHi_Phys(HSD_GObj* gobj)
     ftMewtwoAttributes* mewtwoAttrs = getFtSpecialAttrsD(fp);
 
     if (fp->cmd_vars[0]) {
-        ftCommon_8007D4B8(fp);
-        ftCommon_8007D440(fp, mewtwoAttrs->x64_MEWTWO_TELEPORT_DRIFT *
-                                  fp->co_attrs.air_drift_max);
+        ftCommon_FallBasic(fp);
+        ftCommon_ClampSelfVelX(fp, mewtwoAttrs->x64_MEWTWO_TELEPORT_DRIFT *
+                                       fp->co_attrs.air_drift_max);
     } else {
         float velY = fp->self_vel.y;
         fp->self_vel.y = velY - velY / 10;

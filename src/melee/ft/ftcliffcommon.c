@@ -32,7 +32,7 @@ bool ftCliffCommon_80081298(Fighter_GObj* gobj)
     if (fp->input.lstick.y <= -p_ftCommonData->x480) {
         return false;
     }
-    if (((fp->coll_data.env_flags & 0x03000000) != 0) &&
+    if (fp->coll_data.env_flags & Collide_LedgeGrabMask &&
         (((fp->x2228_b2 & 1) == 0)))
     {
         other_gobj = ft_80082E3C(gobj);
@@ -59,7 +59,7 @@ void ftCliffCommon_80081370(Fighter_GObj* gobj)
         float facing_dir;
         {
             float ledge_dir;
-            if (fp->coll_data.env_flags & MPCOLL_FLAGS_B24) {
+            if (fp->coll_data.env_flags & Collide_LeftLedgeGrab) {
                 ledge_dir = +1;
             } else {
                 ledge_dir = -1;
@@ -78,9 +78,9 @@ void ftCliffCommon_80081370(Fighter_GObj* gobj)
         ftCommon_8007E2FC(gobj);
         fp->x221D_b7 = 1;
         if (fp->facing_dir > 0) {
-            fp->mv.co.cliff.ledge_id = fp->coll_data.ledge_id_unk1;
+            fp->mv.co.cliff.ledge_id = fp->coll_data.ledge_id_left;
         } else {
-            fp->mv.co.cliff.ledge_id = fp->coll_data.ledge_id_unk0;
+            fp->mv.co.cliff.ledge_id = fp->coll_data.ledge_id_right;
         }
         ftCo_CliffCatch_Phys(gobj);
         ft_800881D8(fp, fp->ft_data->x4C_sfx->x28, 127, 64);
@@ -88,9 +88,9 @@ void ftCliffCommon_80081370(Fighter_GObj* gobj)
         ftCommon_8007EBAC(fp, 12, 0);
 
         if (fp->facing_dir > 0) {
-            mpLib_80053ECC(fp->mv.co.cliff.ledge_id, &vec);
+            mpLib_80053ECC_Floor(fp->mv.co.cliff.ledge_id, &vec);
         } else {
-            mpLib_80053DA4(fp->mv.co.cliff.ledge_id, &vec);
+            mpLib_80053DA4_Floor(fp->mv.co.cliff.ledge_id, &vec);
         }
     }
     {
@@ -116,9 +116,9 @@ void ftCo_CliffCatch_Phys(Fighter_GObj* gobj)
         Vec3 vec;
         u8 _[4] = { 0 };
         if (fp->facing_dir > 0) {
-            mpLib_80053ECC(fp->mv.co.cliff.ledge_id, &vec);
+            mpLib_80053ECC_Floor(fp->mv.co.cliff.ledge_id, &vec);
         } else {
-            mpLib_80053DA4(fp->mv.co.cliff.ledge_id, &vec);
+            mpLib_80053DA4_Floor(fp->mv.co.cliff.ledge_id, &vec);
         }
         fp->cur_pos.x = fp->x68C_transNPos.z * fp->facing_dir + vec.x;
         fp->cur_pos.y = vec.y + fp->x68C_transNPos.y;

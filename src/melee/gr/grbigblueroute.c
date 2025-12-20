@@ -1,12 +1,30 @@
 #include "grbigblueroute.h"
 
+#include "gr/inlines.h"
+
 #include <platform.h>
+
+#include "ft/ftlib.h"
+#include "cm/camera.h"
+
+#include "baselib/memory.h"
 
 /// #grBigBlueRoute_8020B864
 
 /// #grBigBlueRoute_8020B89C
 
-/// #grBigBlueRoute_8020B920
+void grBigBlueRoute_8020B920(void)
+{
+    Point3d sp8;
+    HSD_GObj* temp_r3;
+
+    temp_r3 = Ground_801C57A4();
+    if (temp_r3 != NULL) {
+        ftLib_80086644(temp_r3, &sp8);
+        grBigBlueRoute_8020DED4(&sp8);
+        Camera_8002F3AC();
+    }
+}
 
 /// #grBigBlueRoute_8020B95C
 
@@ -70,9 +88,17 @@ bool grBigBlueRoute_8020C1D4(Ground_GObj* arg)
     return false;
 }
 
-/// #grBigBlueRoute_8020C1DC
+void grBigBlueRoute_8020C1DC(Ground_GObj* gobj)
+{
+    grBigBlueRoute_8020C85C();
+    grBigBlueRoute_8020CD20(gobj);
+}
 
-/// #grBigBlueRoute_8020C210
+void grBigBlueRoute_8020C210(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    HSD_Free((void*) gp->gv.corneria.xC8);
+}
 
 /// #grBigBlueRoute_8020C238
 

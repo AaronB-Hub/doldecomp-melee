@@ -4,6 +4,7 @@
 #include <placeholder.h>
 #include <platform.h>
 
+#include "gr/forward.h"
 #include "lb/forward.h"
 #include <baselib/forward.h>
 
@@ -35,7 +36,7 @@ typedef struct MotionState MotionState;
 typedef struct UnkFloat6_Camera UnkFloat6_Camera;
 typedef u32 MotionFlags;
 
-#ifdef M2CTX
+#ifdef M2C
 typedef struct Fighter_GObj Fighter_GObj;
 struct Fighter_GObj {
     /*  +0 */ u16 classifier;
@@ -67,8 +68,9 @@ typedef void (*Fighter_ModelEvent)(Fighter* fp, int arg1, bool arg2);
 typedef void (*Fighter_UnkMtxEvent)(HSD_GObj* gobj, int arg1, Mtx vmtx);
 typedef void (*Fighter_UnkPtrEvent)(int arg0, int* arg1, int* arg2);
 typedef void (*FighterEvent)(Fighter* fp);
-typedef void (*FtCmd)(Fighter_GObj* gobj, CommandInfo* cmd);
-typedef bool (*ftDevice_Callback0)(UNK_T, HSD_GObj*, Vec3*);
+typedef void (*FtCmd)(Fighter_GObj*, CommandInfo*);
+typedef void (*FtCmd2)(Fighter_GObj*, CommandInfo*, int);
+typedef bool (*ftDevice_Callback0)(Ground_GObj*, Fighter_GObj*, Vec3*);
 
 typedef enum FighterKind {
     /* 00 */ FTKIND_MARIO,

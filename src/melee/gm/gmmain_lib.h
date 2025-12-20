@@ -73,7 +73,7 @@
 /* 15D3E4 */ u8* gmMainLib_8015D3E4(u8);
 /* 15D3FC */ s32 gmMainLib_8015D3FC(u8);
 /* 15D418 */ void gmMainLib_8015D418(u8, int stocks);
-/* 15D438 */ s32* gmMainLib_8015D438(u8);
+/* 15D438 */ u32* gmMainLib_8015D438(u8);
 /* 15D450 */ s32* gmMainLib_8015D450(u8);
 /* 15D48C */ bool gmMainLib_8015D48C(u8);
 /* 15D4A8 */ s32 gmMainLib_8015D4A8(u8);
@@ -94,7 +94,7 @@
 /* 15D7BC */ s32* gmMainLib_8015D7BC(u8);
 /* 15D7D4 */ s32* gmMainLib_8015D7D4(u8);
 /* 15D7EC */ s16* gmMainLib_8015D7EC(u8);
-/* 15D804 */ void* gmMainLib_8015D804(s32);
+/* 15D804 */ u32* gmMainLib_8015D804(s32);
 /* 15D818 */ s32 gmMainLib_8015D818(u32);
 /* 15D8B0 */ void gmMainLib_8015D8B0(u32);
 /* 15D8D8 */ s32 gmMainLib_8015D8D8(u32);

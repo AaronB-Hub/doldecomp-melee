@@ -102,7 +102,6 @@
 
 extern struct UnkCostumeList CostumeListsForeachCharacter[FTKIND_MAX];
 
-extern ftData* gFtDataList[FTKIND_MAX];
 extern MotionState ftData_MotionStateList[ftCo_MS_Count];
 extern MotionState* ftData_CharacterStateTables[FTKIND_MAX];
 
@@ -133,11 +132,11 @@ HSD_Joint* Fighter_804D6504 = NULL;
 u8* Fighter_804D6508 = NULL;
 u8* Fighter_804D650C = NULL;
 UNK_T Fighter_804D6510 = NULL;
-UNK_T Fighter_804D6514 = NULL;
-UNK_T Fighter_804D6518 = NULL;
-float* Fighter_804D651C = NULL;
-float* Fighter_804D6520 = NULL;
-float* Fighter_804D6524 = NULL;
+HSD_Joint* Fighter_804D6514 = NULL;
+struct Fighter_804D6518_t* Fighter_804D6518 = NULL;
+struct Fighter_804D651C_t* Fighter_804D651C = NULL;
+struct Fighter_804D6520_t* Fighter_804D6520 = NULL;
+struct Fighter_804D6524_t* Fighter_804D6524 = NULL;
 struct Fighter_804D6528_t* Fighter_804D6528 = NULL;
 UNK_T Fighter_804D652C = NULL;
 Vec2** Fighter_804D6530 = NULL;
@@ -146,8 +145,8 @@ struct Fighter_804D653C_t* Fighter_804D6538 = NULL;
 struct Fighter_804D653C_t* Fighter_804D653C = NULL;
 struct Fighter_804D6540_t** Fighter_804D6540 = NULL;
 FighterPartsTable** ftPartsTable = NULL;
-UNK_T Fighter_804D6548 = NULL;
-UNK_T Fighter_804D654C = NULL;
+float* Fighter_804D6548 = NULL;
+float (*Fighter_804D654C)[5] = NULL;
 int** Fighter_804D6550 = NULL;
 ftCommonData* p_ftCommonData;
 
@@ -379,12 +378,12 @@ void Fighter_UnkInitReset_80067C98(Fighter* fp)
 
     fp->x2222_b7 = 0;
     fp->x2223_b0 = 0;
-    fp->x221A_b4 = 0;
+    fp->fall_fast = 0;
     fp->x2219_b0 = 0;
 
     fp->x20A0_accessory = 0;
     fp->throw_flags = 0;
-    fp->x2214 = 0;
+    fp->cmd_timer = 0;
     fp->item_gobj = 0;
     fp->x1978 = 0;
 
@@ -691,17 +690,17 @@ static void Fighter_UnkInitLoad_80068914_Inner1(Fighter_GObj* gobj)
             fp->x688 = fp->x689 = fp->x68A = fp->x68B = 0xFF;
 }
 
-void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct S_TEMP1* argdata)
+void Fighter_UnkInitLoad_80068914(Fighter_GObj* gobj, struct plAllocInfo* argdata)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     s32 costume_id;
-    fp->kind = argdata->fighterKind;
-    fp->player_id = argdata->playerID;
+    fp->kind = argdata->internal_id;
+    fp->player_id = argdata->slot;
 
-    fp->x221F_b4 = argdata->flags_b0;
+    fp->x221F_b4 = argdata->b0;
 
     fp->x34_scale.x = Player_GetModelScale(fp->player_id);
-    fp->x61C = argdata->unk5;
+    fp->x61C = argdata->x5;
     fp->x618_player_id = Player_GetPlayerId(fp->player_id);
     fp->x61A_controller_index = Player_GetControllerIndex(fp->player_id);
     fp->is_always_metal = Player_GetFlagsBit5(fp->player_id);
@@ -854,7 +853,7 @@ static void Fighter_Create_Inline2(Fighter_GObj* gobj)
     }
 }
 
-Fighter_GObj* Fighter_Create(struct S_TEMP1* input)
+Fighter_GObj* Fighter_Create(struct plAllocInfo* input)
 {
     Fighter_GObj* gobj;
     Fighter* fp;
@@ -865,7 +864,7 @@ Fighter_GObj* Fighter_Create(struct S_TEMP1* input)
     fp = HSD_ObjAlloc(&fighter_alloc_data);
     fp->dat_attrs_backup = HSD_ObjAlloc(&fighter_dat_attrs_alloc_data);
     GObj_InitUserData(gobj, 4U, &Fighter_Unload_8006DABC, fp);
-    ftData_8008572C(input->fighterKind);
+    ftData_8008572C(input->internal_id);
     Fighter_UnkInitLoad_80068914(gobj, input);
     efAsync_8006737C(ftData_UnkBytePerCharacter[fp->kind]);
     ftData_80085820(fp->kind, fp->x619_costume_id);
@@ -905,7 +904,7 @@ Fighter_GObj* Fighter_Create(struct S_TEMP1* input)
     HSD_GObjProc_8038FD54(gobj, &Fighter_8006ABA0, 2);
     HSD_GObjProc_8038FD54(gobj, &Fighter_Spaghetti_8006AD10, 3);
     HSD_GObjProc_8038FD54(gobj, &Fighter_procUpdate, 4);
-    HSD_GObjProc_8038FD54(gobj, &Fighter_8006C27C, 6);
+    HSD_GObjProc_8038FD54(gobj, &Fighter_procMap, 6);
     HSD_GObjProc_8038FD54(gobj, &Fighter_8006C5F4, 7);
     HSD_GObjProc_8038FD54(gobj, &Fighter_CallAcessoryCallbacks_8006C624, 8);
     HSD_GObjProc_8038FD54(gobj, &Fighter_8006C80C, 9);
@@ -921,7 +920,7 @@ Fighter_GObj* Fighter_Create(struct S_TEMP1* input)
         ftMh_MS_341_8014FE10(gobj);
     } else if (fp->kind == FTKIND_CREZYH) {
         ftCh_Init_80155FCC(gobj);
-    } else if (input->flags_b1 != 0) {
+    } else if (input->has_transformation) {
         ftMaterial_800BFD04(gobj);
     } else if (Player_GetFlagsBit3(fp->player_id) != 0) {
         ftCo_800C61B0(gobj);
@@ -1084,7 +1083,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
     fp->x2225_b1 = 0;
     fp->x2225_b4 = 0;
 
-    mpColl_8004CBF4(&fp->coll_data);
+    mpClearFloorSkip(&fp->coll_data);
 
     ftCo_800DEEA8(gobj);
 
@@ -1106,7 +1105,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
     }
 
     if ((flags & Ft_MF_KeepFastFall) == 0) {
-        fp->x221A_b4 = 0;
+        fp->fall_fast = 0;
     }
 
     if ((flags & Ft_MF_SkipColAnim) == 0) {
@@ -1372,7 +1371,7 @@ void Fighter_ChangeMotionState(Fighter_GObj* gobj, FtMotionId msid,
         if (animflags_bool) {
             if (!fp->x594_b0 && !fp->x594_b0) {
                 !fp;
-                ftCommon_8007CC78(fp, fp->co_attrs.dash_run_terminal_velocity);
+                ftCommon_ClampGrVel(fp, fp->co_attrs.dash_run_terminal_velocity);
             }
         }
 
@@ -1873,23 +1872,20 @@ void Fighter_Spaghetti_8006AD10(Fighter_GObj* gobj)
             if (gm_8016B0FC()) {
                 fp->input.x650 = 0.0f;
                 if (ftCo_800A2040(fp)) {
-                    fp->input.held_inputs = (fp->input.held_inputs & 0xD00);
+                    fp->input.held_inputs &= HSD_PAD_A | HSD_PAD_XY;
                 } else {
-                    fp->input.held_inputs = (fp->input.held_inputs & 0x100);
+                    fp->input.held_inputs &= HSD_PAD_A;
                 }
             } else {
-                if ((fp->input.held_inputs & 0x60)) {
-                    fp->input.held_inputs =
-                        (s32) (fp->input.held_inputs | 0x80000000);
+                if (fp->input.held_inputs & (HSD_PAD_L | HSD_PAD_R)) {
+                    fp->input.held_inputs |= HSD_PAD_LR;
                     fp->input.x650 = 1.0f;
                 } else if (fp->input.x650) {
-                    fp->input.held_inputs =
-                        (fp->input.held_inputs | 0x80000000);
+                    fp->input.held_inputs |= HSD_PAD_LR;
                 }
-                if (gm_801A45E8(0) == 0) {
-                    if ((fp->input.held_inputs & 0x10)) {
-                        fp->input.held_inputs =
-                            (fp->input.held_inputs | 0x80000000 | 0x100);
+                if (!gm_801A45E8(0)) {
+                    if (fp->input.held_inputs & HSD_PAD_Z) {
+                        fp->input.held_inputs |= HSD_PAD_LR | HSD_PAD_A;
                         fp->input.x650 = p_ftCommonData->x14;
                     }
                 }
@@ -2052,44 +2048,44 @@ void Fighter_Spaghetti_8006AD10(Fighter_GObj* gobj)
                 fp->x672_input_timer_counter = 0xFE;
             }
 
-            if (fp->input.x668 & 0x100) {
+            if (fp->input.x668 & HSD_PAD_A) {
                 fp->x683 = fp->x67C;
                 fp->x67C = 0;
             } else if (fp->x67C < 0xFF) {
                 fp->x67C++;
             }
 
-            if (fp->input.x668 & 0x200) {
+            if (fp->input.x668 & HSD_PAD_B) {
                 fp->x67D = 0;
             } else if (fp->x67D < 0xFF) {
                 fp->x67D++;
             }
 
-            if (fp->input.x668 & 0xC00) {
+            if (fp->input.x668 & HSD_PAD_XY) {
                 fp->x67E = 0;
             } else if (fp->x67E < 0xFF) {
                 fp->x67E++;
             }
 
-            if (fp->input.x668 & 8) {
+            if (fp->input.x668 & HSD_PAD_DPADUP) {
                 fp->x681 = 0;
             } else if (fp->x681 < 0xFF) {
                 fp->x681++;
             }
 
-            if (fp->input.x668 & 4) {
+            if (fp->input.x668 & HSD_PAD_DPADDOWN) {
                 fp->x682 = 0;
             } else if (fp->x682 < 0xFF) {
                 fp->x682++;
             }
 
-            if (fp->input.x668 & 0x80000000) {
+            if (fp->input.x668 & HSD_PAD_LR) {
                 fp->x67F = 0;
             } else if (fp->x67F < 0xFF) {
                 fp->x67F++;
             }
 
-            if (fp->input.x668 & 0x60) {
+            if (fp->input.x668 & (HSD_PAD_L | HSD_PAD_R)) {
                 fp->x684 = fp->x680;
                 fp->x680 = 0;
             } else if (fp->x680 < 0xFF) {
@@ -2368,7 +2364,7 @@ void Fighter_procUpdate(Fighter_GObj* gobj)
         // __assert functions. But I guess these just stop or reset the game.
         // result is written to where r5 points to, which is 'difference' in
         // this case
-        if (mpLib_800567C0(fp->coll_data.floor.index, &fp->cur_pos,
+        if (mpGetSpeed(fp->coll_data.floor.index, &fp->cur_pos,
                            &difference))
         {
             // fp->position += difference
@@ -2461,7 +2457,7 @@ static inline float Fighter_GetPosY(Fighter* fp)
     return fp->cur_pos.y;
 }
 
-void Fighter_8006C27C(Fighter_GObj* gobj)
+void Fighter_procMap(Fighter_GObj* gobj)
 {
     Fighter* fp = (Fighter*) HSD_GObjGetUserData(gobj);
 
@@ -2469,7 +2465,7 @@ void Fighter_8006C27C(Fighter_GObj* gobj)
         if (fp->ecb_lock) {
             fp->ecb_lock--;
             if (!fp->ecb_lock) {
-                ftCommon_8007D5BC(fp);
+                ftCommon_UnlockECB(fp);
             }
         }
 

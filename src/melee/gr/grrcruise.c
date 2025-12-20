@@ -1,6 +1,10 @@
 #include "grrcruise.h"
 
+#include "grzakogenerator.h"
+
 #include <platform.h>
+
+#include "gr/inlines.h"
 
 void grRCruise_801FF164(bool arg) {}
 
@@ -8,7 +12,10 @@ void grRCruise_801FF164(bool arg) {}
 
 void grRCruise_801FF298(void) {}
 
-/// #grRCruise_801FF29C
+void grRCruise_801FF29C(void)
+{
+    grZakoGenerator_801CAE04(0);
+}
 
 bool grRCruise_801FF2C0(void)
 {
@@ -17,7 +24,11 @@ bool grRCruise_801FF2C0(void)
 
 /// #grRCruise_801FF2C8
 
-/// #grRCruise_801FF3B4
+void grRCruise_801FF3B4(Ground_GObj* gobj)
+{
+    Ground* gp = GET_GROUND(gobj);
+    grAnime_801C8138((HSD_GObj*) gobj, gp->map_id, 0);
+}
 
 bool grRCruise_801FF3E0(Ground_GObj* arg)
 {

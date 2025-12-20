@@ -40,13 +40,13 @@ bool ftCo_800C1D38(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     CollData* coll = &fp->coll_data;
-    if ((coll->env_flags & MPCOLL_FLAGS_B11 ||
-         coll->env_flags & MPCOLL_FLAGS_B05) &&
+    if ((coll->env_flags & Collide_RightWallHug ||
+         coll->env_flags & Collide_LeftWallHug) &&
         ftCo_800986B0(gobj))
     {
         ftCommon_MotionState msid =
             ftCo_800C1E0C(fp) ? ftCo_MS_PassiveWallJump : ftCo_MS_PassiveWall;
-        if (coll->env_flags & MPCOLL_FLAGS_B11) {
+        if (coll->env_flags & Collide_RightWallHug) {
             ftCo_800C1E64(gobj, msid, p_ftCommonData->x760, 0, -1);
         } else {
             ftCo_800C1E64(gobj, msid, p_ftCommonData->x760, 0, +1);
@@ -76,13 +76,13 @@ void ftCo_800C1E64(Fighter_GObj* gobj, int msid, int timer, int vel_y_exponent,
         CollData* coll = &fp->coll_data;
         fp->facing_dir = -facing_dir;
         ftCommon_8007E2FC(gobj);
-        if (fp->coll_data.env_flags & MPCOLL_FLAGS_B11) {
-            ef_offset.x = coll->xA4_ecbCurrCorrect.left.x;
-            ef_offset.y = coll->xA4_ecbCurrCorrect.left.y;
+        if (fp->coll_data.env_flags & Collide_RightWallHug) {
+            ef_offset.x = coll->ecb.left.x;
+            ef_offset.y = coll->ecb.left.y;
             ef_offset.z = 0.0F;
         } else {
-            ef_offset.x = coll->xA4_ecbCurrCorrect.right.x;
-            ef_offset.y = coll->xA4_ecbCurrCorrect.right.y;
+            ef_offset.x = coll->ecb.right.x;
+            ef_offset.y = coll->ecb.right.y;
             ef_offset.z = 0.0F;
         }
     }
@@ -186,11 +186,11 @@ void ftCo_PassiveWall_Phys(Fighter_GObj* gobj)
     PAD_STACK(8);
     if (!fp->mv.co.passivewall.timer) {
         ftCo_DatAttrs* co = &fp->co_attrs;
-        ftCommon_8007D528(fp);
-        if (fp->x221A_b4) {
-            ftCommon_8007D4E4(fp);
+        ftCommon_CheckFallFast(fp);
+        if (fp->fall_fast) {
+            ftCommon_FallFast(fp);
         } else {
-            ftCommon_8007D494(fp, co->grav, co->terminal_vel);
+            ftCommon_Fall(fp, co->grav, co->terminal_vel);
         }
         ftCommon_8007D140(fp, 0.0F, 0.0F, fp->co_attrs.aerial_friction);
     }

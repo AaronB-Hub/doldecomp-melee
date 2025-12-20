@@ -461,7 +461,7 @@ void gmMainLib_8015D418(u8 arg0, int stocks)
     base[arg0].x7C.b13_to_15 = stocks;
 }
 
-s32* gmMainLib_8015D438(u8 arg0)
+u32* gmMainLib_8015D438(u8 arg0)
 {
     struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x94;
@@ -607,7 +607,7 @@ s16* gmMainLib_8015D7EC(u8 arg0)
     return &base[arg0].x7C.x7E;
 }
 
-void* gmMainLib_8015D804(s32 arg0)
+u32* gmMainLib_8015D804(s32 arg0)
 {
     struct gmm_x1868* thing = &gmMainLib_804D3EE0->thing;
     return &thing->x1B80[arg0];

@@ -17,6 +17,13 @@
 #include <dolphin/mtx.h>
 #include <baselib/gobj.h>
 
+/* 3CED84 */ static Vec4 ftYs_Unk3_803CED84 = { 0.65, 0.7, 0.8, 1 };
+/* 3CED94 */ static Vec4 ftYs_Unk3_803CED94 = { 1.1, 1.35, 1.3, 1.2 };
+/* 3CEDA4 */ static Vec3 ftYs_Unk3_803CEDA4[] = {
+    { 12, 0, -6 },
+    { 6, 6, 6 },
+};
+
 /// #ftYs_SpecialS_8012EB48
 
 /// #fn_8012EC7C
@@ -131,8 +138,8 @@ void ftYs_SpecialAirSEnd_Phys(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
 
-    ftCommon_8007C930((Fighter*) fp, fp->co_attrs.gr_friction);
-    ftCommon_8007CB74(gobj);
+    ftCommon_ApplyFrictionGround((Fighter*) fp, fp->co_attrs.gr_friction);
+    ftCommon_ApplyGroundMovement(gobj);
 }
 
 void ftYs_SpecialAirSStart_1_Phys(Fighter_GObj* gobj)
@@ -141,7 +148,8 @@ void ftYs_SpecialAirSStart_1_Phys(Fighter_GObj* gobj)
     ftYoshiAttributes* attributes = fp->dat_attrs;
 
     fp->mv.ys.specials.x30 = 0;
-    ftCommon_8007D494(fp, attributes->x6C, attributes->x70);
+    ftCommon_Fall(fp, attributes->specials_start_gravity,
+                  attributes->specials_start_terminal_vel);
 }
 
 /// #ftYs_SpecialAirSLoop_2_Phys
@@ -154,7 +162,8 @@ void ftYs_SpecialAirSLanding_Phys(Fighter_GObj* gobj)
     ftYoshiAttributes* attributes = fp->dat_attrs;
 
     fp->mv.ys.specials.x30 = 0;
-    ftCommon_8007D494(fp, attributes->x6C, attributes->x70);
+    ftCommon_Fall(fp, attributes->specials_start_gravity,
+                  attributes->specials_start_terminal_vel);
 }
 
 /// #ftYs_SpecialAirSStart_0_Coll

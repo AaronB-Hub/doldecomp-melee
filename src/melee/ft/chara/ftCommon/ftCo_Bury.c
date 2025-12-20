@@ -161,17 +161,17 @@ void ftCo_800C0B20(Fighter_GObj* gobj)
     if (fp->bury_timer_1 == 0) {
         CollData* coll = &fp->coll_data;
         unk_anim = NULL;
-        if (fp->coll_data.env_flags & (MPCOLL_GRPUSH | MPCOLL_FLAGS_B16)) {
+        if (fp->coll_data.env_flags & (Collide_FloorPush | Collide_FloorHug)) {
             unk_anim = Ground_801C5700(coll->floor.index);
         }
-        if (coll->env_flags & MPCOLL_CEIL) {
+        if (coll->env_flags & Collide_CeilingMask) {
             unk_anim = Ground_801C5700(coll->ceiling.index);
         }
-        if (coll->env_flags & MPCOLL_LEFTWALL) {
-            unk_anim = Ground_801C5700(coll->left_wall.index);
+        if (coll->env_flags & Collide_RightWallMask) {
+            unk_anim = Ground_801C5700(coll->right_facing_wall.index);
         }
-        if (coll->env_flags & MPCOLL_RIGHTWALL) {
-            unk_anim = Ground_801C5700(coll->right_wall.index);
+        if (coll->env_flags & Collide_LeftWallMask) {
+            unk_anim = Ground_801C5700(coll->left_facing_wall.index);
         }
         if (unk_anim != NULL) {
             HitCapsule hit;
@@ -263,7 +263,7 @@ void ftCo_Bury_Anim(Fighter_GObj* gobj)
     u8 _[8] = { 0 };
     Fighter* fp = GET_FIGHTER(gobj);
     fp->grab_timer -= p_ftCommonData->x610;
-    ftCommon_8007DC08(fp, p_ftCommonData->x614);
+    ftCommon_GrabMash(fp, p_ftCommonData->x614);
     if (fp->grab_timer <= 0) {
         ftCo_800C13BC(gobj);
     }
@@ -282,10 +282,10 @@ void ftCo_800C0FCC(HSD_GObj* arg0, Fighter_GObj* arg1)
         Vec3 normal;
         Vec3 offset;
         HSD_JObj* jobj = GET_JOBJ(arg0);
-        mpLib_80054DFC(fp->mv.co.bury.x20, &normal);
+        mpLineGetNormal(fp->mv.co.bury.x20, &normal);
         HSD_JObjSetRotationZ(jobj, atan2f(-normal.x, normal.y));
-        if (mpLib_800567C0(fp->coll_data.floor.index,
-                           &fp->mv.co.bury.translate, &offset))
+        if (mpGetSpeed(fp->coll_data.floor.index, &fp->mv.co.bury.translate,
+                       &offset))
         {
             PSVECAdd(&fp->mv.co.bury.translate, &offset,
                      &fp->mv.co.bury.translate);
@@ -336,7 +336,7 @@ void ftCo_BuryWait_Anim(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     fp->grab_timer -= p_ftCommonData->x610;
-    ftCommon_8007DC08(fp, p_ftCommonData->x614);
+    ftCommon_GrabMash(fp, p_ftCommonData->x614);
     if (fp->grab_timer <= 0) {
         ftCo_800C13BC(gobj);
     }
@@ -397,7 +397,7 @@ void ftCo_BuryJump_Phys(Fighter_GObj* gobj)
 {
     u8 _[8] = { 0 };
     Fighter* fp = GET_FIGHTER(gobj);
-    ftCommon_8007D494(fp, fp->co_attrs.grav, fp->co_attrs.terminal_vel);
+    ftCommon_Fall(fp, fp->co_attrs.grav, fp->co_attrs.terminal_vel);
     ftCommon_8007D268(fp);
 }
 

@@ -4,6 +4,7 @@
 #include <placeholder.h>
 #include <platform.h>
 
+#include "mp/forward.h"
 #include <melee/cm/forward.h>
 #include <melee/gr/forward.h>
 #include <melee/it/forward.h>
@@ -88,7 +89,7 @@ struct StageInfo {
         s32 unk0;
         Article* unk4;
     }** itemdata;
-    /* +6AC */ void* coll_data;
+    /* +6AC */ MapCollData* coll_data;
     /* +6B0 */ UnkStage6B0* param;
     /* +6B4 */ UNK_T** ald_yaku_all;
     /* +6B8 */ void* map_ptcl;
@@ -328,6 +329,14 @@ struct grCorneria_GroundVars {
     HSD_JObj* x12C;
 };
 
+struct grGreatBay_GroundVars {
+    u8 _0[0x10];
+    u32 x10;
+    s32 x14;
+    u32 x18;
+    f32 x1C;
+};
+
 struct grIceMt_GroundVars {
     /* +0 gp+C4 */ HSD_GObj* xC4;
     /* +0 gp+C4 */ HSD_GObj* xC6;
@@ -511,7 +520,7 @@ struct grStadium_Display {
     /* EE   */ s16 xEE; ///< The focused player, or 99 if none
     /* F0   */ s16 xF0; ///< Slot type of the focused player
     /* F2   */ s16 xF2;
-    /* F4   */ CameraBox* xF4;
+    /* F4   */ CmSubject* xF4;
     /* F8:0 */ u8 xF8_0 : 1;
     /* F8:1 */ u8 xF8_1 : 1;
     /* F8:2 */ u8 xF8_2 : 1;
@@ -552,6 +561,19 @@ struct grFourside_GroundVars {
     /*  +0 gp+C4 */ u8 x0;
     /*  +1 gp+C5 */ u8 x1;
     /*  +4 gp+C8 */ s32 x4;
+};
+
+struct grGreens_GroundVars {
+    /*  +0 gp+C4 */ struct {
+        u8 b0 : 1;
+        u8 b1 : 1;
+        u8 b2 : 1;
+        u8 b3 : 1;
+        u8 b4 : 1;
+        u8 b5 : 1;
+        u8 b6 : 1;
+        u8 b7 : 1;
+    } x0_flags;
 };
 
 struct grOnett_GroundVars {
@@ -670,10 +692,12 @@ struct Ground {
             char pad_0[0x204 - 0xC4];
             struct grBigBlue_GroundVars bigblue;
             struct grCorneria_GroundVars corneria;
+            struct grGreatBay_GroundVars greatbay;
             struct grFigureGet_GroundVars figureget;
             struct GroundVars_flatzone flatzone;
             struct GroundVars_flatzone2 flatzone2;
             struct grFourside_GroundVars fourside;
+            struct grGreens_GroundVars greens;
             struct grIceMt_GroundVars icemt;
             struct grIceMt_GroundVars2 icemt2;
             struct grInishie1_GroundVars inishie1;

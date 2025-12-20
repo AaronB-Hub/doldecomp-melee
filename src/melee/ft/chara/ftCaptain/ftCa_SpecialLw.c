@@ -242,9 +242,9 @@ void ftCa_SpecialLwEnd_Phys(HSD_GObj* gobj)
     if (fp->ground_or_air == GA_Ground) {
         ftCommon_8007E5AC(fp);
         if (fp->cmd_vars[2] != 0) {
-            ftCommon_8007C930(fp, da->speciallw_ground_traction *
-                                      fp->co_attrs.gr_friction);
-            ftCommon_8007CB74(gobj);
+            ftCommon_ApplyFrictionGround(fp, da->speciallw_ground_traction *
+                                                 fp->co_attrs.gr_friction);
+            ftCommon_ApplyGroundMovement(gobj);
         } else {
             ft_80084F3C(gobj);
         }
@@ -286,9 +286,9 @@ void ftCa_SpecialAirLwEnd_Phys(HSD_GObj* gobj)
     da = fp->dat_attrs;
     if (fp->cmd_vars[2] != 0) {
         ca = getFtAttrs(fp);
-        ftCommon_8007C930(fp, da->speciallw_air_landing_traction *
-                                  ca->gr_friction);
-        ftCommon_8007CB74(gobj);
+        ftCommon_ApplyFrictionGround(fp, da->speciallw_air_landing_traction *
+                                             ca->gr_friction);
+        ftCommon_ApplyGroundMovement(gobj);
         return;
     } else {
         ft_80084F3C(gobj);
@@ -320,9 +320,9 @@ void ftCa_SpecialLw_Coll(HSD_GObj* gobj)
         if ((fp->cmd_vars[0] != 0) &&
             /// @todo Pull out these check functions
             (((((fp->facing_dir == -1) != 0)) &&
-              (fp->coll_data.env_flags & MPCOLL_FLAGS_B11)) ||
+              (fp->coll_data.env_flags & Collide_RightWallHug)) ||
              (fp->facing_dir == +1 &&
-              (fp->coll_data.env_flags & MPCOLL_FLAGS_B05))))
+              (fp->coll_data.env_flags & Collide_LeftWallHug))))
         {
             fp = GET_FIGHTER(gobj);
             ftCa_Special_Inline_SetFlags(gobj);

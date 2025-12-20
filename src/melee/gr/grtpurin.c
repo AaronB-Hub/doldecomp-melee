@@ -163,7 +163,7 @@ void grTPurin_80223388(Ground_GObj* gobj)
             if ((jobj != NULL) &&
                 (lb_8000B1CC(jobj, NULL, &vec), (vec.x < 130.0f)))
             {
-                mpLib_80057638(res);
+                mpJointListAdd(res);
             } else {
                 mpLib_80057BC0(res);
             }
@@ -208,9 +208,9 @@ DynamicsDesc* grTPurin_802234F8(enum_t arg0)
     enum_t i;
 
     if (arg0 != -1) {
-        i = mpLib_80056B6C(arg0);
+        i = mpJointFromLine(arg0);
         if (i != -1) {
-            mpLib_80054C6C(arg0);
+            mpLineGetKind(arg0);
             if (i == (0 << 0)) {
                 return grTPr_804D6B10->x0;
             }

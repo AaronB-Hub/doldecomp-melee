@@ -155,8 +155,8 @@ void Player_80031848(int slot);
 void Player_80031900(void);
 bool Player_800319C4(int slot, bool arg1);
 void Player_80031AD0(int slot);
-void Player_80031CB0(enum_t id, int slot);
-void Player_80031D2C(enum_t id, int slot);
+void Player_80031CB0(CharacterKind kind, u8 color);
+void Player_80031D2C(CharacterKind kind, u8 color);
 void Player_80031DA8(s32 param_1, s32 param_2);
 void Player_80031DC8(void func_arg(s32, s32));
 void Player_80031EBC(int slot);
@@ -283,14 +283,14 @@ void Player_SetFlagsAEBit1(int slot, u8 bit1);
 u8 Player_SetFlagsAEBit1(int slot, u8 bit1);
 #endif
 
-u8 Player_GetUnk4C(s32 slot);
+int Player_GetUnk4C(s32 slot);
 void Player_SetUnk4C(s32 slot, u8 unk4C);
 bool Player_80036058(s32 slot);
 float Player_800360D8(s32 slot);
 void Player_SetStructFunc(s32 slot, void* arg_func);
-pl_800386D8_t* Player_GetTotalAttackCountPtr(int slot);
+plActionStats* Player_GetActionStats(int slot);
 StaleMoveTable* Player_GetStaleMoveTableIndexPtr(s32 slot);
-int* Player_GetUnk6A8Ptr(int slot);
+struct pl_x5EC_t* Player_GetUnk6A8Ptr(int slot);
 pl_StaleMoveTableExt_t* Player_GetStaleMoveTableIndexPtr2(s32 slot);
 FighterKind Player_80036394(s32 slot);
 s32 Player_80036428(s32 slot);

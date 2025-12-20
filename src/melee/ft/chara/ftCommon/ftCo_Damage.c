@@ -81,7 +81,7 @@ float ftCo_Damage_CalcAngle(Fighter* fp, float f)
         return deg_to_rad * fp->dmg.x1848_kb_angle;
     }
     if (fp->ground_or_air == GA_Air) {
-        return p_ftCommonData->x144;
+        return p_ftCommonData->x144_radians;
     } else if (f < p_ftCommonData->x14C) {
         return 0;
     } else {
@@ -132,9 +132,8 @@ not_squatwait:
         fp->dmg.kb_applied *= p_ftCommonData->kb_smashcharge_mul;
     }
     if (fp->x34_scale.y != 1) {
-        fp->dmg.kb_applied =
-            ftCo_CalcYScaledKnockback(Fighter_804D6524, fp->dmg.kb_applied,
-                                      fp->x34_scale.y, *Fighter_804D6524);
+        fp->dmg.kb_applied = ftCo_CalcYScaledKnockback(
+            fp->dmg.kb_applied, fp->x34_scale.y, Fighter_804D6524->x0);
     }
     {
         float armor =
@@ -1190,8 +1189,8 @@ void ftCo_DamageFly_Coll(Fighter_GObj* gobj)
         return;
     } else {
         u32 env_flags = coll->env_flags;
-        if (env_flags & MPCOLL_FLAGS_B11 || env_flags & MPCOLL_FLAGS_B05 ||
-            env_flags & MPCOLL_FLAGS_B14)
+        if (env_flags & Collide_RightWallHug ||
+            env_flags & Collide_LeftWallHug || env_flags & Collide_CeilingHug)
         {
             RETURN_IF(ftCo_800C1D38(gobj));
             RETURN_IF(ftCo_800C23A0(gobj));
@@ -1266,8 +1265,8 @@ void ftCo_DamageFlyRoll_Coll(Fighter_GObj* gobj)
         ftCo_80097D40(gobj);
     } else {
         u32 env_flags = coll->env_flags;
-        if (env_flags & MPCOLL_FLAGS_B11 || env_flags & MPCOLL_FLAGS_B05 ||
-            env_flags & MPCOLL_FLAGS_B14)
+        if (env_flags & Collide_RightWallHug ||
+            env_flags & Collide_LeftWallHug || env_flags & Collide_CeilingHug)
         {
             RETURN_IF(ftCo_800C1D38(gobj));
             RETURN_IF(ftCo_800C23A0(gobj));

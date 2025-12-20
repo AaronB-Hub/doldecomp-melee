@@ -38,7 +38,7 @@
     attributeName* ext_attr = (attributeName*) fp->ft_data->ext_attr;         \
     *sA2 = *ext_attr;
 
-#ifdef M2CTX
+#ifdef M2C
 #define GET_FIGHTER(gobj) ((Fighter*) HSD_GObjGetUserData((HSD_GObj*) gobj))
 #else
 #define GET_FIGHTER(gobj) ((Fighter*) HSD_GObjGetUserData(gobj))
@@ -254,6 +254,11 @@ static inline int ftGetFacingDirInt(Fighter* fp)
     } else {
         return +1;
     }
+}
+
+static inline int ftGetFacingDirInt2(Fighter_GObj* gobj)
+{
+    return ftGetFacingDirInt(GET_FIGHTER(gobj));
 }
 
 /// Ternary macro for fcmpo-based facing direction check

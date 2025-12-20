@@ -171,7 +171,7 @@ void ftSk_SpecialAirHiStart_0_Phys(HSD_GObj* gobj)
     vec.x = attributes->x30;
     vec.y = attributes->x34;
 
-    ftCommon_8007D494(fp, vec.x, vec.y);
+    ftCommon_Fall(fp, vec.x, vec.y);
     ftCommon_8007D268(fp);
 }
 
@@ -266,7 +266,7 @@ void ftSk_SpecialAirHiStart_1_IASA(HSD_GObj* gobj) {}
 
 void ftSk_SpecialHiStart_1_Phys(HSD_GObj* gobj)
 {
-    ftCommon_8007CB74((Fighter_GObj*) gobj);
+    ftCommon_ApplyGroundMovement((Fighter_GObj*) gobj);
 }
 
 void ftSk_SpecialAirHiStart_1_Phys(HSD_GObj* gobj) {}
@@ -285,7 +285,8 @@ void ftSk_SpecialHiStart_1_Coll(HSD_GObj* gobj)
     if (ft_80082708((Fighter_GObj*) gobj) == GA_Ground) {
         temp_r3 = collData->env_flags;
 
-        if ((temp_r3 & 0x3F) || (temp_r3 & 0xFC0)) {
+        if (temp_r3 & Collide_LeftWallMask || temp_r3 & Collide_RightWallMask)
+        {
             ftCommon_8007D60C((Fighter*) fp);
             ftSk_SpecialHi_80113F68(gobj);
             return;
@@ -295,7 +296,8 @@ void ftSk_SpecialHiStart_1_Coll(HSD_GObj* gobj)
     }
     temp_r3_2 = collData->env_flags;
 
-    if ((temp_r3_2 & 0x3F) || (temp_r3_2 & 0xFC0)) {
+    if (temp_r3_2 & Collide_LeftWallMask || temp_r3_2 & Collide_RightWallMask)
+    {
         ftSk_SpecialHi_80113EAC(gobj);
     }
 }
@@ -346,20 +348,22 @@ void ftSk_SpecialAirHiStart_1_Coll(HSD_GObj* gobj)
         (void) 1.0f;
         (void) S32_TO_F32;
         (void) deg_to_rad;
-        if ((collData->env_flags & 0x6000) &&
+        if ((collData->env_flags & Collide_CeilingMask) &&
             (lbVector_AngleXY(&collData->ceiling.normal, &fp->self_vel) >
              (deg_to_rad * (90.0f + (f32) attr->x50))))
         {
             ftSk_SpecialHi_80113F68(gobj);
         }
-        if ((collData->env_flags & 0x3F) &&
-            (lbVector_AngleXY(&collData->right_wall.normal, &fp->self_vel) >
+        if ((collData->env_flags & Collide_LeftWallMask) &&
+            (lbVector_AngleXY(&collData->left_facing_wall.normal,
+                              &fp->self_vel) >
              (deg_to_rad * (90.0f + (f32) attr->x50))))
         {
             ftSk_SpecialHi_80113F68(gobj);
         }
-        if ((collData->env_flags & 0xFC0) &&
-            (lbVector_AngleXY(&collData->left_wall.normal, &fp->self_vel) >
+        if ((collData->env_flags & Collide_RightWallMask) &&
+            (lbVector_AngleXY(&collData->right_facing_wall.normal,
+                              &fp->self_vel) >
              (deg_to_rad * (90.0f + (f32) attr->x50))))
         {
             ftSk_SpecialHi_80113F68(gobj);
@@ -491,7 +495,7 @@ void ftSk_SpecialHi_80113838(Fighter_GObj* gobj)
             if (!(lbVector_AngleXY(normal, &lstick) < (float) M_PI_2)) {
                 if (ftCo_8009A134(gobj) == 0) {
                     f32 temp_f1_5;
-                    ftCommon_8007D9FC(fp);
+                    ftCommon_UpdateFacing(fp);
                     temp_f1_5 = atan2f(fp->input.lstick.y,
                                        fp->input.lstick.x * fp->facing_dir);
                     fp->mv.sk.specialhi.vel.x = lstick.x;
@@ -546,7 +550,7 @@ void ftSk_SpecialHi_80113A30(Fighter_GObj* gobj)
             var_f1 = -var_f1;
         }
         if (var_f1 > 0.001f) {
-            ftCommon_8007D9FC(fp);
+            ftCommon_UpdateFacing(fp);
         }
         var_f30 =
             atan2f(fp->input.lstick.y, fp->input.lstick.x * fp->facing_dir);
@@ -615,8 +619,9 @@ void ftSk_SpecialAirHi_Phys(HSD_GObj* gobj)
     ftSeakAttributes* attributes = fp->dat_attrs;
 
     if (fp->cmd_vars[0] != 0) {
-        ftCommon_8007D4B8(fp);
-        ftCommon_8007D440(fp, attributes->x4C * fp->co_attrs.air_drift_max);
+        ftCommon_FallBasic(fp);
+        ftCommon_ClampSelfVelX(fp,
+                               attributes->x4C * fp->co_attrs.air_drift_max);
         // UPDATE x4c TO F32!
         return;
     } else {

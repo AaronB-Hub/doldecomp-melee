@@ -379,7 +379,7 @@ static struct VictoryTheme lbl_803D5480[0x1B] = {
     },
 };
 
-u8 gm_801601C4(s8 arg0)
+int gm_801601C4(s8 arg0)
 {
     f32 temp_f1;
 
@@ -394,7 +394,7 @@ u8 gm_801601C4(s8 arg0)
     return 0x7F;
 }
 
-u8 gm_80160244(s8 arg0)
+int gm_80160244(s8 arg0)
 {
     f32 temp_f2;
 
@@ -411,8 +411,8 @@ u8 gm_80160244(s8 arg0)
 
 void gm_801602C0(s8 arg0)
 {
-    u8 a = gm_80160244(arg0);
-    u8 b = gm_801601C4(arg0);
+    int a = gm_80160244(arg0);
+    int b = gm_801601C4(arg0);
 
     PAD_STACK(8);
 
@@ -424,7 +424,7 @@ void gm_801602C0(s8 arg0)
 #pragma dont_inline on
 void gm_801603B0(void)
 {
-    u8 temp_r31;
+    int temp_r31;
     s8 temp_r3;
 
     temp_r3 = gmMainLib_8015ED74();
@@ -733,7 +733,7 @@ void gm_80160B40(HSD_Text* text, u8 ckind, u8 arg2)
     const char* str;
 
     if (lbLang_IsSavedLanguageUS()) {
-        text->x49 = 1;
+        text->default_kerning = 1;
     }
     str = arg2 ? fn_801609E0(ckind) : gm_80160980(ckind);
     if (lbLang_IsSavedLanguageUS()) {
@@ -744,7 +744,7 @@ void gm_80160B40(HSD_Text* text, u8 ckind, u8 arg2)
         var_f31 = tmp ? lbl_803B7700[ckind] : lbl_803B75F8[ckind];
     }
     HSD_SisLib_803A6B98(text, 0.0F, 0.0F, str);
-    text->x24.x *= var_f31;
+    text->font_size.x *= var_f31;
 }
 
 /// #gm_80160C90
@@ -1171,7 +1171,8 @@ int gm_801647F8(u8 arg0)
 bool gm_80164840(u8 ckind)
 {
     u16* temp_r31 = gmMainLib_8015ED8C();
-    u8 var_r0 = fn_801605EC(lbl_803B78A4[ckind]);
+    u8 var = lbl_803B78A4[ckind];
+    u8 var_r0 = fn_801605EC(var);
 
     if (var_r0 == NUM_UNLOCKABLE_CHARACTERS || (*temp_r31 & (1LL << var_r0))) {
         return true;
@@ -1853,7 +1854,13 @@ s8 gm_801685D4(u8 arg0, u8 arg1)
 
 /// #gm_801688AC
 
-/// #gm_80168940
+int gm_80168940(MatchEnd* match_end)
+{
+    if (match_end->player_standings[0].slot_type == 0) {
+        return match_end->player_standings[0].xE;
+    }
+    return 0;
+}
 
 void gm_8016895C(HSD_JObj* arg0, DynamicModelDesc* arg1, int idx)
 {
@@ -1900,7 +1907,7 @@ f32 gm_80168B34(CharacterKind ckind, int arg1, int arg2)
     return base + arg2 * 30;
 }
 
-void gm_80168BF8(int arg0)
+float gm_80168BF8(int arg0)
 {
     CharacterKind ckind = Player_GetPlayerCharacter(arg0);
     u32 costume = Player_GetCostumeId(arg0);
@@ -2264,11 +2271,20 @@ void gm_8016A424(s8 arg0)
     lbl_8046B488.xF = arg0;
 }
 
-/// #gm_8016A434
+void gm_8016A434(void)
+{
+    lbl_8046B488.unk_10_b3 = 1;
+}
 
-/// #fn_8016A450
+void fn_8016A450(void)
+{
+    lbl_8046B488.unk_10_b4 = 1;
+}
 
-/// #fn_8016A46C
+void fn_8016A46C(void)
+{
+    lbl_8046B488.unk_10_b6 = 1;
+}
 
 /// #fn_8016A488
 

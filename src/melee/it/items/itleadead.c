@@ -3,6 +3,11 @@
 #include <placeholder.h>
 #include <platform.h>
 
+#include "it/inlines.h"
+#include "it/it_266F.h"
+#include "it/it_2725.h"
+#include "it/item.h"
+
 /// #it_802E8BCC
 
 /// #it_802E8CD8
@@ -33,7 +38,12 @@ bool itLeadead_UnkMotion10_Anim(Item_GObj* gobj)
     return false;
 }
 
-/// #itLeadead_UnkMotion10_Phys
+void itLeadead_UnkMotion10_Phys(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    ItemAttr* attrs = ip->xCC_item_attr;
+    it_80272860(gobj, attrs->x10_fall_speed, attrs->x14_fall_speed_max);
+}
 
 /// #itLeadead_UnkMotion10_Coll
 
@@ -45,7 +55,13 @@ bool itLeadead_UnkMotion10_Anim(Item_GObj* gobj)
 
 /// #itLeadead_UnkMotion12_Anim
 
-/// #itLeadead_UnkMotion12_Phys
+void itLeadead_UnkMotion12_Phys(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    if (ip->ground_or_air == GA_Air) {
+        ip->x40_vel.y -= ip->xCC_item_attr->x10_fall_speed;
+    }
+}
 
 /// #itLeadead_UnkMotion12_Coll
 
@@ -53,7 +69,15 @@ bool itLeadead_UnkMotion10_Anim(Item_GObj* gobj)
 
 /// #itLeadead_UnkMotion7_Anim
 
-/// #itLeadead_UnkMotion7_Phys
+extern f32 it_804DD87C;
+
+void itLeadead_UnkMotion7_Phys(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+
+    it_8027C8D0(&ip->x40_vel, &ip->x378_itemColl.floor.normal, ip->facing_dir);
+    it_8027C0A8(gobj, ip->facing_dir, it_804DD87C);
+}
 
 /// #itLeadead_UnkMotion7_Coll
 
@@ -110,7 +134,10 @@ void itLeadead_UnkMotion6_Phys(Item_GObj* gobj) {}
 
 /// #itLeadead_UnkMotion6_Coll
 
-/// #it_2725_Logic1_PickedUp
+void it_2725_Logic1_PickedUp(Item_GObj* gobj)
+{
+    Item_80268E5C(gobj, 0xD, ITEM_ANIM_UPDATE);
+}
 
 /// #itLeadead_UnkMotion13_Anim
 
@@ -122,9 +149,17 @@ void itLeadead_UnkMotion13_Phys(Item_GObj* gobj) {}
 
 /// #itLeadead_UnkMotion14_Anim
 
-/// #itLeadead_UnkMotion14_Phys
+void itLeadead_UnkMotion14_Phys(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    ItemAttr* attrs = ip->xCC_item_attr;
+    it_80272860(gobj, attrs->x10_fall_speed, attrs->x14_fall_speed_max);
+}
 
-/// #itLeadead_UnkMotion14_Coll
+bool itLeadead_UnkMotion14_Coll(Item_GObj* gobj)
+{
+    return it_8027C824(gobj, NULL);
+}
 
 /// #it_802EA2A0
 
@@ -135,7 +170,10 @@ bool itLeadead_UnkMotion15_Anim(Item_GObj* gobj)
 
 void itLeadead_UnkMotion15_Phys(Item_GObj* gobj) {}
 
-/// #itLeadead_UnkMotion15_Coll
+bool itLeadead_UnkMotion15_Coll(Item_GObj* gobj)
+{
+    return it_8027C79C(gobj);
+}
 
 /// #it_802EA334
 
@@ -144,18 +182,32 @@ bool itLeadead_UnkMotion16_Anim(Item_GObj* gobj)
     return false;
 }
 
-/// #itLeadead_UnkMotion16_Phys
+void itLeadead_UnkMotion16_Phys(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    ip->x40_vel.y -= ip->xCC_item_attr->x10_fall_speed;
+}
 
-/// #itLeadead_UnkMotion16_Coll
+bool itLeadead_UnkMotion16_Coll(Item_GObj* gobj)
+{
+    return it_8027C794(gobj);
+}
 
 bool itLeadead_UnkMotion17_Anim(Item_GObj* gobj)
 {
     return false;
 }
 
-/// #itLeadead_UnkMotion17_Phys
+void itLeadead_UnkMotion17_Phys(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    ip->x40_vel.y -= ip->xCC_item_attr->x10_fall_speed;
+}
 
-/// #itLeadead_UnkMotion17_Coll
+bool itLeadead_UnkMotion17_Coll(Item_GObj* gobj)
+{
+    return it_8026DFB0(gobj);
+}
 
 /// #it_2725_Logic1_Destroyed
 

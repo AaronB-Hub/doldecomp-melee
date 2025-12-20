@@ -148,10 +148,10 @@ void ftCo_Run_Phys(Fighter_GObj* gobj)
     ftCommon_8007C98C(fp, accel, target_vel,
                       attrs->gr_friction *
                           p_ftCommonData->x60_someFrictionMul);
-    ftCommon_8007CB74(gobj);
+    ftCommon_ApplyGroundMovement(gobj);
 }
 
 void ftCo_Run_Coll(Fighter_GObj* gobj)
 {
-    ft_800844EC();
+    ft_800844EC(gobj);
 }

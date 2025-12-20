@@ -208,7 +208,7 @@ static void Item_80267130(HSD_GObj* gobj, SpawnItem* spawnItem)
             facing_dir = 1;
         }
 
-        mpColl_800436D8(&item_data->x378_itemColl, facing_dir);
+        mpCollSetFacingDir(&item_data->x378_itemColl, facing_dir);
     }
 
     HSD_JObjSetFacingDirItem(model, item_data);
@@ -937,7 +937,7 @@ static void foobar2(HSD_GObj* gobj)
 static void foobar3(HSD_GObj* gobj)
 {
     Item* it = (Item*) HSD_GObjGetUserData(gobj);
-    CameraBox* cam_box;
+    CmSubject* cam_box;
     if (it->xDCD_flag.b01 != 0) {
         if (it->xDCD_flag.b01 == 1) {
             it->x520_cameraBox = Camera_80029044(0);
@@ -1434,11 +1434,11 @@ void Item_802697D4(HSD_GObj* gobj)
     it_80273484(gobj);
     if (item_data->ground_or_air == 0) {
         if ((item_data->xDCE_flag.b3 != 0) && (it_8026D604(gobj) != 0)) {
-            mpLib_800567C0(item_data->xC30, &item_data->pos,
-                           &item_data->x64_vec_unk2);
+            mpGetSpeed(item_data->xC30, &item_data->pos,
+                       &item_data->x64_vec_unk2);
         } else {
-            mpLib_800567C0(item_data->x378_itemColl.floor.index,
-                           &item_data->pos, &item_data->x64_vec_unk2);
+            mpGetSpeed(item_data->x378_itemColl.floor.index, &item_data->pos,
+                       &item_data->x64_vec_unk2);
         }
     }
     PSVECAdd(&item_data->pos, &item_data->x64_vec_unk2, &item_data->pos);
@@ -1472,10 +1472,10 @@ static void Item_80269A9C(HSD_GObj* gobj)
     }
     item_data = (Item*) HSD_GObjGetUserData(gobj);
     if (item_data->xDCD_flag.b01 != 0) {
-        CameraBox* cameraBox = item_data->x520_cameraBox;
-        if (cameraBox != NULL) {
-            cameraBox->x10 = item_data->pos;
-            cameraBox->x1C = item_data->pos;
+        CmSubject* CmSubject = item_data->x520_cameraBox;
+        if (CmSubject != NULL) {
+            CmSubject->x10 = item_data->pos;
+            CmSubject->x1C = item_data->pos;
         }
     }
     it_80271A58(gobj);
@@ -2116,7 +2116,7 @@ u32 Item_8026AE60(void)
     return result;
 }
 
-void Item_8026AE84(Item* item_data, enum_t sfx, int pan, int volume)
+void Item_8026AE84(Item* item_data, enum_t sfx, u8 pan, u8 volume)
 {
     if (sfx != 540000) {
         if (sfx != 540001) {
@@ -2128,7 +2128,7 @@ void Item_8026AE84(Item* item_data, enum_t sfx, int pan, int volume)
     }
 }
 
-void Item_8026AF0C(Item* item_data, enum_t sfx, int pan, int volume)
+void Item_8026AF0C(Item* item_data, enum_t sfx, u8 pan, u8 volume)
 {
     if (sfx != 540000) {
         if (sfx != 540001) {
@@ -2143,7 +2143,7 @@ void Item_8026AF0C(Item* item_data, enum_t sfx, int pan, int volume)
     }
 }
 
-void Item_8026AFA0(Item* item_data, enum_t sfx, int pan, int volume)
+void Item_8026AFA0(Item* item_data, enum_t sfx, u8 pan, u8 volume)
 {
     if (sfx != 540000) {
         if (sfx != 540001) {

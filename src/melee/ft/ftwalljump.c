@@ -24,10 +24,10 @@ bool ftWallJump_8008169C(HSD_GObj* gobj)
 
     if (fp0->can_walljump) {
         CollData* coll_data = &fp0->coll_data;
-        if ((fp0->coll_data.env_flags & MPCOLL_FLAGS_B11) ||
-            (coll_data->env_flags & MPCOLL_FLAGS_B05))
+        if ((fp0->coll_data.env_flags & Collide_RightWallHug) ||
+            (coll_data->env_flags & Collide_LeftWallHug))
         {
-            s32 env_flags = coll_data->env_flags & MPCOLL_FLAGS_B11;
+            s32 env_flags = coll_data->env_flags & Collide_RightWallHug;
 
             // side of the collision?
             float wall_dir = env_flags ? -1.f : +1.f;
@@ -46,29 +46,29 @@ bool ftWallJump_8008169C(HSD_GObj* gobj)
 
                 if (env_flags) {
                     // compute absolte position of the ECB's left vertex?
-                    ecb.x = coll_data->xA4_ecbCurrCorrect.left.x;
-                    ecb.y = coll_data->xA4_ecbCurrCorrect.left.y;
+                    ecb.x = coll_data->ecb.left.x;
+                    ecb.y = coll_data->ecb.left.y;
                     ecb.z = 0.0f;
                     ecb.x += fp0->cur_pos.x;
                     ecb.y += fp0->cur_pos.y;
                     ecb.z += fp0->cur_pos.z;
                     // compute distance to the wall?
-                    if (!mpLib_800567C0(coll_data->left_wall.index, &ecb,
-                                        &wall_pos))
+                    if (!mpGetSpeed(coll_data->right_facing_wall.index, &ecb,
+                                    &wall_pos))
                     {
                         wall_pos.x = 0.0f;
                     }
                 } else {
                     // compute absolte position of the ECB's right vertex?
-                    ecb.x = coll_data->xA4_ecbCurrCorrect.right.x;
-                    ecb.y = coll_data->xA4_ecbCurrCorrect.right.y;
+                    ecb.x = coll_data->ecb.right.x;
+                    ecb.y = coll_data->ecb.right.y;
                     ecb.z = 0.0f;
                     ecb.x += fp0->cur_pos.x;
                     ecb.y += fp0->cur_pos.y;
                     ecb.z += fp0->cur_pos.z;
                     // compute distance to the wall?
-                    if (!mpLib_800567C0(coll_data->right_wall.index, &ecb,
-                                        &wall_pos))
+                    if (!mpGetSpeed(coll_data->left_facing_wall.index, &ecb,
+                                    &wall_pos))
                     {
                         wall_pos.x = 0.0f;
                     }
@@ -81,7 +81,7 @@ bool ftWallJump_8008169C(HSD_GObj* gobj)
                     float x_diff = fp0->pos_delta.x - wall_pos.x;
                     x_diff = x_diff < 0 ? -x_diff : x_diff;
 
-                    if (x_diff > fp0->co_attrs.x130) {
+                    if (x_diff > fp0->co_attrs.x148) {
                         // walljump input phase one completed, now start the
                         // walljump input timer and check for the control stick
                         // movement away from the wall in the next phase

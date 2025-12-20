@@ -36,7 +36,7 @@ ItemStateTable it_803F85F0[] = {
 
 void static inline coll_inline(Item* ip)
 {
-    mpColl_800436D8(&ip->x378_itemColl, (ip->facing_dir == -1.0f) ? -1 : 1);
+    mpCollSetFacingDir(&ip->x378_itemColl, (ip->facing_dir == -1.0f) ? -1 : 1);
 }
 
 void it_802DC69C(Item_GObj* gobj)
@@ -542,12 +542,12 @@ int it_802DDA84(Item_GObj* gobj)
     Item* ip = gobj->user_data;
     CollData* col = &ip->x378_itemColl;
     bool cond;
-    ip->x378_itemColl.cur_topn = ip->pos;
-    ip->x378_itemColl.prev_topn = ip->x378_itemColl.cur_topn;
-    ip->x378_itemColl.prev_topn.y += 10.0f;
-    ip->x378_itemColl.cur_topn.y -= 10.0f;
+    ip->x378_itemColl.cur_pos = ip->pos;
+    ip->x378_itemColl.last_pos = ip->x378_itemColl.cur_pos;
+    ip->x378_itemColl.last_pos.y += 10.0f;
+    ip->x378_itemColl.cur_pos.y -= 10.0f;
     cond = mpColl_800471F8(col);
-    ip->pos = col->cur_topn;
+    ip->pos = col->cur_pos;
     if (cond) {
         return 1;
     }

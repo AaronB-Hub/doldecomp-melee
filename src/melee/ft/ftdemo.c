@@ -46,10 +46,10 @@ static HSD_GObjEvent on_create_fighter[16] = {
 
 static void initFighter(HSD_GObj* gobj, plAllocInfo2* alloc_info)
 {
-    struct S_TEMP1 temp1;
-    temp1.fighterKind = alloc_info->internal_id;
-    temp1.playerID = alloc_info->slot;
-    temp1.flags_b0 = alloc_info->has_transformation;
+    struct plAllocInfo temp1;
+    temp1.internal_id = alloc_info->internal_id;
+    temp1.slot = alloc_info->slot;
+    temp1.b0 = alloc_info->has_transformation;
     Fighter_UnkInitLoad_80068914(gobj, &temp1);
 }
 
@@ -114,7 +114,7 @@ Fighter_GObj* ftDemo_CreateFighter(plAllocInfo2* alloc_info)
     }
     HSD_GObjProc_8038FD54(gobj, Fighter_8006A360, 1);
     HSD_GObjProc_8038FD54(gobj, Fighter_procUpdate, 4);
-    HSD_GObjProc_8038FD54(gobj, Fighter_8006C27C, 5);
+    HSD_GObjProc_8038FD54(gobj, Fighter_procMap, 5);
     HSD_GObjProc_8038FD54(gobj, Fighter_8006C80C, 9);
     HSD_GObjProc_8038FD54(gobj, Fighter_8006D9AC, 16);
     Fighter_UnkProcessDeath_80068354(gobj);

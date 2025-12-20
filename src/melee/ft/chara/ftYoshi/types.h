@@ -34,8 +34,8 @@ typedef struct _ftYoshiAttributes { // x2D4 (fp->dat_attrs)
     int x48;
     int x4C;
     u8 pad_x50[0x6C - 0x50];
-    float x6C;
-    float x70;
+    float specials_start_gravity;
+    float specials_start_terminal_vel;
     u8 pad_x74[0x114 - 0x74];
     float x114;
     float x118;
@@ -77,16 +77,6 @@ struct S_UNK_YOSHI1 {
 };
 
 union ftYoshi_MotionVars {
-    /// @todo Proper state name.
-    struct ftYoshi_State2Vars {
-        float x0;
-        UNK_T x4;
-        UNK_T x8;
-        bool xC;
-        UNK_T x10;
-        float x14;
-        float x18;
-    } unk2;
     struct ftYoshi_SpecialNVars {
         /* fp+2340:0 */ u8 x0_b0 : 1;
         /* fp+2340:1 */ u8 x0_b1 : 1;
@@ -102,6 +92,17 @@ union ftYoshi_MotionVars {
         /* fp+2340 */ int x0;
         /* fp+2344 */ int x4;
     } specialhi;
+    struct ftYoshi_GuardVars {
+        /* fp+2340 */ f32 x0;
+        /* fp+2344 */ u8 _pad[8];
+        /* fp+234C */ bool xC;
+        /* fp+2350 */ f32 x10;
+        /* fp+2354 */ f32 x14;
+        /* fp+2358 */ f32 x18;
+        /* fp+235C */ UNK_T x1C;
+        /* fp+2360 */ int x20;
+        /* fp+2364 */ int x24;
+    } guard;
 };
 
 #endif

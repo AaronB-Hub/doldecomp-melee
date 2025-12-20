@@ -34,22 +34,6 @@ typedef struct _ftMapping {
     s8 has_transformation;
 } ftMapping;
 
-struct plAllocInfo {
-    s32 internal_id;
-    u8 slot;
-    s8 unk8;
-    struct {
-        u8 b0 : 1;
-        u8 has_transformation : 1;
-        u8 b2 : 1;
-        u8 b3 : 1;
-        u8 b4 : 1;
-        u8 b5 : 1;
-        u8 b6 : 1;
-        u8 b7 : 1;
-    };
-};
-
 /// TODO delete after fixing functions that use this
 struct Unk_Struct_w_Array {
     char some_str[8 + 4]; //"PdPm.dat"
@@ -61,18 +45,40 @@ struct Unk_Struct_w_Array {
 char str_PdPmdat_start_of_data[] = "PdPm.dat";
 char str_plLoadCommonData[] = "plLoadCommonData";
 
-ftMapping ftMapping_list[FTKIND_MAX] = { //////ftMapping_list
-    { 0x02, 0xFF, 0x00 }, { 0x03, 0xFF, 0x00 }, { 0x01, 0xFF, 0x00 },
-    { 0x18, 0xFF, 0x00 }, { 0x04, 0xFF, 0x00 }, { 0x05, 0xFF, 0x00 },
-    { 0x06, 0xFF, 0x00 }, { 0x11, 0xFF, 0x00 }, { 0x00, 0xFF, 0x00 },
-    { 0x12, 0xFF, 0x00 }, { 0x10, 0xFF, 0x00 }, { 0x08, 0xFF, 0x00 },
-    { 0x09, 0xFF, 0x00 }, { 0x0C, 0xFF, 0x00 }, { 0x0A, 0x0B, 0x00 },
-    { 0x0F, 0xFF, 0x00 }, { 0x0D, 0xFF, 0x00 }, { 0x0E, 0xFF, 0x00 },
-    { 0x13, 0x07, 0x01 }, { 0x07, 0x13, 0x01 }, { 0x16, 0xFF, 0x00 },
-    { 0x14, 0xFF, 0x00 }, { 0x15, 0xFF, 0x00 }, { 0x1A, 0xFF, 0x00 },
-    { 0x17, 0xFF, 0x00 }, { 0x19, 0xFF, 0x00 }, { 0x1B, 0xFF, 0x00 },
-    { 0x1D, 0xFF, 0x00 }, { 0x1E, 0xFF, 0x00 }, { 0x1F, 0xFF, 0x00 },
-    { 0x1C, 0xFF, 0x00 }, { 0x20, 0xFF, 0x00 }, { 0x0A, 0xFF, 0x00 }
+ftMapping ftMapping_list[CHKIND_MAX] = { //////ftMapping_list
+    /* CKIND_CAPTAIN   */ { FTKIND_CAPTAIN, 0xFF },
+    /* CKIND_DONKEY    */ { FTKIND_DONKEY, 0xFF },
+    /* CKIND_FOX       */ { FTKIND_FOX, 0xFF },
+    /* CKIND_GAMEWATCH */ { FTKIND_GAMEWATCH, 0xFF },
+    /* CKIND_KIRBY     */ { FTKIND_KIRBY, 0xFF },
+    /* CKIND_KOOPA     */ { FTKIND_KOOPA, 0xFF },
+    /* CKIND_LINK      */ { FTKIND_LINK, 0xFF },
+    /* CKIND_LUIGI     */ { FTKIND_LUIGI, 0xFF },
+    /* CKIND_MARIO     */ { FTKIND_MARIO, 0xFF },
+    /* CKIND_MARS      */ { FTKIND_MARS, 0xFF },
+    /* CKIND_MEWTWO    */ { FTKIND_MEWTWO, 0xFF },
+    /* CKIND_NESS      */ { FTKIND_NESS, 0xFF },
+    /* CKIND_PEACH     */ { FTKIND_PEACH, 0xFF },
+    /* CKIND_PIKACHU   */ { FTKIND_PIKACHU, 0xFF },
+    /* CKIND_POPONANA  */ { FTKIND_POPO, FTKIND_NANA },
+    /* CKIND_PURIN     */ { FTKIND_PURIN, 0xFF },
+    /* CKIND_SAMUS     */ { FTKIND_SAMUS, 0xFF },
+    /* CKIND_YOSHI     */ { FTKIND_YOSHI, 0xFF },
+    /* CKIND_ZELDA     */ { FTKIND_ZELDA, FTKIND_SEAK, true },
+    /* CKIND_SEAK      */ { FTKIND_SEAK, FTKIND_ZELDA, true },
+    /* CKIND_FALCO     */ { FTKIND_FALCO, 0xFF },
+    /* CKIND_CLINK     */ { FTKIND_CLINK, 0xFF },
+    /* CKIND_DRMARIO   */ { FTKIND_DRMARIO, 0xFF },
+    /* CKIND_EMBLEM    */ { FTKIND_EMBLEM, 0xFF },
+    /* CKIND_PICHU     */ { FTKIND_PICHU, 0xFF },
+    /* CKIND_GANON     */ { FTKIND_GANON, 0xFF },
+    /* CKIND_MASTERH   */ { FTKIND_MASTERH, 0xFF },
+    /* CKIND_BOY       */ { FTKIND_BOY, 0xFF },
+    /* CKIND_GIRL      */ { FTKIND_GIRL, 0xFF },
+    /* CKIND_GKOOPS    */ { FTKIND_GKOOPS, 0xFF },
+    /* CKIND_CREZYH    */ { FTKIND_CREZYH, 0xFF },
+    /* CHKIND_SANDBAG  */ { FTKIND_SANDBAG, 0xFF },
+    /* CHKIND_POPO     */ { FTKIND_POPO, 0xFF }
 };
 
 ////.bss
@@ -234,10 +240,10 @@ void Player_80031AD0(int slot)
     first_struct.slot = slot;
     first_struct.b0 = false;
     first_struct.has_transformation = false;
-    first_struct.unk8 = -1;
+    first_struct.x5 = -1;
 
     /// @todo Eliminate cast.
-    player->player_entity[0] = Fighter_Create((struct S_TEMP1*) &first_struct);
+    player->player_entity[0] = Fighter_Create(&first_struct);
     player->player_state = 2;
 
     internal_id = byte_check =
@@ -253,11 +259,11 @@ void Player_80031AD0(int slot)
         second_struct.slot = slot;
         second_struct.b0 = true;
         second_struct.has_transformation = has_transformation;
-        second_struct.unk8 = -1;
+        second_struct.x5 = -1;
 
         /// @todo Eliminate cast.
         player->player_entity[1] =
-            Fighter_Create((struct S_TEMP1*) &second_struct);
+            Fighter_Create(&second_struct);
 
         if (player->player_state != 1) {
             player->player_state = 2;
@@ -271,25 +277,25 @@ void Player_80031AD0(int slot)
     }
 }
 
-void Player_80031CB0(enum_t id, int slot)
+void Player_80031CB0(CharacterKind kind, u8 color)
 {
-    if (ftMapping_list[id].internal_id != -1) {
-        ftData_800855C8(ftMapping_list[id].internal_id, slot);
+    if (ftMapping_list[kind].internal_id != -1) {
+        ftData_800855C8(ftMapping_list[kind].internal_id, color);
     }
 
-    if (hasExtraFighterId(&ftMapping_list[id])) {
-        ftData_800855C8(ftMapping_list[id].extra_internal_id, slot);
+    if (hasExtraFighterId(&ftMapping_list[kind])) {
+        ftData_800855C8(ftMapping_list[kind].extra_internal_id, color);
     }
 }
 
-void Player_80031D2C(enum_t id, int slot)
+void Player_80031D2C(CharacterKind kind, u8 color)
 {
-    if (ftMapping_list[id].internal_id != -1) {
-        ftData_8008578C(ftMapping_list[id].internal_id, slot);
+    if (ftMapping_list[kind].internal_id != -1) {
+        ftData_8008578C(ftMapping_list[kind].internal_id, color);
     }
 
-    if (hasExtraFighterId(&ftMapping_list[id])) {
-        ftData_8008578C(ftMapping_list[id].extra_internal_id, slot);
+    if (hasExtraFighterId(&ftMapping_list[kind])) {
+        ftData_8008578C(ftMapping_list[kind].extra_internal_id, color);
     }
 }
 
@@ -1690,7 +1696,7 @@ u8 Player_SetFlagsAEBit1(int slot, u8 bit1)
     player->flagsAE.b1 = bit1;
 }
 
-u8 Player_GetUnk4C(s32 slot)
+int Player_GetUnk4C(s32 slot)
 {
     StaticPlayer* player;
     u8 unk4C;
@@ -1732,10 +1738,10 @@ void Player_SetStructFunc(s32 slot, void* arg_func)
     player->struct_func = arg_func;
 }
 
-pl_800386D8_t* Player_GetTotalAttackCountPtr(int slot)
+plActionStats* Player_GetActionStats(int slot)
 {
     StaticPlayer* player;
-    pl_800386D8_t* attack_count;
+    plActionStats* attack_count;
     Player_CheckSlot(slot);
     player = &player_slots[slot];
     attack_count = &player->stale_moves.total_attack_count_struct;
@@ -1752,10 +1758,10 @@ StaleMoveTable* Player_GetStaleMoveTableIndexPtr(s32 slot)
     return stale_move_table;
 }
 
-int* Player_GetUnk6A8Ptr(int slot)
+struct pl_x5EC_t* Player_GetUnk6A8Ptr(int slot)
 {
     StaticPlayer* player;
-    int* unk6A8;
+    struct pl_x5EC_t* unk6A8;
     Player_CheckSlot(slot);
     player = &player_slots[slot];
     unk6A8 = &player->stale_moves.x5EC;

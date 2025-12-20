@@ -44,6 +44,16 @@ struct _m2c_stack_ftCo_8009F834 {
     /* 0xB4 */ char pad_B4[0x1C];
 }; /* size = 0xD0 */
 
+
+/*  args:
+gobj
+gfx_id
+bone
+use_common_bone_id
+destroy_on_state_change
+offset
+range
+*/
 void ftCo_8009F834(Fighter_GObj* gobj, int arg1, enum Fighter_Part arg2,
                    int arg3, int arg4, Vec3* arg5, Vec3* arg6, f32 arg7)
 {
@@ -274,8 +284,8 @@ block_62:
     return;
 block_63:
     efAsync_Spawn(gobj, &GET_FIGHTER(gobj)->x60C, 3, arg1,
-                  temp_r30->parts[var_r27].joint,
-                  &temp_r30->ft_data->x0->x100[0x68], var_f1);
+                  temp_r30->parts[var_r27].joint, &temp_r30->ft_data->x0->x168,
+                  var_f1);
     return;
 block_64:
     efAsync_Spawn(gobj, &GET_FIGHTER(gobj)->x60C, 3, arg1,
@@ -293,7 +303,7 @@ block_65:
     return;
 block_66:
     temp_f1_2 = temp_r30->x34_scale.y;
-    sp94 = temp_f1_2 * M2C_BITWISE(f32, temp_r30->co_attrs.x12C);
+    sp94 = temp_f1_2 * temp_r30->co_attrs.x144;
     temp_r9_2 = gobj->user_data;
     efAsync_Spawn(gobj, &temp_r9_2->x60C, 3, 0x438,
                   temp_r30->parts[var_r27].joint, &sp94, temp_r9_2, temp_f1_2);

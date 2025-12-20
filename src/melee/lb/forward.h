@@ -28,6 +28,7 @@ typedef struct PreloadEntry PreloadEntry;
 typedef struct ReflectDesc ReflectDesc;
 typedef struct ShieldDesc ShieldDesc;
 typedef struct Unk80433380_48 Unk80433380_48;
+typedef struct LbShadow LbShadow;
 
 typedef enum HurtCapsuleState {
     HurtCapsule_Enabled,
@@ -87,5 +88,23 @@ typedef void (*RefractCallbackTypeB)(struct lbRefract_CallbackData*, s32, u32,
                                      s8, s8, s8, s8);
 typedef void (*RefractCallbackTypeC)(struct lbRefract_CallbackData*, s32, u32,
                                      s32*, s32*, s32*, s32*);
+
+typedef struct lbColl_80008D30_arg1 {
+    /*  +0 */ HitCapsuleState state;
+    /*  +4 */ u32 damage;
+    /*  +8 */ int kb_angle;
+    /*  +C */ u32 unkC;
+    /* +10 */ u32 unk10;
+    /* +14 */ u32 unk14;
+    /* +18 */ u32 element;
+    /* +1C */ int sfx_severity;
+    /* +20 */ enum_t sfx_kind;
+} lbColl_80008D30_arg1;
+
+typedef enum ECBSourceKind {
+    ECBSource_None,
+    ECBSource_JObj,
+    ECBSource_Fixed,
+} ECBSourceKind;
 
 #endif

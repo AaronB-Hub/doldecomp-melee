@@ -39,7 +39,9 @@ struct ftKb_FighterVars {
     /* fp+224C   */ u8 _48[0x60 - 0x48];
     /* fp+228C   */ UNK_T x60;
     /* fp+2290   */ bool x64;
-    /* fp+2294   */ u8 _68[0x7C - 0x68];
+    /* fp+2294   */ u8 _68[0x74 - 0x68];
+    /* fp+22A0   */ u32 x74;
+    /* fp+22A4   */ u32 x78;
     /* fp+22A8   */ Item_GObj* ns_flash_gobj;
     /* fp+2294   */ u8 x80[0x9C - 0x80];
     /* fp+22C8   */ int x9C;
@@ -47,18 +49,18 @@ struct ftKb_FighterVars {
     /* fp+22D0   */ UNK_T xA4;
     /* fp+22D4   */ int xA8;
     /* fp+22D8   */ UNK_T xAC;
-    /* fp+22DC   */ UNK_T xB0;
+    /* fp+22DC   */ u32 xB0;
     /* fp+22E0   */ int xB4;
-    /* fp+22E4   */ UNK_T xB8;
+    /* fp+22E4   */ u32 xB8;
     /* fp+22E8   */ int xBC;
-    /* fp+22EC   */ UNK_T xC0;
+    /* fp+22EC   */ Item_GObj* xC0;
     /* fp+22F0   */ bool xC4;
     /* fp+22F4   */ UNK_T xC8;
     /* fp+22F8   */ bool xCC;
-    /* fp+22FC   */ Item_GObj* xD0;
-    /* fp+2300   */ UNK_T xD4;
-    /* fp+2304   */ UNK_T xD8;
-    /* fp+2308   */ UNK_T xDC;
+    /* fp+22FC   */ Item_GObj* xD0; ///< Peach toad item
+    /* fp+2300   */ int xD4;
+    /* fp+2304   */ int xD8;
+    /* fp+2308   */ Item_GObj* xDC; ///< Game & Watch pan item
     /* fp+230C   */ int xE0;
     /* fp+2310   */ short xE4;
     /* fp+2314   */ float xE8;
@@ -402,6 +404,27 @@ union ftKb_MotionVars {
         char pad1[0x60];
         /* fp+23C4 */ float xC4;
     } specialhi;
+    struct ftKb_SpecialLWVars {
+        /* fp+2340 */ s16 x0;
+        /* fp+2342 */ s16 x2;
+        /* fp+2344 */ s16 x4;
+        /* fp+2346 */ s16 x6;
+        /* fp+2348 */ int x8;
+        /* fp+234C */ int xC;
+        /* fp+2350 */ int x10;
+        /* fp+2354 */ int x14;
+        /* fp+2358 */ Vec3 x18;
+        /* fp+2364 */ Vec3 x24;
+        /* fp+2370 */  Vec3 x30;
+        /* fp+237C */  Vec3 x3C;
+        /* fp+2388 */  Vec3 x48;
+        /* fp+2394 */  Vec3 x54;
+        /* fp+23A0 */  Vec3 x60;
+        /* fp+23AC */  Vec3 x6C;
+        /* fp+23B8 */  Vec3 x78;
+        /* fp+23C4 */ float x84;
+        /*fp+23C8 */ float x88[9];
+    } speciallw;
 };
 
 #endif

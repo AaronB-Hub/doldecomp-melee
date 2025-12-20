@@ -45,7 +45,7 @@ void ftCo_800C4724(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     HSD_JObj* jobj = GET_JOBJ(gobj);
-    it_80294430(fp->item_gobj, fp->co_attrs.x14C, fp->x2C4.y);
+    it_80294430(fp->item_gobj, fp->co_attrs.x164, fp->x2C4.y);
     fp->mv.co.warpstar.facing_dir = fp->facing_dir;
     fp->facing_dir = 0;
     fp->mv.co.warpstar.x1C = 120;
@@ -150,14 +150,18 @@ void ftCo_WarpStarFall_IASA(Fighter_GObj* gobj) {}
 void ftCo_WarpStarFall_Phys(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    ftCommon_8007D494(fp, p_ftCommonData->x694, p_ftCommonData->x698);
+    ftCommon_Fall(fp, p_ftCommonData->x694, p_ftCommonData->x698);
     {
-        float n0 = fp->input.lstick.x * p_ftCommonData->x69C;
-        float n1 = fp->input.lstick.x > 0 ? p_ftCommonData->x6A0
-                                          : -p_ftCommonData->x6A0;
-        float n2 = n0 + n1;
-        float n3 = fp->input.lstick.x * p_ftCommonData->x6A4;
-        ftCommon_8007D174(fp, fp->self_vel.x, n2, n3, p_ftCommonData->x6A8);
+        float accel_scaling =
+            fp->input.lstick.x * p_ftCommonData->warpstarfall_drift_scaling;
+        float accel_flat = fp->input.lstick.x > 0
+                               ? p_ftCommonData->warpstarfall_drift_flat
+                               : -p_ftCommonData->warpstarfall_drift_flat;
+        float accel = accel_scaling + accel_flat;
+        float target_vel =
+            fp->input.lstick.x * p_ftCommonData->warpstarfall_drift_max;
+        ftCommon_8007D174(fp, fp->self_vel.x, accel, target_vel,
+                          p_ftCommonData->x6A8);
     }
 }
 
@@ -200,7 +204,7 @@ void ftCo_800C4C60(Fighter_GObj* gobj)
     {
         Vec3 vec;
         vec.x = 0;
-        vec.y = fp->coll_data.xA4_ecbCurrCorrect.bottom.y;
+        vec.y = fp->coll_data.ecb.bottom.y;
         vec.z = 0;
         vec.x += fp->cur_pos.x;
         vec.y += fp->cur_pos.y;

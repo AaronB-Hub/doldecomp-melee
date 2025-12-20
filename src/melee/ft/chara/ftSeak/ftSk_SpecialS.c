@@ -620,10 +620,10 @@ void ftSk_SpecialAirSStart_Phys(HSD_GObj* gobj)
     ftCo_DatAttrs* fighter_attr = &fp->co_attrs;
 
     if (fp->cmd_vars[0] != 0) {
-        ftCommon_8007D494(fp, fighter_attr->grav, fighter_attr->terminal_vel);
+        ftCommon_Fall(fp, fighter_attr->grav, fighter_attr->terminal_vel);
     }
 
-    ftCommon_8007CE94(fp, fighter_attr->aerial_friction);
+    ftCommon_ApplyFrictionAir(fp, fighter_attr->aerial_friction);
 }
 
 void ftSk_SpecialSStart_Coll(HSD_GObj* gobj)
@@ -829,8 +829,8 @@ void ftSk_SpecialS_80111830(HSD_GObj* gobj)
         float ecb_top;
         float ecb_bot;
         vec0.x = 0.0;
-        ecb_top = fp->coll_data.xA4_ecbCurrCorrect.top.y;
-        ecb_bot = fp->coll_data.xA4_ecbCurrCorrect.bottom.y;
+        ecb_top = fp->coll_data.ecb.top.y;
+        ecb_bot = fp->coll_data.ecb.bottom.y;
         vec0.y = 0.5F * (ecb_top + ecb_bot);
         vec0.z = 0.0;
         vec0.x += fp->cur_pos.x;

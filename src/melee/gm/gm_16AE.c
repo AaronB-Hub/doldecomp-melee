@@ -990,7 +990,7 @@ void fn_8016C7F0(void)
     s32 sp20;
     u8 _[0x18];
 
-    s32* temp_r30_2;
+    u32* temp_r30_2;
     int var_r29;
     u8 var_r29_2;
     int var_r28;
@@ -2200,9 +2200,9 @@ void gm_8016F088(StartMeleeData* arg0)
     }
 }
 
-void gm_8016F120(int arg0)
+int gm_8016F120(int arg0)
 {
-    gmMainLib_8015DADC(arg0);
+    return gmMainLib_8015DADC(arg0);
 }
 
 void fn_8016F140(int arg0)

@@ -20,8 +20,8 @@ struct lbl_8046B488_t;
 
 #include <melee/gm/gm_17C0.h>
 
-/* 1601C4 */ u8 gm_801601C4(s8);
-/* 160244 */ u8 gm_80160244(s8);
+/* 1601C4 */ int gm_801601C4(s8);
+/* 160244 */ int gm_80160244(s8);
 /* 1602C0 */ void gm_801602C0(s8);
 /* 1603B0 */ void gm_801603B0(void);
 /* 160400 */ u32
@@ -190,12 +190,12 @@ gm_80167BC8(struct VsModeData*); // inits VsModeData from game rules
 /* 168638 */ void gm_80168638(MatchEnd*);
 /* 168710 */ void gm_80168710(MatchEnd*, VsModeData*);
 /* 1688AC */ int gm_801688AC(MatchEnd*);
-/* 168940 */ UNK_RET gm_80168940(UNK_PARAMS);
+/* 168940 */ int gm_80168940(MatchEnd*);
 /* 16895C */ void gm_8016895C(HSD_JObj*, DynamicModelDesc*, int idx);
 /* 1689E4 */ UNK_RET fn_801689E4(UNK_PARAMS);
 /* 168A6C */ UNK_RET fn_80168A6C(UNK_PARAMS);
 /* 168B34 */ float gm_80168B34(CharacterKind, int, int);
-/* 168BF8 */ void gm_80168BF8(int);
+/* 168BF8 */ float gm_80168BF8(int);
 /* 168C5C */ void gm_80168C5C(u32);
 /* 168E54 */ UNK_RET fn_80168E54(s8, s8, u8, u8);
 /* 168F2C */ void fn_80168F2C(void);
@@ -238,13 +238,13 @@ gm_80167BC8(struct VsModeData*); // inits VsModeData from game rules
 /* 16A404 */ void gm_8016A404(s32 arg0);
 /* 16A414 */ void gm_8016A414(f32 arg8);
 /* 16A424 */ void gm_8016A424(s8 arg0);
-/* 16A434 */ UNK_RET gm_8016A434(UNK_PARAMS);
-/* 16A450 */ UNK_RET fn_8016A450(UNK_PARAMS);
-/* 16A46C */ UNK_RET fn_8016A46C(UNK_PARAMS);
+/* 16A434 */ void gm_8016A434(void);
+/* 16A450 */ void fn_8016A450(void);
+/* 16A46C */ void fn_8016A46C(void);
 /* 16A488 */ UNK_RET fn_8016A488(UNK_PARAMS);
 /* 16A4C8 */ UNK_RET fn_8016A4C8(UNK_PARAMS);
 /* 16A92C */ void gm_8016A92C(StartMeleeRules*);
-/* 16A944 */ UNK_RET gm_8016A944(UNK_PARAMS);
+/* 16A944 */ bool gm_8016A944(UNK_PARAMS);
 /* 16A97C */ void* gm_8016A97C(void);
 /* 16A98C */ UNK_T gm_8016A98C(void);
 /* 16A998 */ UNK_RET gm_8016A998(UNK_PARAMS);

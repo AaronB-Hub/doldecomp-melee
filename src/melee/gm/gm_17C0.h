@@ -59,7 +59,7 @@
 /* 17E738 */ UNK_RET gm_8017E738(UNK_PARAMS);
 /* 17E76C */ UNK_RET gm_8017E76C(UNK_PARAMS);
 /* 17E7A0 */ void gm_8017E7A0(int);
-/* 17E7E0 */ UNK_RET gm_8017E7E0(UNK_PARAMS);
+/* 17E7E0 */ bool gm_8017E7E0(void);
 /* 17E7FC */ void gm_8017E7FC(int);
 /* 17E8A4 */ void fn_8017E8A4(int);
 /* 17EB30 */ UnkAllstarData* gm_8017EB30(void);
@@ -101,7 +101,7 @@
 /* 181998 */ void gm_80181998(void);
 /* 181A00 */ void gm_80181A00(s32 arg0, s32 arg1);
 /* 181A14 */ int gm_80181A14(void);
-/* 181A24 */ u16 gm_80181A24(void);
+/* 181A24 */ u32 gm_80181A24(void);
 /* 181A34 */ s32 gm_80181A34(void);
 /* 181A44 */ UNK_RET gm_80181A44(int c_kind, int, bool);
 /* 181AC8 */ UNK_RET gm_80181AC8(int, int, int);

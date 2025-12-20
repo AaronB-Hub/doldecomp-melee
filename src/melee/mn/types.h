@@ -19,7 +19,7 @@ typedef struct {
 } Menu;
 // size 0x8
 
-#ifdef M2CTX
+#ifdef M2C
 typedef struct Menu_GObj Menu_GObj;
 struct Menu_GObj {
     /*  +0 */ u16 classifier;
@@ -375,6 +375,12 @@ struct SSSData {
     /* +03 */ s8 force_stage_id;
     /* +04 */ u8 start_game;
     /* +08 */ VsModeData data;
+};
+
+struct AnimLoopSettings {
+    /* +00 */ f32 start_frame;
+    /* +04 */ f32 end_frame;
+    /* +08 */ f32 loop_frame; ///< if -1.0f, dont loop
 };
 
 #endif

@@ -36,8 +36,6 @@
 #include <baselib/random.h>
 #include <baselib/rumble.h>
 
-extern s8 ftData_UnkBytePerCharacter[];
-
 s32 ftLib_800860C4(void)
 {
     s32 ret = 0;
@@ -333,8 +331,8 @@ void ftLib_800866DC(HSD_GObj* gobj, Vec3* v)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     struct ftCo_DatAttrs* r4 = &fp->co_attrs;
-    s32 i = fp->ft_data->x0->x16C_idx;
-    lb_8000B1CC(ftLib_80086630(gobj, i), &r4->x158, v);
+    s32 i = fp->ft_data->x0->camera_zoom_target_bone;
+    lb_8000B1CC(ftLib_80086630(gobj, i), &r4->x170, v);
 }
 
 void ftLib_80086724(HSD_GObj* gobj, HSD_GObj* other)
@@ -456,8 +454,7 @@ inline void vector_add(Vec3* dst, Vec3* src, float x, float y, float z)
 void ftLib_80086990(HSD_GObj* gobj, Vec3* v)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    float tmp = 0.5f * (fp->coll_data.xA4_ecbCurrCorrect.top.y +
-                        fp->coll_data.xA4_ecbCurrCorrect.bottom.y);
+    float tmp = 0.5f * (fp->coll_data.ecb.top.y + fp->coll_data.ecb.bottom.y);
     vector_add(v, &fp->cur_pos, 0, tmp, 0);
 }
 
@@ -544,7 +541,7 @@ bool ftLib_80086B64(HSD_GObj* gobj)
     return fp->x221F_b0;
 }
 
-CameraBox* ftLib_80086B74(HSD_GObj* gobj)
+CmSubject* ftLib_80086B74(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     return fp->x890_cameraBox;
@@ -559,14 +556,14 @@ float ftLib_80086B80(HSD_GObj* gobj)
 void ftLib_80086B90(HSD_GObj* gobj, Vec3* v)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    CameraBox* cam = fp->x890_cameraBox;
+    CmSubject* cam = fp->x890_cameraBox;
     *v = cam->x1C;
 }
 
 bool ftLib_80086BB4(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    CameraBox* cam = fp->x890_cameraBox;
+    CmSubject* cam = fp->x890_cameraBox;
     return Camera_80031154(&cam->x10);
 }
 
@@ -679,7 +676,7 @@ float ftLib_80086F80(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     if (fp->invisible) {
-        return fp->ft_data->x0->xFC;
+        return fp->ft_data->x0->name_tag_height;
     }
 
     return fp->co_attrs.name_tag_height;
@@ -809,7 +806,7 @@ FighterKind ftLib_800872A4(HSD_GObj* gobj)
     return fp->kind;
 }
 
-void* ftLib_800872B0(HSD_GObj* gobj)
+LbShadow* ftLib_800872B0(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     return &fp->x20A4;
