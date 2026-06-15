@@ -24,7 +24,7 @@ struct {
     HSD_ShapeAnimJoint* xC;
 } mnLanguage_804A08D8;
 
-// language id -> frame map
+/// language id -> frame map
 static f32 mnLanguage_804D5018[2] = { 1, 0 };
 
 static Vec3 mnLanguage_803EF5A0 = { 0, 19, -0.1 };
@@ -42,16 +42,16 @@ void mnLanguage_8024BFE0(HSD_GObj* arg0_unused)
     HSD_JObj* sp24;
 
     temp_r31 = HSD_GObjGetUserData(mnLanguage_804D6C50);
-    if (mn_804D6BC8.x0 != 0) {
-        mn_804D6BC8.x0 -= 1;
+    if (mn_804D6BC8.cooldown != 0) {
+        mn_804D6BC8.cooldown -= 1;
         mn_804D6BC8.x2 = 0;
         mn_804D6BC8.x4 = 0;
         return;
     }
-    temp_r3 = Menu_GetAllEvents();
+    temp_r3 = Menu_GetAllInputs();
     if (temp_r3 & 0x20) {
         lbAudioAx_80024030(0);
-        mn_804A04F0.x11 = 0;
+        mn_804A04F0.entering_menu = 0;
         mn_80229894(4, 4, 3);
         return;
     }
@@ -63,8 +63,8 @@ void mnLanguage_8024BFE0(HSD_GObj* arg0_unused)
             lbAudioAx_80027AB0(0xAD);
             mn_80229860(1);
             mn_8022F1A8(1, 9);
-            mn_804A04F0.x0 = 4;
-            mn_804A04F0.x2 = 4;
+            mn_804A04F0.cur_menu = 4;
+            mn_804A04F0.hovered_selection = 4;
         }
     } else if (temp_r31->x2 != 0) {
         if (temp_r3 & 4) {
@@ -91,7 +91,7 @@ void fn_8024C210(HSD_GObj* gobj)
 {
     u8 _[4];
     HSD_JObj* jobj = GET_JOBJ(gobj);
-    if (mn_8022EC18(jobj, &mnLanguage_803EF5AC.x, 0x80) >=
+    if (mn_8022EC18(jobj, (AnimLoopSettings*) &mnLanguage_803EF5AC, 0x80) >=
         mnLanguage_803EF5AC.y)
     {
         HSD_GObjPLink_80390228(gobj);
@@ -104,9 +104,9 @@ void fn_8024C270(HSD_GObj* gobj)
     Menu* menu = GET_MENU(gobj);
     u8 _[12];
 
-    if (mn_804A04F0.x0 != 0x17) {
+    if (mn_804A04F0.cur_menu != 0x17) {
         HSD_GObjProc_8038FE24(HSD_GObj_804D7838);
-        gobjproc = HSD_GObjProc_8038FD54(gobj, fn_8024C210, 0);
+        gobjproc = HSD_GObj_SetupProc(gobj, fn_8024C210, 0);
         gobjproc->flags_3 = HSD_GObj_804D783C;
         HSD_SisLib_803A5CC4(menu->text);
     }
@@ -119,24 +119,24 @@ void fn_8024C2E8(HSD_GObj* gobj)
     HSD_JObj* jobj = GET_JOBJ(gobj);
     f32 tmp;
 
-    if (mn_804A04F0.x0 != 0x17) {
+    if (mn_804A04F0.cur_menu != 0x17) {
         HSD_GObjProc_8038FE24(HSD_GObj_804D7838);
-        gobjproc = HSD_GObjProc_8038FD54(gobj, fn_8024C210, 0);
+        gobjproc = HSD_GObj_SetupProc(gobj, fn_8024C210, 0);
         gobjproc->flags_3 = HSD_GObj_804D783C;
         HSD_SisLib_803A5CC4(menu->text);
         return;
     }
 
-    tmp = mn_8022EC18(jobj, &mnLanguage_803EF5A0.x, 0x80);
+    tmp = mn_8022EC18(jobj, (AnimLoopSettings*) &mnLanguage_803EF5A0, 0x80);
     if (tmp == mnLanguage_803EF5A0.y) {
         HSD_GObjProc_8038FE24(HSD_GObj_804D7838);
-        gobjproc = HSD_GObjProc_8038FD54(gobj, fn_8024C270, 0);
+        gobjproc = HSD_GObj_SetupProc(gobj, fn_8024C270, 0);
         gobjproc->flags_3 = HSD_GObj_804D783C;
         menu->unk2 = 1;
     }
 }
 
-// Must not be declared inline, for proper .sdata2 float ordering
+/// Must not be declared inline, for proper .sdata2 float ordering
 static void Menu_InitCenterText_noinline(Menu* menu, u8 val)
 {
     HSD_Text* text =
@@ -173,17 +173,14 @@ void mnLanguage_8024C3C4(HSD_GObj* arg0_unused)
     HSD_JObjReqAnimAll(jobj, 0.0F);
     HSD_JObjAnimAll(jobj);
     user_data = HSD_MemAlloc(8);
-    if (user_data == NULL) {
-        OSReport("Can't get user_data.\n");
-        __assert("mnlanguage.c", 0x163, "user_data");
-    }
+    HSD_ASSERTREPORT(0x163, user_data, "Can't get user_data.\n");
     lang = lbLang_GetSavedLanguage();
     user_data->x0 = lang;
     user_data->x1 = lang;
     user_data->x4 = 0;
     user_data->x2 = 0;
     GObj_InitUserData(gobj, 0, HSD_Free, user_data);
-    gobjproc = HSD_GObjProc_8038FD54(gobj, fn_8024C2E8, 0);
+    gobjproc = HSD_GObj_SetupProc(gobj, fn_8024C2E8, 0);
     gobjproc->flags_3 = HSD_GObj_804D783C;
     lang = user_data->x0;
     lb_80011E24(GET_JOBJ(gobj), &sp1C, 1, -1);
@@ -205,10 +202,10 @@ void mnLanguage_8024C5C0(HSD_GObj* gobj)
     HSD_GObjProc* gobjproc;
     HSD_Archive* archive;
 
-    mn_804D6BC8.x0 = 5;
-    mn_804A04F0.x1 = mn_804A04F0.x0;
-    mn_804A04F0.x0 = 0x17;
-    mn_804A04F0.x2 = 0;
+    mn_804D6BC8.cooldown = 5;
+    mn_804A04F0.prev_menu = mn_804A04F0.cur_menu;
+    mn_804A04F0.cur_menu = 0x17;
+    mn_804A04F0.hovered_selection = 0;
     archive = mn_804D6BB8;
     lbArchive_LoadSections(
         archive, (void**) &mnLanguage_804A08D8.x0, "MenMainConLa_Top_joint",
@@ -217,6 +214,6 @@ void mnLanguage_8024C5C0(HSD_GObj* gobj)
         &mnLanguage_804A08D8.xC, "MenMainConLa_Top_shapeanim_joint", 0);
     mnLanguage_8024C3C4(gobj);
     gobjproc =
-        HSD_GObjProc_8038FD54(GObj_Create(0, 1, 0x80), mnLanguage_8024BFE0, 0);
+        HSD_GObj_SetupProc(GObj_Create(0, 1, 0x80), mnLanguage_8024BFE0, 0);
     gobjproc->flags_3 = HSD_GObj_804D783C;
 }

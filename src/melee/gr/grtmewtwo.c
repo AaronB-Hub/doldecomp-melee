@@ -90,7 +90,7 @@ static StageCallbacks grTMewtwo_803E8F70[4] = {
 };
 
 StageData grTMewtwo_803E8FCC = {
-    (1 << 0) | (1 << 2) | (1 << 4) | (1 << 5),
+    TMEWTWO,
     grTMewtwo_803E8F70,
     "/GrTMt.dat",
     grTMewtwo_802221DC,
@@ -124,7 +124,7 @@ void grTmewtwo_UnkStage0_OnLoad(void) {}
 
 void grTmewtwo_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTMewtwo_8022227C(void)
@@ -134,30 +134,17 @@ bool grTMewtwo_8022227C(void)
 
 Ground_GObj* grTMewtwo_80222284(int index)
 {
-    /// @todo Can't move below @c callbacks.
     HSD_GObj* gobj;
-
     StageCallbacks* callbacks = &grTMewtwo_803E8F70[index];
-    gobj = Ground_801C14D0(index);
-    if (gobj != NULL) {
-        Ground* gp = GET_GROUND(gobj);
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
 
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+    gobj = Ground_GetStageGObj(index);
+
+    if (gobj != NULL) {
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtmewtwo.c", 201,
-                 index);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 201, index);
     }
+
     return gobj;
 }
 

@@ -2,11 +2,11 @@
 
 #include "gm/gm_unsplit.h"
 #include "it/inlines.h"
-#include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
 #include "it/itCommonItems.h"
 #include "it/item.h"
+#include "it/itgroundcoll.h"
 
 #include <baselib/gobj.h>
 #include <baselib/jobj.h>
@@ -74,7 +74,7 @@ void it_80283BD4(Item_GObj* gobj)
     ip->xDD4_itemVar.heart.xDD4_heal = vars->x4.flags;
 }
 
-void it_3F14_Logic8_Spawned(Item_GObj* gobj)
+void itHeart_Logic8_Spawned(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     HeartContainerAttr* vars = ip->xC4_article_data->x4_specialAttributes;
@@ -88,14 +88,11 @@ void it_3F14_Logic8_Spawned(Item_GObj* gobj)
     it_80283DD4(gobj);
 }
 
-void it_3F14_Logic8_Destroyed(Item_GObj* gobj)
+void itHeart_Logic8_Destroyed(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
-
-    if ((s8) ((((*(s8*) &ip->xDD4_itemVar.heart.xDD8.flags) & 0xC0) << 24) >>
-              31))
-    {
-        ((s8*) &gm_80473A18 + ip->xDD4_itemVar.heart.xDDC)[0x90] = 0;
+    if (ip->xDD4_itemVar.heart.xDD8.b0) {
+        gm_80473A18.x90[ip->xDD4_itemVar.heart.xDDC] = 0;
     }
 }
 
@@ -155,7 +152,7 @@ bool itHeart_UnkMotion3_Coll(Item_GObj* gobj)
     return false;
 }
 
-void it_3F14_Logic8_PickedUp(Item_GObj* gobj)
+void itHeart_Logic8_PickedUp(Item_GObj* gobj)
 {
     HSD_JObj* child = HSD_JObjGetChild(GET_JOBJ(gobj));
 
@@ -171,7 +168,7 @@ bool itHeart_UnkMotion2_Anim(Item_GObj* gobj)
 
 void itHeart_UnkMotion2_Phys(Item_GObj* gobj) {}
 
-void it_3F14_Logic8_Dropped(Item_GObj* gobj)
+void itHeart_Logic8_Dropped(Item_GObj* gobj)
 {
     HSD_JObj* child = HSD_JObjGetChild(GET_JOBJ(gobj));
 
@@ -181,7 +178,7 @@ void it_3F14_Logic8_Dropped(Item_GObj* gobj)
     Item_80268E5C(gobj, 3, 6);
 }
 
-void it_3F14_Logic8_EnteredAir(Item_GObj* gobj)
+void itHeart_Logic8_EnteredAir(Item_GObj* gobj)
 {
     Item_80268E5C(gobj, 4, ITEM_ANIM_UPDATE);
 }
@@ -199,7 +196,7 @@ bool itHeart_UnkMotion4_Coll(Item_GObj* gobj)
     return false;
 }
 
-void it_3F14_Logic8_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
+void itHeart_Logic8_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
 {
     it_8026B894(gobj, ref_gobj);
 }

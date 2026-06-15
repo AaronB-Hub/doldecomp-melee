@@ -1,5 +1,6 @@
 #include "it/items/itfoods.h"
 
+#include "it/inlines.h"
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
@@ -22,7 +23,7 @@
 /* 28FE14 */ void itFoods_UnkMotion3_Phys(Item_GObj* arg0);
 /* 28FE44 */ bool itFoods_UnkMotion3_Coll(Item_GObj* arg0);
 
-ItemStateTable it_803F83F0[] = {
+ItemStateTable it_803F5DB0[] = {
     { -1, itFoods_UnkMotion0_Anim, itFoods_UnkMotion0_Phys,
       itFoods_UnkMotion0_Coll },
     { -1, itFoods_UnkMotion1_Anim, itFoods_UnkMotion1_Phys,
@@ -73,16 +74,24 @@ HSD_GObj* it_8028FAF4(Item_GObj* arg0, Vec3* arg1)
     return gobj;
 }
 
-void it_3F14_Logic18_Spawned(Item_GObj* arg0)
+inline u32 getRandMax(Article* article)
 {
-    Item* ip = GET_ITEM(arg0);
+    itFoodsAttributes* attr = article->x4_specialAttributes;
+    return attr->x0;
+}
+
+void itFoods_Logic18_Spawned(HSD_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
     itFoodsAttributes* attr = ip->xC4_article_data->x4_specialAttributes;
-    s32 rand = HSD_Randi(*(s32*) ip->xC4_article_data->x4_specialAttributes);
-    PAD_STACK(12);
+    s32 rand = HSD_Randi(getRandMax(ip->xC4_article_data));
+    s32 temp;
+
     ip->xDD4_itemVar.foods.heal_amount = attr[rand].x8;
     ip->xDD4_itemVar.foods.x0 = rand;
-    it_80273318(arg0, attr[rand].x4, rand);
-    it_8028FC5C((HSD_GObj*) arg0);
+    temp = rand;
+    it_80273318(gobj, attr[temp].x4);
+    it_8028FC5C(gobj);
 }
 
 void it_8028FC5C(HSD_GObj* arg0)
@@ -132,11 +141,11 @@ bool itFoods_UnkMotion1_Coll(Item_GObj* gobj)
     return 0;
 }
 
-void it_3F14_Logic18_PickedUp(Item_GObj* gobj)
+void itFoods_Logic18_PickedUp(Item_GObj* gobj)
 {
     HSD_JObj* jobj = HSD_GObjGetHSDObj(gobj);
     HSD_JObj* child = HSD_JObjGetChild(jobj);
-    HSD_JObjClearFlagsAll(child, 0x10U);
+    HSD_JObjClearFlagsAll(child, JOBJ_HIDDEN);
     Item_80268E5C(gobj, 2, ITEM_ANIM_UPDATE);
 }
 
@@ -147,7 +156,7 @@ bool itFoods_UnkMotion2_Anim(Item_GObj* gobj)
 
 void itFoods_UnkMotion2_Phys(Item_GObj* gobj) {}
 
-void it_3F14_Logic18_Dropped(Item_GObj* gobj)
+void itFoods_Logic18_Dropped(Item_GObj* gobj)
 {
     Item_80268E5C((HSD_GObj*) gobj, 3, 6);
 }
@@ -170,7 +179,7 @@ bool itFoods_UnkMotion3_Coll(Item_GObj* gobj)
     return 0;
 }
 
-void it_3F14_Logic18_EvtUnk(Item_GObj* gobj, Item_GObj* arg1)
+void itFoods_Logic18_EvtUnk(Item_GObj* gobj, Item_GObj* arg1)
 {
     it_8026B894(gobj, (HSD_GObj*) arg1);
 }

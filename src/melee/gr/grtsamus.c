@@ -18,10 +18,10 @@
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-/* 223580 */ static void grTSamus_80223580(bool);
-/* 223584 */ static void grTSamus_80223584(void);
-/* 2235F4 */ static void grTsamus_UnkStage0_OnLoad(void);
-/* 2235F8 */ static void grTsamus_UnkStage0_OnStart(void);
+/* 223580 */ static void grTSamus_OnDemoInit(int);
+/* 223584 */ static void grTSamus_OnInit(void);
+/* 2235F4 */ static void grTSamus_OnLoad(void);
+/* 2235F8 */ static void grTSamus_OnStart(void);
 /* 22361C */ static bool grTSamus_8022361C(void);
 /* 223624 */ static HSD_GObj* grTSamus_80223624(s32);
 /* 22370C */ static void grTSamus_8022370C(Ground_GObj*);
@@ -36,8 +36,8 @@
 /* 223828 */ static bool grTSamus_80223828(Ground_GObj*);
 /* 223830 */ static void grTSamus_80223830(Ground_GObj*);
 /* 223850 */ static void grTSamus_80223850(Ground_GObj*);
-/* 223854 */ static DynamicsDesc* grTSamus_80223854(enum_t);
-/* 22385C */ static bool grTSamus_8022385C(Vec3*, int, HSD_JObj*);
+/* 223854 */ static DynamicsDesc* grTSamus_OnTouchLine(enum_t);
+/* 22385C */ static bool grTSamus_OnCheckShadowRender(Vec3*, int, HSD_JObj*);
 
 static StageCallbacks grTSs_803E93F8[] = {
     {
@@ -65,22 +65,22 @@ static StageCallbacks grTSs_803E93F8[] = {
 };
 
 StageData grTSs_803E9454 = {
-    59,
+    TSAMUS,
     grTSs_803E93F8,
     "/GrTSs.dat",
-    grTSamus_80223584,
-    grTSamus_80223580,
-    grTsamus_UnkStage0_OnLoad,
-    grTsamus_UnkStage0_OnStart,
+    grTSamus_OnInit,
+    grTSamus_OnDemoInit,
+    grTSamus_OnLoad,
+    grTSamus_OnStart,
     grTSamus_8022361C,
-    grTSamus_80223854,
-    grTSamus_8022385C,
+    grTSamus_OnTouchLine,
+    grTSamus_OnCheckShadowRender,
     1,
 };
 
-void grTSamus_80223580(bool unk0) {}
+void grTSamus_OnDemoInit(int unused) {}
 
-void grTSamus_80223584(void)
+void grTSamus_OnInit(void)
 {
     stage_info.unk8C.b4 = false;
     stage_info.unk8C.b5 = true;
@@ -94,11 +94,11 @@ void grTSamus_80223584(void)
     Ground_801C42AC();
 }
 
-void grTsamus_UnkStage0_OnLoad(void) {}
+void grTSamus_OnLoad(void) {}
 
-void grTsamus_UnkStage0_OnStart(void)
+void grTSamus_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTSamus_8022361C(void)
@@ -109,29 +109,16 @@ bool grTSamus_8022361C(void)
 HSD_GObj* grTSamus_80223624(s32 arg0)
 {
     HSD_GObj* gobj;
-    StageCallbacks* cb;
-    Ground* gp;
+    StageCallbacks* callbacks = &grTSs_803E93F8[arg0];
 
-    cb = &grTSs_803E93F8[arg0];
-    gobj = Ground_801C14D0(arg0);
+    gobj = Ground_GetStageGObj(arg0);
+
     if (gobj != NULL) {
-        gp = gobj->user_data;
-        gp->x8_callback = 0;
-        gp->xC_callback = 0;
-        GObj_SetupGXLink(gobj, &grDisplay_801C5DB0, 3, 0);
-        if (cb->callback3 != 0U) {
-            gp->x1C_callback = cb->callback3;
-        }
-        if (cb->callback0 != NULL) {
-            cb->callback0(gobj);
-        }
-        if (cb->callback2 != 0U) {
-            HSD_GObjProc_8038FD54(gobj, cb->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtsamus.c", 0xC3,
-                 arg0);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 0xC3, arg0);
     }
+
     return gobj;
 }
 
@@ -185,12 +172,12 @@ void grTSamus_80223830(Ground_GObj* gobj)
 
 void grTSamus_80223850(Ground_GObj* gobj) {}
 
-DynamicsDesc* grTSamus_80223854(enum_t arg0)
+DynamicsDesc* grTSamus_OnTouchLine(enum_t arg0)
 {
     return NULL;
 }
 
-bool grTSamus_8022385C(Vec3* arg0, int arg1, HSD_JObj* arg2)
+bool grTSamus_OnCheckShadowRender(Vec3* arg0, int arg1, HSD_JObj* arg2)
 {
     return true;
 }

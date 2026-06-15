@@ -19,6 +19,7 @@
 #include <trigf.h>
 #include <dolphin/mtx.h>
 #include <dolphin/os.h>
+#include <MSL/math_ppc.h>
 
 void JObjInfoInit(void);
 HSD_JObjInfo hsdJObj = { JObjInfoInit };
@@ -567,11 +568,6 @@ void HSD_JObjAnimAll(HSD_JObj* jobj)
     }
 }
 
-inline MtxPtr HSD_CObjGetViewMtx(HSD_CObj* cobj)
-{
-    return cobj->view_mtx;
-}
-
 void HSD_JObjDispAll(HSD_JObj* jobj, Mtx vmtx, u32 flags, u32 rendermode)
 {
     MtxPtr new_var = vmtx;
@@ -589,7 +585,7 @@ void HSD_JObjDispAll(HSD_JObj* jobj, Mtx vmtx, u32 flags, u32 rendermode)
                 PSMTXConcat(jobj->mtx, mtx, mtx);
                 cobj = HSD_CObjGetCurrent();
                 HSD_ASSERT(0x355, cobj);
-                PSMTXConcat(HSD_CObjGetViewMtx(cobj), mtx, mtx);
+                PSMTXConcat(HSD_CObjGetViewingMtxPtrDirect(cobj), mtx, mtx);
                 HSD_JObjDispAll(jobj->child, mtx, flags, rendermode);
             }
         } else {
@@ -840,14 +836,10 @@ void HSD_JObjAddChild(HSD_JObj* jobj, HSD_JObj* child)
     if (jobj == NULL || child == NULL) {
         return;
     }
-    if (child->parent != NULL) {
-        OSReport("child should be a orphan.\n");
-        __assert(__FILE__, 1350, "child->parent == NULL");
-    }
-    if (child->next != NULL) {
-        OSReport("child should not have siblings");
-        __assert(__FILE__, 1351, "child->next == NULL");
-    }
+    HSD_ASSERTREPORT(1350, child->parent == NULL,
+                     "child should be a orphan.\n");
+    HSD_ASSERTREPORT(1351, child->next == NULL,
+                     "child should not have siblings");
     if (jobj->child == NULL) {
         jobj->child = child;
     } else {
@@ -1096,8 +1088,8 @@ inline HSD_JObj* jobj_get_effector(HSD_JObj* jobj)
     return NULL;
 }
 
-// Note: this must not be declared inline, so that
-// the "eff" assertion string data is placed before "robj".
+/// Note: this must not be declared inline, so that
+/// the "eff" assertion string data is placed before "robj".
 HSD_JObj* jobj_get_effector_checked(HSD_JObj* eff)
 {
     eff = jobj_get_effector(eff);

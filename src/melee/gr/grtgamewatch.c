@@ -9,6 +9,7 @@
 #include "lb/lb_00F9.h"
 #include "lb/types.h"
 
+#include <dolphin/os/OSError.h>
 #include <baselib/gobj.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
@@ -24,7 +25,7 @@ StageCallbacks grTGw_803E96F8[] = {
 };
 
 StageData grTGw_803E9754 = {
-    63,
+    TGAMEWATCH,
     grTGw_803E96F8,
     "/GrTGw.dat",
     grTGameWatch_80224114,
@@ -63,7 +64,7 @@ void grTgamewatch_UnkStage0_OnLoad(void)
 
 void grTgamewatch_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTGameWatch_802241AC(void)
@@ -74,29 +75,14 @@ bool grTGameWatch_802241AC(void)
 HSD_GObj* grTGameWatch_802241B4(int id)
 {
     HSD_GObj* gobj;
-    StageCallbacks* cb = &grTGw_803E96F8[id];
-    gobj = Ground_801C14D0(id);
+    StageCallbacks* callbacks = &grTGw_803E96F8[id];
+
+    gobj = Ground_GetStageGObj(id);
 
     if (gobj != NULL) {
-        Ground* gp = (Ground*) HSD_GObjGetUserData(gobj);
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-
-        if (cb->callback3 != NULL) {
-            gp->x1C_callback = cb->callback3;
-        }
-
-        if (cb->callback0 != NULL) {
-            cb->callback0(gobj);
-        }
-
-        if (cb->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, cb->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtgamewatch.c", 195,
-                 id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 195, id);
     }
 
     return gobj;

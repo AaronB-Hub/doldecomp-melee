@@ -10,6 +10,7 @@
 #include "lb/types.h"
 #include "mp/mplib.h"
 
+#include <dolphin/os/OSError.h>
 #include <baselib/gobj.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
@@ -26,7 +27,7 @@ StageCallbacks grTPr_803E9338[] = {
 };
 
 StageData grTPr_803E9394 = {
-    58,
+    TPURIN,
     grTPr_803E9338,
     "/GrTPr.dat",
     grTPurin_80223164,
@@ -72,7 +73,7 @@ void grTpurin_UnkStage0_OnLoad(void)
 
 void grTpurin_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTPurin_80223204(void)
@@ -83,28 +84,14 @@ bool grTPurin_80223204(void)
 HSD_GObj* grTPurin_8022320C(int id)
 {
     HSD_GObj* gobj;
-    StageCallbacks* cb = &grTPr_803E9338[id];
-    gobj = Ground_801C14D0(id);
+    StageCallbacks* callbacks = &grTPr_803E9338[id];
+
+    gobj = Ground_GetStageGObj(id);
 
     if (gobj != NULL) {
-        Ground* gp = (Ground*) HSD_GObjGetUserData(gobj);
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-
-        if (cb->callback3 != NULL) {
-            gp->x1C_callback = cb->callback3;
-        }
-
-        if (cb->callback0 != NULL) {
-            cb->callback0(gobj);
-        }
-
-        if (cb->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, cb->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtpurin.c", 203, id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 203, id);
     }
 
     return gobj;

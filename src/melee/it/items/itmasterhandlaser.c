@@ -20,6 +20,7 @@
 #include "it/inlines.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/ithitbox.h"
 #include "it/item.h"
 #include "it/types.h"
 #include "lb/lb_00B0.h"
@@ -27,6 +28,15 @@
 
 #include <math.h>
 #include <baselib/gobj.h>
+
+ItemStateTable it_803F9378[] = {
+    {
+        0,
+        itMasterhandlaser_UnkMotion0_Anim,
+        itMasterhandlaser_UnkMotion0_Phys,
+        itMasterhandlaser_UnkMotion0_Coll,
+    },
+};
 
 static inline float my_sqrtf(float x)
 {
@@ -43,6 +53,22 @@ static inline float my_sqrtf(float x)
         guess = _half * guess * (_three - guess * guess * x);
         y = (float) (x * guess);
         return y;
+    }
+    return x;
+}
+
+static inline float sqrtf_store(float x, volatile float* y)
+{
+    static const double _half = .5;
+    static const double _three = 3.0;
+
+    if (x > 0.0f) {
+        double guess = __frsqrte((double) x);
+        guess = _half * guess * (_three - guess * guess * x);
+        guess = _half * guess * (_three - guess * guess * x);
+        guess = _half * guess * (_three - guess * guess * x);
+        *y = (float) (x * guess);
+        return *y;
     }
     return x;
 }
@@ -79,7 +105,7 @@ Item_GObj* it_802F0340(Item_GObj* gobj, Vec3* prev_pos, Vec3* pos,
     return spawned;
 }
 
-void it_2725_Logic84_EvtUnk(Item_GObj* gobj, Item_GObj* arg1)
+void itMasterHandLaser_Logic84_EvtUnk(Item_GObj* gobj, Item_GObj* arg1)
 {
     it_8026B894(gobj, arg1);
 }
@@ -140,52 +166,61 @@ void it_802F05A8(Item_GObj* gobj)
 
 void it_802F063C(Item_GObj* gobj, Item_GObj* arg1)
 {
-    s32 temp_r0;
-    Vec3 delta;
-    Vec3 pos_0;
-    Vec3 pos_1;
-    Vec3 pos_2;
     Fighter* fp;
     Item* ip;
-    f32 var_f1;
-    f32 var_f0;
-    f32 var_f2;
     itMasterHandLaserAttributes* attrs;
-    Vec3 translate;
+
+    f32 x0, y0, x1, y1;
+    f32 z_diff;
+    Vec3 pos_0;     // 58, 5C, 60
+    Vec3 pos_1;     // 4C, 50, 54
+    Vec3 pos_2;     // 40, 44, 48
+    Vec3 translate; // 34, 38, 3C
+    u8 _padA[4];
+    volatile f32 sqrt_0;
+    volatile f32 sqrt_1;
+    volatile f32 sqrt_2;
+    PAD_STACK(4);
 
     ip = GET_ITEM(gobj);
     fp = GET_FIGHTER(ip->owner);
     attrs = ip->xC4_article_data->x4_specialAttributes;
+
     lb_8000B804(HSD_JObjGetChild(gobj->hsd_obj), ip->xC8_joint->child);
     lb_8000B1CC(fp->parts[ip->xDD4_itemVar.masterhandlaser.x4].joint, NULL,
                 &pos_0);
-    translate.x = 0;
+    y0 = pos_0.y;
+    x0 = pos_0.x;
+
+    translate.x = 0.0f;
     translate.y = -attrs->x0;
-    translate.z = 0;
+    translate.z = 0.0f;
+
     HSD_JObjSetTranslate(ip->xBBC_dynamicBoneTable->bones[2], &translate);
     lb_8000B1CC(ip->xBBC_dynamicBoneTable->bones[2], NULL, &pos_2);
-    if (mpCheckMultiple(pos_0.x, pos_0.y, pos_2.x, pos_2.y, &pos_1, NULL, NULL,
-                        NULL, 1, -1, -1) != 0)
-    {
-        translate.x = 0;
-        translate.z = 0;
-        delta.x = (pos_0.x - pos_2.x) * (pos_0.x - pos_2.x);
-        delta.y = (pos_0.y - pos_2.y) * (pos_0.y - pos_2.y);
-        delta.z = (pos_0.z - pos_2.z) * (pos_0.z - pos_2.z);
-        var_f0 = sqrtf(delta.x + delta.y + delta.z);
-        delta.x = (pos_0.x - pos_1.x) * (pos_0.x - pos_1.x);
-        delta.y = (pos_0.y - pos_1.y) * (pos_0.y - pos_1.y);
-        var_f1 = sqrtf(delta.x + delta.y);
-        delta.x = (pos_0.x - pos_2.x) * (pos_0.x - pos_2.x);
-        delta.y = (pos_0.y - pos_2.y) * (pos_0.y - pos_2.y);
-        var_f2 = sqrtf(delta.x + delta.y);
+    x1 = pos_2.x;
+    y1 = pos_2.y;
 
-        translate.y = var_f0 * -(var_f1 / var_f2);
+    if (mpCheckMultiple(x0, y0, x1, y1, &pos_1, NULL, NULL, NULL, 1, -1, -1) !=
+        0)
+    {
+        translate.x = 0.0f;
+        translate.z = 0.0f;
+        translate.y =
+            sqrtf_store(((pos_0.x - pos_2.x) * (pos_0.x - pos_2.x)) +
+                            ((pos_0.y - pos_2.y) * (pos_0.y - pos_2.y)) +
+                            ((z_diff = pos_0.z - pos_2.z) *
+                             (pos_0.z - pos_2.z)),
+                        &sqrt_0) *
+            -(sqrtf_store(((pos_0.x - pos_1.x) * (pos_0.x - pos_1.x)) +
+                              ((pos_0.y - pos_1.y) * (pos_0.y - pos_1.y)),
+                          &sqrt_1) /
+              sqrtf_store(((pos_0.x - pos_2.x) * (pos_0.x - pos_2.x)) +
+                              ((pos_0.y - pos_2.y) * (pos_0.y - pos_2.y)),
+                          &sqrt_2));
         HSD_JObjSetTranslate(ip->xBBC_dynamicBoneTable->bones[2], &translate);
 
-        temp_r0 = ip->xDD4_itemVar.masterhandlaser.x8 - 1;
-        ip->xDD4_itemVar.masterhandlaser.x8 = temp_r0;
-        if (temp_r0 < 0) {
+        if (--ip->xDD4_itemVar.masterhandlaser.x8 < 0) {
             lb_8000B1CC(ip->xBBC_dynamicBoneTable->bones[2], NULL, &pos_2);
             efSync_Spawn(0x405, gobj, &pos_2);
             ip->xDD4_itemVar.masterhandlaser.x8 = attrs->x4;

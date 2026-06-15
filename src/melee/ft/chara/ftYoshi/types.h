@@ -7,9 +7,7 @@
 #include <melee/it/forward.h>
 
 struct ftYoshi_FighterVars {
-    /* 0x222C */ u32 x222C;
-    /* 0x2230 */ u32 x2230;
-    /* 0x2234 */ u32 x2234;
+    /* 0x222C */ Vec3 x222C;
     /* 0x2238 */ Item_GObj* x2238;
 };
 
@@ -33,15 +31,53 @@ typedef struct _ftYoshiAttributes { // x2D4 (fp->dat_attrs)
     float x44;
     int x48;
     int x4C;
-    u8 pad_x50[0x6C - 0x50];
+    int x50;
+    float x54;
+    float x58;
+    float x5C;
+    float x60;
+    float x64;
+    float x68;
     float specials_start_gravity;
     float specials_start_terminal_vel;
-    u8 pad_x74[0x114 - 0x74];
+    float x74;
+    float x78;
+    float x7C;
+    float x80;
+    float x84;
+    float x88;
+    float x8C;
+    float x90;
+    float x94;
+    float x98;
+    float x9C;
+    float xA0;
+    int xA4;
+    float xA8;
+    float xAC;
+    float xB0;
+    float xB4;
+    float xB8;
+    float xBC;
+    float xC0;
+    float xC4;
+    float xC8;
+    float xCC;
+    float xD0;
+    float xD4;
+    float xD8;
+    int xDC;
+    float xE0;
+    float xE4;
+    float xE8;
+    u8 pad_xEC[0x114 - 0xEC];
     float x114;
     float x118;
     float x11C;
     float x120;
-    u8 pad_x124[0x138 - 0x124];
+    float x124;
+    float x128;
+    u8 x12C[0x138 - 0x12C];
 } ftYoshiAttributes;
 STATIC_ASSERT(sizeof(struct _ftYoshiAttributes) == 0x138);
 
@@ -59,7 +95,11 @@ struct ftYs_DatAttrs {
     /*  +F8 */ float specialhi_base_angle;
     /*  +FC */ float xFC;
     /* +100 */ float x100;
-    /* +104 */ char x104[0x118 - 0x104];
+    /* +104 */ float x104;
+    /* +108 */ float x108;
+    /* +10C */ float x10C;
+    /* +110 */ float x110;
+    /* +114 */ char pad_114[0x118 - 0x114];
     /* +118 */ Vec2 speciallw_star_offset;
 };
 STATIC_ASSERT(sizeof(struct ftYs_DatAttrs) == 0x120);
@@ -85,7 +125,17 @@ union ftYoshi_MotionVars {
     } specialn;
     struct ftYoshi_SpecialSVars {
         /* fp+2340 */ int x0;
-        /* fp+2344 */ u8 x4[0x30 - 0x4];
+        /* fp+2344 */ int x4;
+        /* fp+2348 */ int x8;
+        /* fp+234C */ int xC;
+        /* fp+2350 */ f32 x10;
+        /* fp+2354 */ f32 x14;
+        /* fp+2358 */ f32 x18;
+        /* fp+235C */ f32 x1C;
+        /* fp+2360 */ f32 x20;
+        /* fp+2364 */ f32 x24;
+        /* fp+2368 */ int x28;
+        /* fp+236C */ int x2C;
         /* fp+2370 */ int x30;
     } specials;
     struct ftYoshi_SpecialHiVars {

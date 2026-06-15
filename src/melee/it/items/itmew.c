@@ -5,6 +5,8 @@
 #include "it/inlines.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/it_279C.h"
+#include "it/itmaplib.h"
 #include "it/item.h"
 
 #include <baselib/gobj.h>
@@ -30,7 +32,7 @@ ItemStateTable it_803F80C8[] = {
     { 2, itMew_UnkMotion2_Anim, itMew_UnkMotion2_Phys, itMew_UnkMotion2_Coll },
 };
 
-void it_2725_Logic22_Spawned(Item_GObj* gobj)
+void itMew_Logic22_Spawned(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     MewVars* attr = ip->xC4_article_data->x4_specialAttributes;

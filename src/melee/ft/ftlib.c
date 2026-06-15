@@ -6,7 +6,7 @@
 #include "ft/ft_081B.h"
 #include "ft/ft_0852.h"
 #include "ft/ft_0877.h"
-#include "ft/ft_0D31.h"
+#include "ft/ft_0D4D.h"
 #include "ft/ftanim.h"
 #include "ft/ftchangeparam.h"
 #include "ft/ftcommon.h"
@@ -17,7 +17,7 @@
 #include "ftCommon/forward.h"
 
 #include "ftGameWatch/ftGw_Init.h"
-#include "ftKirby/ftKb_Init.h"
+#include "ftKirby/ftkirby.h"
 #include "gm/gm_unsplit.h"
 
 #include "it/forward.h"
@@ -114,7 +114,7 @@ HSD_GObj* ftLib_80086198(HSD_GObj* gobj)
     return result;
 }
 
-// get closest opposing fp?
+/// get closest opposing fp?
 HSD_GObj* ftLib_8008627C(Vec3* pos, HSD_GObj* gobj)
 {
     Vec3 cur_v;
@@ -164,8 +164,8 @@ HSD_GObj* ftLib_8008627C(Vec3* pos, HSD_GObj* gobj)
     return result;
 }
 
-// get closest opposing fp, on given side (left/right)
-HSD_GObj* ftLib_80086368(Vec3* v, HSD_GObj* gobj, float facing_dir)
+/// get closest opposing fp, on given side (left/right)
+Fighter_GObj* ftLib_80086368(Vec3* v, Fighter_GObj* gobj, float facing_dir)
 {
     Vec3 sp24;
     float dx, dy, diff;
@@ -289,13 +289,13 @@ void ftLib_800865D8(HSD_GObj* gobj, float* x, float* y)
     *y = fp->input.lstick.y;
 }
 
-void* ftLib_800865F0(HSD_GObj* gobj)
+HSD_JObj* ftLib_800865F0(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     return fp->parts[ftParts_GetBoneIndex(fp, 4)].joint;
 }
 
-void* ftLib_80086630(HSD_GObj* gobj, Fighter_Part part)
+HSD_JObj* ftLib_80086630(HSD_GObj* gobj, Fighter_Part part)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     return fp->parts[part].joint;
@@ -956,21 +956,21 @@ void ftLib_800874CC(HSD_GObj* gobj, void* arg1, s32 arg2)
 }
 
 void ftLib_80087508(s8 ft_kind, u8 arg1)
-// void ftLib_80087508(FighterKind ft_kind, u8 arg1)
+/// void ftLib_80087508(FighterKind ft_kind, u8 arg1)
 {
     ftData_8008572C(ft_kind);
-    efAsync_8006737C(ftData_UnkBytePerCharacter[ft_kind]);
+    efAsync_LoadSync(ftData_UnkBytePerCharacter[ft_kind]);
     ftData_80085820(ft_kind, arg1);
     ftData_80085A14(ft_kind);
     ftData_800857E0(ft_kind);
 }
 
 void ftLib_80087574(s8 ft_kind)
-// void ftLib_80087574(FighterKind ft_kind)
+/// void ftLib_80087574(FighterKind ft_kind)
 {
     u8 i;
     ftData_8008572C(ft_kind);
-    efAsync_8006737C(ftData_UnkBytePerCharacter[ft_kind]);
+    efAsync_LoadSync(ftData_UnkBytePerCharacter[ft_kind]);
 
     for (i = 0; i < CostumeListsForeachCharacter[ft_kind].numCostumes; i++) {
         ftData_80085820(ft_kind, i);
@@ -1044,9 +1044,7 @@ float ftLib_8008777C(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
 
-    if (fp->ground_or_air != GA_Ground) {
-        __assert("ftlib.c", 1517, "fp->ground_or_air == GA_Ground");
-    }
+    HSD_ASSERT(1517, fp->ground_or_air == GA_Ground);
 
     {
         CollData* cd = Fighter_GetCollData(fp);

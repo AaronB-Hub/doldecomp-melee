@@ -9,9 +9,20 @@
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/it_279C.h"
+#include "it/itmaplib.h"
 #include "it/item.h"
 
-void it_2725_Logic6_Spawned(Item_GObj* gobj)
+ItemStateTable it_803F7C10[] = {
+    { 0, itFire_UnkMotion0_Anim, itFire_UnkMotion0_Phys,
+      itFire_UnkMotion0_Coll },
+    { 1, itFire_UnkMotion1_Anim, itFire_UnkMotion1_Phys,
+      itFire_UnkMotion1_Coll },
+    { 2, itFire_UnkMotion2_Anim, itFire_UnkMotion2_Phys,
+      itFire_UnkMotion2_Coll }
+};
+
+void itFire_Logic6_Spawned(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     itFireAttributes* attrs = ip->xC4_article_data->x4_specialAttributes;
@@ -23,7 +34,7 @@ void it_2725_Logic6_Spawned(Item_GObj* gobj)
 
 void it_802CC740(Item_GObj* gobj) {}
 
-void it_2725_Logic6_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
+void itFire_Logic6_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
 {
     it_8026B894(gobj, ref_gobj);
 }

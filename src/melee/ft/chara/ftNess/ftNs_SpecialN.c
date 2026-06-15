@@ -16,13 +16,13 @@
 
 #include "it/forward.h"
 
-#include "it/items/itnesspkflush.h"
+#include "it/items/itnesspkflash.h"
 #include "lb/lb_00B0.h"
 
 #include <common_structs.h>
 #include <dolphin/mtx.h>
 
-// SpecialN/SpecialAirN (PK Flash)
+/// SpecialN/SpecialAirN (PK Flash)
 #define FTNESS_SPECIALN_COLL_FLAG                                             \
     Ft_MF_SkipMatAnim | Ft_MF_SkipColAnim | Ft_MF_UpdateCmd |                 \
         Ft_MF_SkipItemVis | Ft_MF_Unk19 | Ft_MF_SkipModelPartVis |            \
@@ -301,7 +301,7 @@ void ftNs_SpecialNEnd_Anim(HSD_GObj* gobj)
     u8 _[8];
 
     SetPKFlashAttr(gobj);
-    ftParts_8007592C(fp, 0, 0);
+    ftPartSetRotX(fp, 0, 0);
 
     if (!ftAnim_IsFramesRemaining(gobj)) {
         ft_8008A2BC(gobj);
@@ -402,7 +402,7 @@ void ftNs_SpecialAirNEnd_Anim(HSD_GObj* gobj)
     u8 _[8];
 
     SetPKFlashAttr(gobj);
-    ftParts_8007592C(fp, 0, 0);
+    ftPartSetRotX(fp, 0, 0);
 
     if (ftAnim_IsFramesRemaining(gobj)) {
         return;
@@ -568,7 +568,7 @@ void ftNs_SpecialAirNStart_Phys(HSD_GObj* gobj)
         fp->mv.ns.specialn.falling_acceleration_delay--;
     } else {
         ftCommon_Fall(fp, sa->x14_PKFLASH_FALL_ACCEL,
-                          fp->co_attrs.terminal_vel);
+                      fp->co_attrs.terminal_vel);
     }
 
     {
@@ -589,7 +589,7 @@ void ftNs_SpecialAirNRelease_Phys(HSD_GObj* gobj)
         fp->mv.ns.specialn.falling_acceleration_delay--;
     } else {
         ftCommon_Fall(fp, sa->x14_PKFLASH_FALL_ACCEL,
-                          fp->co_attrs.terminal_vel);
+                      fp->co_attrs.terminal_vel);
     }
 
     {
@@ -610,7 +610,7 @@ void ftNs_SpecialAirNEnd_Phys(HSD_GObj* gobj)
         fp->mv.ns.specialn.falling_acceleration_delay--;
     } else {
         ftCommon_Fall(fp, sa->x14_PKFLASH_FALL_ACCEL,
-                          fp->co_attrs.terminal_vel);
+                      fp->co_attrs.terminal_vel);
     }
 
     {

@@ -4,6 +4,7 @@
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
+#include "gr/inlines.h"
 #include "gr/types.h"
 
 #include "lb/forward.h"
@@ -62,7 +63,7 @@ static StageCallbacks grTMs_803E8EB0[4] = {
 };
 
 StageData grTMs_803E8F0C = {
-    0x00000034,
+    TMARS,
     grTMs_803E8EB0,
     "/GrTMs.dat",
     grTMars_80221EF8,
@@ -97,7 +98,7 @@ static void grTmars_UnkStage0_OnLoad(void)
 
 static void grTmars_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 static bool grTMars_80221F90(void)
@@ -108,28 +109,14 @@ static bool grTMars_80221F90(void)
 static HSD_GObj* grTMars_80221F98(int id)
 {
     HSD_GObj* gobj;
-    Ground* gp;
-    StageCallbacks* callbacks;
+    StageCallbacks* callbacks = &grTMs_803E8EB0[id];
 
-    callbacks = &grTMs_803E8EB0[id];
-    gobj = Ground_801C14D0(id);
+    gobj = Ground_GetStageGObj(id);
 
     if (gobj != NULL) {
-        gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtmars.c", 0xC3, id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 0xC3, id);
     }
 
     return gobj;

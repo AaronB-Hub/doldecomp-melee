@@ -44,7 +44,7 @@
 #include "mp/mplib.h"
 #include "pl/player.h"
 #include "pl/plbonuslib.h"
-#include "vi/vi1202.h"
+#include "sfx/crowdsfx.h"
 
 #include <common_structs.h>
 #include <math.h>
@@ -985,7 +985,7 @@ void ftCommon_8007E5AC(Fighter* fp)
     Vec3* ground_normal = &fp->coll_data.floor.normal;
     float tmp = -atan2f(ground_normal->x, ground_normal->y);
     HSD_ASSERT(1146, fp->ground_or_air == GA_Ground);
-    ftParts_80075CB4(fp, 0, tmp);
+    ftPartSetRotZ(fp, 0, tmp);
 }
 
 void ftCommon_SetAccessory(Fighter* fp, HSD_Joint* joint)
@@ -1380,7 +1380,7 @@ void ftCommon_8007EFC8(HSD_GObj* gobj, void (*arg1)(HSD_GObj*))
         it_8026B9A8(src->item_gobj, dst_gobj, dst->ft_data->x8->x10);
     }
     un_80322314();
-    ftMaterial_800BFD04(gobj);
+    ftCo_800BFD04(gobj);
     arg1(dst_gobj);
 }
 
@@ -1690,7 +1690,7 @@ bool ftCommon_80080144(Fighter* fp)
     return false;
 }
 
-// https://decomp.me/scratch/Jjkwx
+/// https://decomp.me/scratch/Jjkwx
 void ftCommon_80080174(Fighter* fp)
 {
     float phi_f2;

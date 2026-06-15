@@ -8,6 +8,7 @@
 #include "lb/lb_00F9.h"
 #include "lb/types.h"
 
+#include <dolphin/os/OSError.h>
 #include <baselib/gobj.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
@@ -23,7 +24,7 @@ StageCallbacks grTPk_803E9270[] = {
 };
 
 StageData grTPk_803E92CC = {
-    57,
+    TPIKACHU,
     grTPk_803E9270,
     "/GrTPk.dat",
     grTPikachu_80222E80,
@@ -62,7 +63,7 @@ void grTpikachu_UnkStage0_OnLoad(void)
 
 void grTpikachu_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTPikachu_80222F18(void)
@@ -73,28 +74,14 @@ bool grTPikachu_80222F18(void)
 HSD_GObj* grTPikachu_80222F20(int id)
 {
     HSD_GObj* gobj;
-    StageCallbacks* cb = &grTPk_803E9270[id];
-    gobj = Ground_801C14D0(id);
+    StageCallbacks* callbacks = &grTPk_803E9270[id];
+
+    gobj = Ground_GetStageGObj(id);
 
     if (gobj != NULL) {
-        Ground* gp = (Ground*) HSD_GObjGetUserData(gobj);
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-
-        if (cb->callback3 != NULL) {
-            gp->x1C_callback = cb->callback3;
-        }
-
-        if (cb->callback0 != NULL) {
-            cb->callback0(gobj);
-        }
-
-        if (cb->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, cb->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtpikachu.c", 195, id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 195, id);
     }
 
     return gobj;

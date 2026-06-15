@@ -10,7 +10,6 @@
 #include "ft/ft_0877.h"
 #include "ft/ft_0881.h"
 #include "ft/ft_0892.h"
-#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/types.h"
 #include "ftCommon/ftCo_Fall.h"
@@ -19,7 +18,6 @@
 
 #include "it/forward.h"
 
-#include "it/items/it_27CF.h"
 #include "it/items/itclimbersice.h"
 #include "lb/lb_00B0.h"
 

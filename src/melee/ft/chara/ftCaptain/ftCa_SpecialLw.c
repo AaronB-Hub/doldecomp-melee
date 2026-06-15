@@ -23,10 +23,10 @@
 #include <common_structs.h>
 #include <dolphin/mtx.h>
 
-// /* literal */ float const ftCa_SpecialHi_804D9220 = 0.0F;
-// /* literal */ float const ftCa_SpecialHi_804D9224 = 0.01745329238474369f;
-// /* literal */ float const ftCa_SpecialHi_804D9228 = 1;
-// /* literal */ float const ftCa_SpecialHi_804D922C = -1;
+/// /* literal */ float const ftCa_SpecialHi_804D9220 = 0.0F;
+/// /* literal */ float const ftCa_SpecialHi_804D9224 = 0.01745329238474369f;
+/// /* literal */ float const ftCa_SpecialHi_804D9228 = 1;
+/// /* literal */ float const ftCa_SpecialHi_804D922C = -1;
 
 static inline bool ftCa_Special_Inline_Check_Flag(Fighter* fp)
 {
@@ -227,7 +227,7 @@ void ftCa_SpecialLw_Phys(HSD_GObj* gobj)
         ftCommon_8007E5AC((Fighter*) fp);
         ft_80085088(gobj);
     } else {
-        ftParts_80075CB4((Fighter*) fp, 0, 0);
+        ftPartSetRotZ((Fighter*) fp, 0, 0);
         ft_80085134(gobj);
     }
     ftCa_Special_Inline_Friction(fp);
@@ -249,7 +249,7 @@ void ftCa_SpecialLwEnd_Phys(HSD_GObj* gobj)
             ft_80084F3C(gobj);
         }
     } else {
-        ftParts_80075CB4(fp, 0, 0.0F);
+        ftPartSetRotZ(fp, 0, 0.0F);
         ft_80084EEC(gobj);
     }
     ftCa_Special_Inline_Friction(fp);
@@ -263,7 +263,7 @@ void ftCa_SpecialLwEndAir_Phys(HSD_GObj* gobj)
         ft_80085088(gobj);
         return;
     }
-    ftParts_80075CB4(fp, 0, 0);
+    ftPartSetRotZ(fp, 0, 0);
     if (fp->cmd_vars[0] != 0) {
         ft_80084EEC(gobj);
     } else {

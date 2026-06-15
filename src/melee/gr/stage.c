@@ -99,7 +99,7 @@ f32 Stage_GetBlastZoneLeftOffset(void)
     return stage_info.blast_zone.left + stage_info.cam_info.cam_x_offset;
 }
 
-// named stGetPlyDeadUp according to an assert in ftcamera.c
+/// named stGetPlyDeadUp according to an assert in ftcamera.c
 f32 Stage_GetBlastZoneTopOffset(void)
 {
     return stage_info.blast_zone.top + stage_info.cam_info.cam_y_offset;
@@ -323,7 +323,7 @@ s32 Stage_80225074(s32 arg0)
     } else if (arg0 == 1) {
         r31 = 0x44;
     } else {
-        __assert(__FILE__, 526, "0");
+        HSD_ASSERT(526, 0);
     }
 
     tmp = Ground_801C28AC(unk_struct_804D49E8.list_idx, r31, &spC);
@@ -469,5 +469,5 @@ void Stage_8022532C(InternalStageId idx, s32 arg1)
     local_data.stage_id = unk_struct_804D49E8.unk_struct->stage_id;
     local_data.list_idx = idx;
 
-    Ground_801C1074(&local_data, arg1);
+    Ground_DemoInit(&local_data, arg1);
 }

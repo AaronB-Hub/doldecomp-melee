@@ -1,12 +1,12 @@
 #include "db.h"
 
+#include "ft/ftlib.h"
+#include "lb/lbarchive.h"
+
 #include <dolphin/card.h>
 #include <dolphin/vi.h>
 #include <sysdolphin/baselib/controller.h>
 #include <sysdolphin/baselib/gobj.h>
-#include <melee/ft/ftlib.h>
-#include <melee/lb/lbarchive.h>
-#include <melee/un/types.h>
 
 /* 4D6B30 */ u16 db_gameLaunchButtonState;
 /* 4D6B2C */ char** db_bonus_names;
@@ -14,7 +14,7 @@
 /* 4D6B24 */ char** db_submotion_names;
 /* 4D6B20 */ bool db_804D6B20;
 
-int g_debugLevel = 1;
+int DbLevel = 1;
 
 char db_build_timestamp[] = "DATE Feb 13 2002  TIME 22:06:27";
 
@@ -70,7 +70,7 @@ void db_Setup(void)
         char** submotion_names;
     }* commonData;
 
-    if (g_debugLevel >= 3) {
+    if (DbLevel >= 3) {
         for (i = 0; i < 4; i++) {
             db_ButtonStates[i].repeat = 0;
             db_ButtonStates[i].released = 0;
@@ -166,7 +166,7 @@ void db_RunEveryFrame(void)
     int stack[4];
     int i;
     int num_players;
-    if (g_debugLevel < 3) {
+    if (DbLevel < 3) {
         return;
     }
     if (ftLib_IsMasterHandPresent() || ftLib_IsCrazyHandPresent()) {

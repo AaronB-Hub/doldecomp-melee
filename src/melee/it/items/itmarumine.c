@@ -6,6 +6,9 @@
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/ithitbox.h"
+#include "it/it_279C.h"
+#include "it/itmaplib.h"
 #include "it/item.h"
 #include "it/types.h"
 #include "lb/lb_00B0.h"
@@ -72,7 +75,7 @@ void it_802D09D0(Item_GObj* gobj)
     }
 }
 
-void it_2725_Logic16_Spawned(Item_GObj* gobj)
+void itMarumine_Logic16_Spawned(Item_GObj* gobj)
 {
     Item* ip;
     itPokemonAttributes* attr;
@@ -348,7 +351,7 @@ void it_802D1204(Item_GObj* gobj)
         it_80274250(gobj, &vec);
     }
     it_8026B3A8(gobj);
-    HSD_JObjSetFlagsAll(jobj, 0x10);
+    HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
     it_8026BD24(gobj);
     it_8027518C(gobj);
     it_80273454(gobj);

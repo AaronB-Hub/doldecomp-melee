@@ -1,75 +1,122 @@
-#ifndef GALE01_05B4B8
-#define GALE01_05B4B8
-
-#include <placeholder.h>
-#include <platform.h>
+#ifndef MELEE_EF_EFLIB_H
+#define MELEE_EF_EFLIB_H
 
 #include "ef/forward.h"
 #include <baselib/forward.h>
 
-#include <baselib/objalloc.h>
+#include <dolphin/mtx.h>
 
-/* 05B4B8 */ void efLib_8005B4B8(void);
-/* 05B704 */ void efLib_8005B704(HSD_GObj*, s32);
-/* 05B780 */ void efLib_8005B780(HSD_GObj*);
+typedef struct EF_ParamEntry {
+    /* 0x0 */ void* gobj;
+    /* 0x4 */ u16 gfx_id;
+    /* 0x6 */ u16 alpha;
+} EF_ParamEntry; /* size = 0x8 */
+STATIC_ASSERT(sizeof(EF_ParamEntry) == 0x8);
+
+/* 05B4B8 */ void efLib_Init(void);
+/* 05B704 */ void efLib_SetFlags(HSD_GObj* gobj, s32 expires);
+/* 05B780 */ void efLib_Destroy(HSD_GObj* gobj);
 /* 05B880 */ void efLib_DestroyAll(HSD_GObj* gobj);
 /* 05BA40 */ void efLib_PauseAll(HSD_GObj* gobj);
 /* 05BAC4 */ void efLib_ResumeAll(HSD_GObj* gobj);
-/* 05BB40 */ void Effect_RemoveUserData(void* user_data);
-/* 05BBB4 */ void efLib_8005BBB4(u32, f32);
-/* 05BC50 */ void fn_8005BC50(HSD_GObj* gobj);
-/* 05BE88 */ Effect* efLib_8005BE88(int, HSD_GObj* parent_gobj);
-/* 05C1B4 */ Effect* efLib_8005C1B4(u32, HSD_GObj*, HSD_JObj*);
-/* 05C2BC */ Effect* efLib_8005C2BC(u32, HSD_GObj*, HSD_JObj*);
-/* 05C3DC */ Effect* efLib_8005C3DC(u32, HSD_GObj*, HSD_JObj*);
-/* 05C5C4 */ Effect* efLib_8005C5C4(u32, HSD_GObj*, HSD_JObj*);
-/* 05C6F4 */ Effect* efLib_8005C6F4(u32, HSD_GObj*, void*);
-/* 05C814 */ Effect* efLib_8005C814(u32, HSD_GObj*, Vec3*);
-/* 05C904 */ void fn_8005C904(HSD_GObj*, int);
-/* 05C9A4 */ void efLib_8005C9A4(HSD_GObj*);
-/* 05C9D0 */ void fn_8005C9D0(HSD_GObj*);
-// /* 05C9FC */ Effect* efLib_8005C9FC();
-/* 05C9FC */ HSD_Generator* efLib_8005C9FC(s32, Vec3*);
-// /* 05C9FC */ Effect* efLib_8005C9FC(u32, Vec3*, f32, Vec3*, ...);
-/* 05CAB0 */ HSD_Generator* efLib_8005CAB0(s32);
-/* 05CB34 */ HSD_Generator* efLib_8005CB34(s32, Vec3*, f32);
-/* 05CC2C */ HSD_Generator* efLib_8005CC2C(s32, HSD_JObj*);
-// /* 05CC84 */ HSD_Generator* efLib_8005CC84(u32,  HSD_JObj*, ...);
-/* 05CC84 */ HSD_Generator* efLib_8005CC84(s32, HSD_JObj*);
-/* 05CD2C */ HSD_Generator* efLib_8005CD2C(s32, void*, HSD_GObj*);
-/* 05CE48 */ HSD_Generator* efLib_8005CE48(s32, void*);
-/* 05CF40 */ HSD_Generator* efLib_8005CF40(s32, void*);
-/* 05D044 */ HSD_Generator* efLib_8005D044(s32, void*);
-/* 05D174 */ void efLib_8005D174(s8, s32, HSD_JObj*, s32);
-/* 05DB20 */ void fn_8005DB20(s32, s32, s32, HSD_JObj*);
-// /* 05DB70 */ void fn_8005DB70(s32, s32, s32, HSD_JObj*);
-/* 05DB70 */ void
-fn_8005DB70(int, int, int,
-            HSD_JObj*); // args must be int type to be able to satisfy passing
-                        // into HSD_JObjSetDPtclCallback
-/* 05DBC0 */ void efLib_8005DBC0(HSD_Particle*);
-/* 05DCD0 */ void fn_8005DCD0(void*);
-/* 05DDB8 */ void efLib_8005DDB8(Effect*);
-/* 05DE94 */ void efLib_8005DE94(Effect*);
-/* 05E090 */ void efLib_8005E090(Effect*);
-/* 05E1D8 */ void efLib_8005E1D8(Effect*);
-/* 05E2B4 */ void efLib_8005E2B4(Effect*);
-/* 05E3A0 */ void efLib_8005E3A0(Effect*);
-/* 05E648 */ void efLib_8005E648(Effect*);
-/* 05E950 */ void efLib_8005E950(Effect*);
-/* 05EB70 */ void efLib_8005EB70(Effect*);
-/* 05EBC8 */ void efLib_8005EBC8(Effect*);
-/* 05EDDC */ void efLib_8005EDDC(Effect*);
-/* 05F08C */ void efLib_8005F08C(Effect*);
-/* 05F270 */ void efLib_8005F270(Effect*);
-/* 05F454 */ void efLib_8005F454(Effect*);
-/* 05F748 */ void efLib_8005F748(Effect*);
-/* 05F774 */ void efLib_8005F774(HSD_JObj*, s32, u32, u32);
-/* 05F864 */ void efLib_8005F864(HSD_GObj* gobj, s8, float, float);
-/* 05F990 */ void efLib_8005F990(HSD_GObj*, s32);
-/* 05FAB8 */ void efLib_8005FAB8(Effect*);
-/* 05FBE4 */ void fn_8005FBE4(Effect*);
-/* 05FCD8 */ Effect* efLib_8005FCD8(int, HSD_GObj*, HSD_JObj*, Vec3*);
-/* 458EB0 */ extern HSD_ObjAllocData Effect_AllocData;
+/* 05BB40 */ void efLib_remove_user_data(void* user_data);
+/* 05BBB4 */ void efLib_RemoveLast(void);
+/* 05BC50 */ void efLib_Update(HSD_GObj* gobj);
+
+// Create effects
+
+/* 05BE88 */ EF_Effect* efLib_Create(int gfx_id, HSD_GObj* parent_gobj);
+/* 05C1B4 */ EF_Effect* efLib_Create_Attach(u32 gfx_id, HSD_GObj* gobj,
+                                            HSD_JObj* jobj);
+/* 05C2BC */ EF_Effect* efLib_Create_AttachChild(u32 gfx_id, HSD_GObj* gobj,
+                                                 HSD_JObj* jobj);
+/* 05C3DC */ EF_Effect* efLib_Create_Attach_Scale(u32 gfx_id, HSD_GObj* gobj,
+                                                  HSD_JObj* jobj);
+/* 05C5C4 */ EF_Effect*
+efLib_Create_AttachChild_Scale(u32 gfx_id, HSD_GObj* gobj, HSD_JObj* jobj);
+/* 05C6F4 */ EF_Effect* efLib_Create_Attach_Scale_FacingDir(u32 gfx_id,
+                                                            HSD_GObj* gobj,
+                                                            HSD_JObj* jobj);
+/* 05C814 */ EF_Effect* efLib_Create_Attach_Pos(u32 gfx_id, HSD_GObj* gobj,
+                                                Vec3* position);
+
+// Particle processing callbacks
+
+/* 05C9A4 */ void efLib_particles_proc_main(HSD_GObj* gobj);
+/* 05C9D0 */ void efLib_particles_proc_aux(HSD_GObj* gobj);
+
+// Create generators
+
+/* 05C9FC */ HSD_Generator* efLib_CreateGenerator(s32 gfx_id, Vec3* pos);
+/* 05CAB0 */ HSD_Generator* efLib_CreateGenerator_AddAppSRT(s32 gfx_id);
+/* 05CB34 */ HSD_Generator*
+efLib_CreateGenerator_Translate_FacingDir(s32 gfx_id, Vec3* translation,
+                                          f32 direction);
+/* 05CC2C */ HSD_Generator* efLib_CreateGenerator_Attach(s32 gfx_id,
+                                                         HSD_JObj* jobj);
+/* 05CC84 */ HSD_Generator*
+efLib_CreateGenerator_Attach_AddAppSRT(s32 gfx_id, HSD_JObj* jobj);
+/* 05CD2C */ HSD_Generator*
+efLib_CreateGenerator_Attach_Scale(s32 gfx_id, va_list vlist, HSD_GObj* gobj);
+/* 05CE48 */ HSD_Generator*
+efLib_CreateGenerator_AppSRT_SetScale(s32 gfx_id, va_list vlist);
+/* 05CF40 */ HSD_Generator*
+efLib_CreateGenerator_AppSRT_SetFacingDir(s32 gfx_id, va_list vlist);
+/* 05D044 */ HSD_Generator*
+efLib_CreateGenerator_AppSRT_SetFacingDirScale(s32 gfx_id, va_list vlist);
+
+// Called by particles library
+
+/* 05D174 */ void efLib_SpawnParticleEffect(int bank, s32 gfx_id,
+                                            HSD_JObj* jobj, bool flag);
+
+// Particle-related callbacks
+
+/* 05DB20 */ void efLib_Cb_SPtcl(s32 linkNo, s32 bank, s32 gfx_id,
+                                 HSD_JObj* jobj);
+/* 05DB70 */ void efLib_Cb_DPtcl(int linkNo, int bank, int gfx_id,
+                                 HSD_JObj* jobj);
+/* 05DBC0 */ void efLib_Cb_ParticleRender(HSD_Particle* particle);
+/* 05DCD0 */ void efLib_Cb_PtclAppSRTHook(HSD_Particle* particle);
+
+// Effect callbacks
+
+/* 05DDB8 */ void efLib_Cb_SetOffsetY_FromParamY(EF_Effect* effect);
+/* 05DE94 */ void efLib_Cb_SetScale_FromParamX(EF_Effect* effect);
+/* 05E090 */ void efLib_Cb_SetRotYAndTransition(EF_Effect* effect);
+/* 05E1D8 */ void efLib_Cb_SetJObjOffsetZ(EF_Effect* effect);
+/* 05E2B4 */ void efLib_Cb_SetRotY_FromFighterDir(EF_Effect* effect);
+/* 05E3A0 */ void efLib_Cb_SetRotYZ_FromFighter(EF_Effect* effect);
+/* 05E648 */ void efLib_Cb_Fall_FromParamY(EF_Effect* effect);
+/* 05E950 */ void efLib_Cb_SetOffset_FromParams(EF_Effect* effect);
+/* 05EB70 */ void efLib_Cb_LifetimeEndSpawn(EF_Effect* effect);
+/* 05EBC8 */ void efLib_Cb_SetScaleRotY_FromFighter(EF_Effect* effect);
+/* 05EDDC */ void efLib_Cb_SetRotYZ_FromParamZ_FighterDir(EF_Effect* effect);
+/* 05F08C */ void efLib_Cb_ftMr_SpecialLw(EF_Effect* effect);
+/* 05F270 */ void efLib_Cb_ftLg_SpecialLw(EF_Effect* effect);
+/* 05F454 */ void efLib_Cb_ftKp_SpecialHi(EF_Effect* effect);
+/* 05F748 */ void efLib_Cb_ftCo_Bury(EF_Effect* effect);
+
+// Property setting
+
+/* 05F774 */ void efLib_SetTevKonstColor(HSD_JObj* jobj, s32 count, u32 konst,
+                                         u32 tev0);
+/* 05F864 */ void efLib_SetParamAlpha(HSD_GObj* gobj, u8 alpha);
+/* 05F990 */ void efLib_SetParamGfxId(HSD_GObj* gobj, s32 gfx_id);
+
+// More effect callbacks (?)
+
+/* 05FAB8 */ void efLib_Cb_ApplyStoredAlpha(EF_Effect* effect);
+/* 05FBE4 */ void efLib_Cb_AccumOffset_FromParams(EF_Effect* effect);
+
+// Misplaced generator creation
+
+/* 05FCD8 */ EF_Effect* efLib_CreateGenerator_AppSRT_SetPos(int gfx_id,
+                                                            HSD_GObj* gobj,
+                                                            HSD_JObj* jobj,
+                                                            Vec3* vec);
+
+extern EF_ParamEntry efLib_AnimQueue[0x10];
+extern EF_ParamEntry efLib_ParamTable[0x8];
 
 #endif

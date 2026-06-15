@@ -1,5 +1,5 @@
 /**
- * @todo this file also contains the OnEnter callback for MN_DEBUG_MENU,
+ * @todo this file also contains the OnEnter callback for GS_DEBUG_MENU,
  * which should probably be split out into a separate file
  */
 
@@ -8,20 +8,19 @@
 #include "gm_unsplit.h"
 #include "gmopening.h"
 
-#include "un/un_3028.h"
+#include "gm/gmmain_lib.h"
+#include "gm/types.h"
+#include "if/ifcoget.h"
+#include "if/textlib.h"
+#include "lb/lbaudio_ax.h"
+#include "lb/lbmthp.h"
 
 #include <sysdolphin/baselib/gobj.h>
 #include <sysdolphin/baselib/gobjgxlink.h>
 #include <sysdolphin/baselib/gobjobject.h>
 #include <sysdolphin/baselib/sobjlib.h>
-#include <melee/gm/gmmain_lib.h>
-#include <melee/gm/types.h>
-#include <melee/lb/lbaudio_ax.h>
-#include <melee/lb/lbmthp.h>
-#include <melee/mn/types.h>
-#include <melee/un/un_2FC9.h>
 
-void gm_801A6254(MinorScene* arg0)
+void gm_801A6254(GameScene* arg0)
 {
     u8 temp_ret;
     u8 temp_r0;
@@ -44,13 +43,13 @@ void gm_801A6254(MinorScene* arg0)
     gm_80173EEC();
     gm_80172898(0x100);
     if (gm_801721EC() == 0) {
-        gm_SetScenePendingMinor(0);
+        gm_SetPendingScene(0);
     }
 }
 
-void gm_801A6308(MinorScene* arg0)
+void gm_801A6308(GameScene* arg0)
 {
-    gm_SetScenePendingMinor(0);
+    gm_SetPendingScene(0);
 }
 
 void gm_801A632C_OnEnter(void* arg0_)
@@ -111,7 +110,7 @@ void gm_801A637C_OnEnter(void* arg0)
 {
     HSD_GObj* temp_r3;
     HSD_GObj* temp_r3_2;
-    HSD_SObj_803A477C_t* temp_r3_3;
+    HSD_SObj* temp_r3_3;
     const char* filename;
     PAD_STACK(8);
 

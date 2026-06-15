@@ -6,6 +6,9 @@
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/ithitbox.h"
+#include "it/itzako.h"
+#include "it/itmaplib.h"
 #include "it/item.h"
 #include "it/items/itzgshell.h"
 #include "it/items/itzrshell.h"
@@ -64,7 +67,7 @@ static void zero_pad(Item* ip)
     ip->x40_vel.y = 0.0f;
 }
 
-bool it_2725_Logic3_DmgReceived(Item_GObj* gobj)
+bool itNokonoko_Logic3_DmgReceived(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     itNokoNoko_DatAttrs* da = ip->xC4_article_data->x4_specialAttributes;

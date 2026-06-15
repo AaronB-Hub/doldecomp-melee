@@ -116,27 +116,27 @@ bool itLgunray_UnkMotion0_Coll(Item_GObj* gobj)
     return false;
 }
 
-bool it_3F14_Logic35_DmgDealt(Item_GObj* gobj)
+bool itLGunRay_Logic35_DmgDealt(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_3F14_Logic35_Clanked(Item_GObj* gobj)
+bool itLGunRay_Logic35_Clanked(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_3F14_Logic35_HitShield(Item_GObj* gobj)
+bool itLGunRay_Logic35_HitShield(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_3F14_Logic35_Absorbed(Item_GObj* gobj)
+bool itLGunRay_Logic35_Absorbed(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_3F14_Logic35_Reflected(Item_GObj* gobj)
+bool itLGunRay_Logic35_Reflected(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     HSD_JObj* jobj = GET_JOBJ(gobj);
@@ -147,16 +147,16 @@ bool it_3F14_Logic35_Reflected(Item_GObj* gobj)
     ip->xDD4_itemVar.lgunray.angle += M_PI;
 
     while (ip->xDD4_itemVar.lgunray.angle < 0.0f) {
-        ip->xDD4_itemVar.lgunray.angle += 2 * M_PI;
+        ip->xDD4_itemVar.lgunray.angle += M_TAU;
     }
-    while (ip->xDD4_itemVar.lgunray.angle > 2 * M_PI) {
-        ip->xDD4_itemVar.lgunray.angle -= 2 * M_PI;
+    while (ip->xDD4_itemVar.lgunray.angle > M_TAU) {
+        ip->xDD4_itemVar.lgunray.angle -= M_TAU;
     }
 
     return false;
 }
 
-bool it_3F14_Logic35_ShieldBounced(Item_GObj* gobj)
+bool itLGunRay_Logic35_ShieldBounced(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     PAD_STACK(4);
@@ -164,15 +164,15 @@ bool it_3F14_Logic35_ShieldBounced(Item_GObj* gobj)
     ip->xDD4_itemVar.lgunray.scale = scale;
     ip->xDD4_itemVar.lgunray.angle = atan2f(ip->x40_vel.y, ip->x40_vel.x);
     while (ip->xDD4_itemVar.lgunray.angle < 0.0f) {
-        ip->xDD4_itemVar.lgunray.angle += 2 * M_PI;
+        ip->xDD4_itemVar.lgunray.angle += M_TAU;
     }
-    while (ip->xDD4_itemVar.lgunray.angle > 2 * M_PI) {
-        ip->xDD4_itemVar.lgunray.angle -= 2 * M_PI;
+    while (ip->xDD4_itemVar.lgunray.angle > M_TAU) {
+        ip->xDD4_itemVar.lgunray.angle -= M_TAU;
     }
     return false;
 }
 
-void it_3F14_Logic35_EvtUnk(Item_GObj* gobj, HSD_GObj* ref_gobj)
+void itLGunRay_Logic35_EvtUnk(Item_GObj* gobj, HSD_GObj* ref_gobj)
 {
     it_8026B894(gobj, ref_gobj);
 }

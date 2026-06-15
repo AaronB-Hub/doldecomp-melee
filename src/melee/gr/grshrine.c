@@ -6,6 +6,7 @@
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
+#include "gr/inlines.h"
 #include "gr/types.h"
 
 #include "lb/forward.h"
@@ -54,7 +55,7 @@ static StageCallbacks grSh_803E50E8[3] = {
 };
 
 StageData grSh_803E5130 = {
-    (1 << 0) | (1 << 1) | (1 << 2),
+    SHRINE,
     grSh_803E50E8,
     "/GrSh.dat",
     grShrine_80201C64,
@@ -96,7 +97,7 @@ static void grShrine_UnkStage0_OnLoad(void) {}
 
 static void grShrine_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(false);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 static bool grShrine_80201D18(void)
@@ -109,26 +110,14 @@ static HSD_GObj* grShrine_80201D20(s32 arg0)
     HSD_GObj* gobj;
     StageCallbacks* callbacks = &grSh_803E50E8[arg0];
 
-    gobj = Ground_801C14D0(arg0);
+    gobj = Ground_GetStageGObj(arg0);
 
     if (gobj != NULL) {
-        Ground* gp;
-        gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grshrine.c", 205, arg0);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 205, arg0);
     }
+
     return gobj;
 }
 

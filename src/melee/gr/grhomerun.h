@@ -4,8 +4,8 @@
 #include <placeholder.h>
 
 #include "baselib/forward.h"
-
-#include "it/inlines.h"
+#include "lb/forward.h"
+#include "mp/forward.h"
 
 #include <baselib/cobj.h>
 #include <baselib/fog.h>
@@ -16,7 +16,7 @@
 /* 21C7FC */ void grHomeRun_8021C7FC(void);
 /* 21C800 */ void grHomeRun_8021C800(void);
 /* 21C824 */ bool grHomeRun_8021C824(void);
-/* 21C82C */ UNK_RET grHomeRun_8021C82C(UNK_PARAMS);
+/* 21C82C */ HSD_GObj* grHomeRun_8021C82C(int);
 /* 21C914 */ void grHomeRun_8021C914(Ground_GObj*);
 /* 21CB10 */ bool grHomeRun_8021CB10(Ground_GObj*);
 /* 21CB18 */ void grHomeRun_8021CB18(Ground_GObj*);
@@ -61,14 +61,15 @@
 /* 21E4F0 */ bool grHomeRun_8021E4F0(Ground_GObj*);
 /* 21E4F8 */ void grHomeRun_8021E4F8(Ground_GObj*);
 /* 21E4FC */ void grHomeRun_8021E4FC(Ground_GObj*);
-/* 21E500 */ UNK_RET grHomeRun_8021E500(UNK_PARAMS);
-/* 21E994 */ UNK_RET fn_8021E994(UNK_PARAMS);
-/* 21EA30 */ UNK_RET grHomeRun_8021EA30(UNK_PARAMS);
+/* 21E500 */ HSD_GObj* grHomeRun_8021E500(s16);
+/* 21E994 */ void fn_8021E994(Ground*, s32, CollData*, s32, mpLib_GroundEnum,
+                              f32);
+/* 21EA30 */ void grHomeRun_8021EA30(f32*);
 /* 21EAF8 */ UNK_RET grHomeRun_8021EAF8(UNK_PARAMS);
 /* 21EB10 */ void fn_8021EB10(HSD_GObj*);
-/* 21EC58 */ UNK_RET grHomeRun_8021EC58(UNK_PARAMS);
-/* 21ED74 */ UNK_RET grHomeRun_8021ED74(UNK_PARAMS);
-/* 21EDD4 */ UNK_RET grHomeRun_8021EDD4(UNK_PARAMS);
+/* 21EC58 */ HSD_Text* grHomeRun_8021EC58(int);
+/* 21ED74 */ void grHomeRun_8021ED74(void);
+/* 21EDD4 */ void grHomeRun_8021EDD4(void);
 /* 21EEB4 */ DynamicsDesc* grHomeRun_8021EEB4(enum_t);
 /* 21EEBC */ bool grHomeRun_8021EEBC(Vec3*, int arg, HSD_JObj* jobj);
 /* 21EF10 */ float grHomeRun_8021EF10(void);

@@ -264,7 +264,7 @@ void Player_UnsetFlagsBit1(int slot);
 s32 Player_GetFlagsBit3(s32 slot);
 void Player_SetFlagsBit3(s32 slot, u8 bit3);
 int Player_GetFlagsBit4(int slot);
-u8 Player_GetFlagsBit5(s32 slot); ///< player is metal
+u8 Player_GetFlagsBit5(s32 slot);                ///< player is metal
 void Player_SetFlagsBit5(s32 slot, u8 is_metal); ///< player is metal
 u8 Player_GetFlagsBit6(s32 slot);
 void Player_SetFlagsBit6(s32 slot, u8 bit6);
@@ -295,7 +295,7 @@ pl_StaleMoveTableExt_t* Player_GetStaleMoveTableIndexPtr2(s32 slot);
 FighterKind Player_80036394(s32 slot);
 s32 Player_80036428(s32 slot);
 void Player_SetUnk45(s32 slot, int unk45);
-u8 Player_GetUnk45(s32 slot);
+u32 Player_GetUnk45(s32 slot);
 void Player_UpdateJoystickCountByIndex(s32 slot, s32 index);
 s32 Player_GetJoystickCountByIndex(s32 slot, s32 index);
 void Player_800366DC(s32 slot, s32 arg1);
@@ -310,7 +310,7 @@ void Player_InitAllPlayers(void);
 void Player_80036DA4(void);
 void Player_80036DD8(void);
 void Player_80036E20(CharacterKind ckind, HSD_Archive* archive, s32 arg2);
-s32 Player_80036EA0(s32 slot);
+HSD_JObj* Player_80036EA0(s32 slot);
 void Player_80036F34(s32 slot, s32 arg1);
 void Player_80037054(s32 slot, s32 arg1);
 void Player_SetOtherStamina(s32 slot, s32 stamina);

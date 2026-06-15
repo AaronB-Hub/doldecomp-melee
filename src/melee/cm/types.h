@@ -10,22 +10,22 @@
 
 /// @note name found @ 80029070
 struct CmSubject {
-/* +00 */ CmSubject* next;
-/* +04 */ CmSubject* prev;
-/* +08 */ bool x8;
-/* +0C:0 */ u8 xC_b0 : 1;
-/* +0C:1 */ u8 xC_b1 : 1;
-/* +0C:2 */ u8 xC_b2 : 1;
-/* +0E */ s16 xE;
-/* +10 */ Vec3 x10;  // might be Vec2?
-/* +1C */ Vec3 x1C;  // position?
-/* +28 */ float x28; // direction?
-/* +2C */ Vec2 x2C;
-/* +34 */ Vec3 x34; // size?
-/* +40 */ Vec2 x40;
-/* +48 */ Vec3 x48;
-/* +54 */ Vec3 x54;
-/* +60 */ Vec3 x60;
+    /* +00 */ CmSubject* next;
+    /* +04 */ CmSubject* prev;
+    /* +08 */ bool x8;
+    /* +0C:0 */ u8 xC_b0 : 1;
+    /* +0C:1 */ u8 xC_b1 : 1;
+    /* +0C:2 */ u8 xC_b2 : 1;
+    /* +0E */ s16 xE;
+    /* +10 */ Vec3 x10;  // might be Vec2?
+    /* +1C */ Vec3 x1C;  // position?
+    /* +28 */ float x28; // direction?
+    /* +2C */ Vec2 x2C;
+    /* +34 */ Vec3 x34; // size?
+    /* +40 */ Vec2 x40;
+    /* +48 */ Vec3 x48;
+    /* +54 */ Vec3 x54;
+    /* +60 */ Vec3 x60;
 };
 
 struct CameraTransformState {
@@ -44,6 +44,22 @@ struct CameraBounds {
     float y_max;
     int total_subjects;
     float z_pos;
+};
+
+struct Camera_x2D0 {
+    /* +0x00 */ f32 y_max;
+    /* +0x04 */ f32 y_min;
+    /* +0x08 */ f32 x_min;
+    /* +0x0C */ f32 x_max;
+    /* +0x10 */ f32 z_max;
+    /* +0x14 */ f32 z_min;
+    /* +0x18 */ f32 angle_up;
+    /* +0x1C */ f32 angle_down;
+    /* +0x20 */ f32 angle_right;
+    /* +0x24 */ f32 angle_left;
+    /* +0x28 */ f32 unk28;
+    /* +0x2C */ f32 unk2C;
+    /* +0x30 */ void (*callback)(Camera_x2D0*);
 };
 
 struct CameraQuake {
@@ -92,24 +108,12 @@ struct Camera {
     /* 0x2BA */ s16 x2BA;
     /* 0x2BC */ f32 x2BC;
     /* 0x2C0 */ f32 x2C0;
-    /* 0x2C4 */ s8 x2C4; /* unk player slot */
-    /* 0x2C5 */ s8 x2C5;
+    /* 0x2C4 */ s8 x2C4; ///< unk player slot
+    /* 0x2C5 */ s8 x2C5; ///< pauser slot
     /* 0x2C6 */ char pad_2C6[0x2C8 - 0x2C6];
     /* 0x2C8 */ float pitch_offset;
     /* 0x2CC */ float yaw_offset;
-    /* 0x2D0 */ f32 x2D0;
-    /* 0x2D4 */ f32 x2D4;
-    /* 0x2D8 */ f32 x2D8;
-    /* 0x2DC */ f32 x2DC;
-    /* 0x2E0 */ f32 x2E0;
-    /* 0x2E4 */ f32 x2E4;
-    /* 0x2E8 */ f32 x2E8;
-    /* 0x2EC */ f32 x2EC;
-    /* 0x2F0 */ f32 x2F0;
-    /* 0x2F4 */ f32 x2F4;
-    /* 0x2F8 */ f32 min_distance;
-    /* 0x2FC */ f32 max_distance;
-    /* 0x300 */ s32 x300;
+    /* 0x2D0 */ Camera_x2D0 x2D0;
     /* 0x304 */ s8 x304;
     /* 0x305 */ s8 x305;
     /* 0x306 */ s8 x306;
@@ -126,11 +130,23 @@ struct Camera {
     /* 0x341:3 */ u8 x341_b3_b4 : 2;
     /* 0x341:5 */ u8 x341_b5_b6 : 2;
     /* 0x341:7 */ u8 x341_b7 : 1;
-    /* 0x342 */ char pad_342[0x350 - 0x342]; /* maybe part of unk_341[0x57]? */
+    /* 0x342 */ char x342_pad[2];
+    /* 0x344 */ union {
+        s32 s32;
+        Vec3 vec;
+        s32 (*cb)(Vec3*);
+    } x344;
     /* 0x350 */ Vec3 x350;
     /* 0x35C */ union {
         Vec3 vec;
         s32 (*cb)(Vec3*);
+        struct {
+            u8 b0 : 1;
+            u8 b1 : 1;
+            u8 b2 : 1;
+            u8 pad;
+            s16 x2;
+        } bits;
     } x35C;
     /* 0x368 */ Vec3 x368;
     /* 0x374 */ f32 x374;
@@ -139,7 +155,10 @@ struct Camera {
         s32 s32;
     } x378;
     // /* 0x378 */ f32 x378;
-    /* 0x37C */ s32 x37C;
+    /* 0x37C */ union {
+        s32 s32;
+        f32 f32;
+    } x37C;
     /* 0x380 */ u8 x380[0x18];
     /* 0x398:0 */ u8 x398_b0 : 1;
     /* 0x398:1 */ u8 x398_b1 : 1;
@@ -166,17 +185,6 @@ struct Camera {
     /* 0x39B */ char pad_39B; /* maybe part of unk_39A[6]? */
 };
 STATIC_ASSERT(sizeof(struct Camera) == 0x39C);
-
-// struct CameraUnkGlobals {
-//     /*  +0 */ float _0[11];
-//     /* +2C */ float x2C;
-//     /* +30 */ float x30;
-//     /* +34 */ float x34;
-//     /* +38 */ float x38;
-//     /* +3C */ float x3C;
-//     /* +40 */ float x40;
-//     /* +44 */ float _44[43];
-// };
 
 struct CameraUnkGlobals {
     /*  +0 */ float x0;

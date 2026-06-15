@@ -6,6 +6,8 @@
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/it_3F14.h"
+#include "it/itmaplib.h"
 #include "it/itCommonItems.h"
 #include "it/item.h"
 
@@ -99,37 +101,37 @@ bool itMariofireball_UnkMotion0_Coll(Item_GObj* gobj)
     return false;
 }
 
-bool it_2725_Logic87_DmgDealt(Item_GObj* gobj)
+bool itMarioFireball_Logic87_DmgDealt(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_2725_Logic87_Reflected(Item_GObj* gobj)
+bool itMarioFireball_Logic87_Reflected(Item_GObj* gobj)
 {
     return it_80273030(gobj);
 }
 
-bool it_2725_Logic87_Clanked(Item_GObj* gobj)
+bool itMarioFireball_Logic87_Clanked(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_2725_Logic87_HitShield(Item_GObj* gobj)
+bool itMarioFireball_Logic87_HitShield(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_2725_Logic87_Absorbed(Item_GObj* gobj)
+bool itMarioFireball_Logic87_Absorbed(Item_GObj* gobj)
 {
     return true;
 }
 
-bool it_2725_Logic87_ShieldBounced(Item_GObj* gobj)
+bool itMarioFireball_Logic87_ShieldBounced(Item_GObj* gobj)
 {
     return itColl_BounceOffShield(gobj);
 }
 
-void it_2725_Logic87_EvtUnk(Item_GObj* gobj, HSD_GObj* referenced_gobj)
+void itMarioFireball_Logic87_EvtUnk(Item_GObj* gobj, HSD_GObj* referenced_gobj)
 {
     it_8026B894(gobj, referenced_gobj);
 }

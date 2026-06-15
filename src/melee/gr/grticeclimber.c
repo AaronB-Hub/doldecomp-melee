@@ -47,7 +47,7 @@
 };
 
 StageData grTIc_803E8AF4 = {
-    47,
+    TICECLIMBER,
     grTIc_803E8A98,
     "/GrTIc.dat",
     grTIceClimber_80220F14,
@@ -80,7 +80,7 @@ void grTiceclimber_UnkStage0_OnLoad(void) {}
 
 void grTiceclimber_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTIceClimber_80220FAC(void)
@@ -91,29 +91,14 @@ bool grTIceClimber_80220FAC(void)
 HSD_GObj* grTIceClimber_80220FB4(int id)
 {
     HSD_GObj* gobj;
-    StageCallbacks* cb = &grTIc_803E8A98[id];
-    gobj = Ground_801C14D0(id);
+    StageCallbacks* callbacks = &grTIc_803E8A98[id];
+
+    gobj = Ground_GetStageGObj(id);
 
     if (gobj != NULL) {
-        Ground* gp = (Ground*) HSD_GObjGetUserData(gobj);
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-
-        if (cb->callback3 != NULL) {
-            gp->x1C_callback = cb->callback3;
-        }
-
-        if (cb->callback0 != NULL) {
-            cb->callback0(gobj);
-        }
-
-        if (cb->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, cb->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grticeclimber.c", 202,
-                 id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 202, id);
     }
 
     return gobj;
@@ -177,7 +162,7 @@ void grTIceClimber_80221208(Item_GObj* gobj, Ground* u1, Vec3* u2,
     Vec3 pos;
     Item* it = GET_ITEM(gobj);
 
-    HSD_JObjSetFlagsAll(it->xDD4_itemVar.mato.x4, 0x10);
+    HSD_JObjSetFlagsAll(it->xDD4_itemVar.mato.x4, JOBJ_HIDDEN);
     lb_8000B1CC(it->xDD4_itemVar.mato.x4, NULL, &pos);
     efSync_Spawn(0x445, gobj, &pos);
     Camera_80030E44(2, 0);

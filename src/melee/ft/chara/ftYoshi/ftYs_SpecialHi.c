@@ -1,4 +1,6 @@
-#include "ftYs_SpecialHi.static.h"
+#include "ftYs_SpecialHi.h"
+
+#include "placeholder.h"
 
 #include "baselib/forward.h"
 
@@ -17,12 +19,22 @@
 
 #include "ftYoshi/ftYs_Init.h"
 #include "ftYoshi/types.h"
-#include "it/items/it_2F2B.h"
 #include "it/items/ityoshieggthrow.h"
+#include "it/items/ityoshitongue.h"
+#include "lb/lb_00B0.h"
 
 #include <math.h>
 #include <dolphin/mtx.h>
 #include <baselib/gobj.h>
+
+static void setDamageCallbacks(Fighter_GObj* gobj)
+{
+    Fighter* fp = GET_FIGHTER(gobj);
+    if (fp->fv.ys.x2238 != NULL) {
+        fp->take_dmg_cb = ftYs_Init_8012BA8C;
+        fp->death2_cb = ftYs_Init_8012BA8C;
+    }
+}
 
 void ftYs_SpecialS_8012DF18(HSD_GObj* gobj)
 {
@@ -41,30 +53,29 @@ void ftYs_SpecialS_8012DF18(HSD_GObj* gobj)
     }
 }
 
-static inline float max(float a, float b)
-{
-    return a > b ? b : a;
-}
-
 void ftYs_SpecialS_8012DF8C(Fighter_GObj* gobj, Vec3* arg1)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     ftYs_DatAttrs* da = fp->dat_attrs;
-    float temp_f4;
+    float mag;
     {
         float temp = ABS(fp->input.lstick.x) / da->xEC;
-        float mag = max(temp, 1.0f) * da->xF0;
+        mag = temp;
+        if (mag > 1.0f) {
+            mag = 1.0f;
+        }
+        mag *= da->xF0;
         if (mag < da->xF4) {
             mag = 0.0f;
         }
-        temp_f4 = mag * getStickDirX(fp);
+        mag *= getStickDirX(fp);
     }
     {
         float angle;
         if (fp->facing_dir == +1.0f) {
-            angle = da->specialhi_base_angle - temp_f4;
+            angle = da->specialhi_base_angle - mag;
         } else {
-            angle = M_PI - da->specialhi_base_angle - temp_f4;
+            angle = M_PI - da->specialhi_base_angle - mag;
         }
         arg1->x = (fp->mv.ys.specialhi.x4 * da->x100 + da->xFC) * cosf(angle);
         arg1->y = (fp->mv.ys.specialhi.x4 * da->x100 + da->xFC) * sinf(angle);
@@ -72,7 +83,53 @@ void ftYs_SpecialS_8012DF8C(Fighter_GObj* gobj, Vec3* arg1)
     }
 }
 
-/// #fn_8012E110
+static inline void ftYs_SpecialS_8012DF8C_outline(Fighter_GObj* gobj,
+                                                  Vec3* vec)
+{
+    ftYs_SpecialS_8012DF8C(gobj, vec);
+}
+
+void fn_8012E110(Fighter_GObj* gobj)
+{
+    Fighter* fp = GET_FIGHTER(gobj);
+    ftYs_DatAttrs* da = fp->dat_attrs;
+    bool var_r0;
+
+    if (fp->throw_flags_b0) {
+        fp->throw_flags_b0 = 0;
+        var_r0 = true;
+    } else {
+        var_r0 = false;
+    }
+
+    if (var_r0) {
+        Vec3 sp30;
+        lb_8000B1CC(fp->parts[31].joint, NULL, &sp30);
+        fp->x1984_heldItemSpec = fp->fv.ys.x2238 =
+            it_802B2A10(gobj, &sp30, 0x1F, fp->facing_dir);
+        setDamageCallbacks(gobj);
+    }
+
+    if (fp->cmd_vars[0] != 0U && fp->fv.ys.x2238 != NULL) {
+        Vec3 sp24;
+        Vec3 sp18;
+        PAD_STACK(4);
+        fp->cmd_vars[0] = 0;
+        fp->mv.ys.specialhi.x0 = 1;
+        sp24.x = da->x104 * fp->facing_dir;
+        sp24.y = da->x108;
+        sp24.z = 0.0F;
+        ftYs_SpecialS_8012DF8C_outline(gobj, &sp18);
+        {
+            float x4 = fp->mv.ys.specialhi.x4;
+            it_802B28C8(fp->fv.ys.x2238, &sp18, &sp24,
+                        x4 * da->x110 + da->x10C, x4);
+        }
+        fp->fv.ys.x2238 = NULL;
+        fp->take_dmg_cb = NULL;
+        fp->death2_cb = NULL;
+    }
+}
 
 void ftYs_SpecialS_8012E270(Fighter_GObj* gobj)
 {
@@ -86,23 +143,46 @@ void ftYs_SpecialS_8012E270(Fighter_GObj* gobj)
     fp->death2_cb = NULL;
 }
 
-/// #ftYs_SpecialHi_Enter
+void ftYs_SpecialHi_Enter(Fighter_GObj* gobj)
+{
+    Fighter* fp = gobj->user_data;
 
-/// #ftYs_SpecialAirHi_Enter
+    u8 _[24];
+
+    fp->mv.ys.specialhi.x0 = 0;
+    fp->mv.ys.specialhi.x4 = 0;
+    fp->fv.ys.x2238 = NULL;
+    fp->throw_flags = 0;
+    fp->cmd_vars[0] = 0;
+    Fighter_ChangeMotionState(gobj, ftYs_MS_SpecialHi, 0, 0.0F, 1.0F, 0.0F,
+                              NULL);
+    fp = GET_FIGHTER(gobj);
+    fp->accessory4_cb = fn_8012E110;
+    ftAnim_8006EBA4(gobj);
+}
+
+void ftYs_SpecialAirHi_Enter(Fighter_GObj* gobj)
+{
+    Fighter* fp = gobj->user_data;
+
+    u8 _[24];
+
+    fp->mv.ys.specialhi.x0 = 0;
+    fp->mv.ys.specialhi.x4 = 0;
+    fp->fv.ys.x2238 = NULL;
+    fp->throw_flags = 0;
+    fp->cmd_vars[0] = 0;
+    Fighter_ChangeMotionState(gobj, ftYs_MS_SpecialAirHi, 0, 0.0F, 1.0F, 0.0F,
+                              NULL);
+    fp = GET_FIGHTER(gobj);
+    fp->accessory4_cb = fn_8012E110;
+    ftAnim_8006EBA4(gobj);
+}
 
 static void setAccessory4Callback(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     fp->accessory4_cb = fn_8012E110;
-}
-
-static void setDamageCallbacks(Fighter_GObj* gobj)
-{
-    Fighter* fp = GET_FIGHTER(gobj);
-    if (fp->fv.ys.x2238 != NULL) {
-        fp->take_dmg_cb = ftYs_Init_8012BA8C;
-        fp->death2_cb = ftYs_Init_8012BA8C;
-    }
 }
 
 static u32 const motion_flags = (1 << 1) | (1 << 7) | (1 << 12) | (1 << 14) |

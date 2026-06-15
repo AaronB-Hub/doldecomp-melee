@@ -85,7 +85,7 @@
 /* 048578 */ bool mpColl_80048578(CollData*);
 /* 048654 */ bool mpColl_80048654(CollData*);
 /* 048768 */ bool mpColl_80048768(CollData*);
-/* 048844 */ bool mpColl_80048844(CollData*, f32);
+/* 048844 */ bool mpColl_80048844(CollData*);
 /* 0488F4 */ bool mpColl_800488F4(CollData*);
 /* 048AB0 */ bool mpColl_80048AB0_RightWall(CollData*);
 /* 0491C8 */ bool mpColl_800491C8_RightWall(CollData*);
@@ -122,6 +122,7 @@
 /* 04CBF4 */ void mpClearFloorSkip(CollData*);
 /* 04CC00 */ void mpCopyCollData(CollData* src, CollData* dst, int);
 /* 04D024 */ bool mpColl_8004D024(Vec3*);
+/* 04F42C */ s32 mpColl_8004F42C(int joint, int index);
 /* 4D64AC */ extern int mpColl_804D64AC;
 
 #endif

@@ -2,6 +2,7 @@
 
 #include <platform.h>
 
+#include "baselib/gobj.h"
 #include "gr/granime.h"
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
@@ -20,10 +21,10 @@
 #include <baselib/gobjgxlink.h>
 #include <baselib/gobjproc.h>
 
-static void grTCaptain_8021FC60(bool);
-static void grTCaptain_8021FC64(void);
-static void grTcaptain_UnkStage0_OnLoad(void);
-static void grTcaptain_UnkStage0_OnStart(void);
+static void grTCaptain_OnDemoInit(int);
+static void grTCaptain_OnInit(void);
+static void grTCaptain_OnLoad(void);
+static void grTCaptain_OnStart(void);
 static bool grTCaptain_8021FCFC(void);
 static HSD_GObj* grTCaptain_8021FD04(int gobj_id);
 static void grTCaptain_8021FDEC(Ground_GObj* gobj);
@@ -38,8 +39,8 @@ static void grTCaptain_8021FEB8(Ground_GObj* gobj);
 static bool grTCaptain_8021FF08(Ground_GObj*);
 static void grTCaptain_8021FF10(Ground_GObj*);
 static void grTCaptain_8021FF30(Ground_GObj*);
-static DynamicsDesc* grTCaptain_8021FF34(enum_t);
-static bool grTCaptain_8021FF3C(Vec3*, int, HSD_JObj*);
+static DynamicsDesc* grTCaptain_OnTouchLine(enum_t);
+static bool grTCaptain_OnCheckShadowRender(Vec3*, int, HSD_JObj*);
 
 static StageCallbacks grTCa_803E8608[] = {
     { grTCaptain_8021FDEC, grTCaptain_8021FE18, grTCaptain_8021FE20,
@@ -52,24 +53,24 @@ static StageCallbacks grTCa_803E8608[] = {
 };
 
 StageData grTCa_803E8664 = {
-    41,
+    TCAPTAIN,
     grTCa_803E8608,
     "/GrTCa.dat",
-    grTCaptain_8021FC64,
-    grTCaptain_8021FC60,
-    grTcaptain_UnkStage0_OnLoad,
-    grTcaptain_UnkStage0_OnStart,
+    grTCaptain_OnInit,
+    grTCaptain_OnDemoInit,
+    grTCaptain_OnLoad,
+    grTCaptain_OnStart,
     grTCaptain_8021FCFC,
-    grTCaptain_8021FF34,
-    grTCaptain_8021FF3C,
+    grTCaptain_OnTouchLine,
+    grTCaptain_OnCheckShadowRender,
     (1 << 0),
     NULL,
     0,
 };
 
-static void grTCaptain_8021FC60(bool arg0) {}
+static void grTCaptain_OnDemoInit(int unused) {}
 
-static void grTCaptain_8021FC64(void)
+static void grTCaptain_OnInit(void)
 {
     stage_info.unk8C.b4 = false;
     stage_info.unk8C.b5 = true;
@@ -81,11 +82,11 @@ static void grTCaptain_8021FC64(void)
     Ground_801C4210();
     Ground_801C42AC();
 }
-static void grTcaptain_UnkStage0_OnLoad(void) {}
+static void grTCaptain_OnLoad(void) {}
 
-static void grTcaptain_UnkStage0_OnStart(void)
+static void grTCaptain_OnStart(void)
 {
-    grZakoGenerator_801CAE04(false);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 static bool grTCaptain_8021FCFC(void)
@@ -95,32 +96,15 @@ static bool grTCaptain_8021FCFC(void)
 
 static HSD_GObj* grTCaptain_8021FD04(int gobj_id)
 {
-    /// @todo Can't move below @c callbacks.
     HSD_GObj* gobj;
-
     StageCallbacks* callbacks = &grTCa_803E8608[gobj_id];
 
-    gobj = Ground_801C14D0(gobj_id);
+    gobj = Ground_GetStageGObj(gobj_id);
+
     if (gobj != NULL) {
-        Ground* gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtcaptain.c", 215,
-                 gobj_id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 215, gobj_id);
     }
 
     return gobj;
@@ -143,10 +127,10 @@ static void grTCaptain_8021FE24(Ground_GObj* arg0) {}
 
 static void grTCaptain_8021FE28(Ground_GObj* gobj)
 {
-    u8 _[8];
-
     Ground* gp = GET_GROUND(gobj);
-    Ground_801C2ED0(gobj->hsd_obj, gp->map_id);
+    HSD_JObj* jobj = GET_JOBJ(gobj);
+
+    Ground_801C2ED0(jobj, gp->map_id);
     grAnime_801C8138(gobj, gp->map_id, 0);
 }
 
@@ -165,10 +149,10 @@ static void grTCaptain_8021FEB4(Ground_GObj* arg0) {}
 
 static void grTCaptain_8021FEB8(Ground_GObj* gobj)
 {
-    u8 _[8];
-
     Ground* gp = GET_GROUND(gobj);
-    Ground_801C2ED0(gobj->hsd_obj, gp->map_id);
+    HSD_JObj* jobj = GET_JOBJ(gobj);
+
+    Ground_801C2ED0(jobj, gp->map_id);
     grAnime_801C8138(gobj, gp->map_id, 0);
 }
 
@@ -184,12 +168,13 @@ static void grTCaptain_8021FF10(Ground_GObj* arg0)
 
 static void grTCaptain_8021FF30(Ground_GObj* argo) {}
 
-static DynamicsDesc* grTCaptain_8021FF34(enum_t arg0)
+static DynamicsDesc* grTCaptain_OnTouchLine(enum_t arg0)
 {
     return NULL;
 }
 
-static bool grTCaptain_8021FF3C(Vec3* arg0, int arg1, HSD_JObj* arg2)
+static bool grTCaptain_OnCheckShadowRender(Vec3* arg0, int arg1,
+                                           HSD_JObj* arg2)
 {
     return true;
 }

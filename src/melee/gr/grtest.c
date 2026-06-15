@@ -12,6 +12,7 @@
 #include "gr/stage.h"
 #include "gr/types.h"
 
+#include <dolphin/os/OSError.h>
 #include <baselib/gobj.h>
 #include <baselib/gobjgxlink.h>
 #include <baselib/jobj.h>
@@ -32,19 +33,22 @@ StageCallbacks grTe_803E5708[] = {
       0xC0000000 },
     { 0, 0, 0, 0, 0 }
 };
-StageData grTe_803E5764 = { 0x01,
-                            grTe_803E5708,
-                            "/GrTe.dat",
-                            grTest_80206E30,
-                            grTest_80206E2C,
-                            grTest_UnkStage0_OnLoad,
-                            grTest_UnkStage0_OnStart,
-                            grTest_8020703C,
-                            grTest_8020740C,
-                            grTest_80207414,
-                            1,
-                            grTe_803E56B8,
-                            13 };
+
+StageData grTe_803E5764 = {
+    TEST,
+    grTe_803E5708,
+    "/GrTe.dat",
+    grTest_80206E30,
+    grTest_80206E2C,
+    grTest_UnkStage0_OnLoad,
+    grTest_UnkStage0_OnStart,
+    grTest_8020703C,
+    grTest_8020740C,
+    grTest_80207414,
+    1,
+    grTe_803E56B8,
+    13,
+};
 
 float grTe_804D6A48;
 
@@ -74,7 +78,7 @@ void grTest_UnkStage0_OnLoad(void) {}
 
 void grTest_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(false);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTest_8020703C(void)
@@ -86,27 +90,15 @@ HSD_GObj* grTest_80207044(int gobj_id)
 {
     HSD_GObj* gobj;
     StageCallbacks* callbacks = &grTe_803E5708[gobj_id];
-    gobj = Ground_801C14D0(gobj_id);
+
+    gobj = Ground_GetStageGObj(gobj_id);
+
     if (gobj != NULL) {
-        Ground* gp = GET_GROUND(gobj);
-        gp->x8_callback = 0;
-        gp->xC_callback = 0;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtest.c", 209,
-                 gobj_id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 209, gobj_id);
     }
+
     return gobj;
 }
 
@@ -150,9 +142,9 @@ void grTest_802071C4(Ground_GObj* gobj)
         iVar2 = Ground_801C3FA4(gobj, 0x10);
         if (iVar2) {
             if (HSD_JObjGetFlags(iVar2) & 0x10) {
-                HSD_JObjClearFlags(iVar2, 0x10);
+                HSD_JObjClearFlags(iVar2, JOBJ_HIDDEN);
             } else {
-                HSD_JObjSetFlags(iVar2, 0x10);
+                HSD_JObjSetFlags(iVar2, JOBJ_HIDDEN);
             }
             grTe_804D6A48 = 0.0f;
         }
@@ -162,9 +154,9 @@ void grTest_802071C4(Ground_GObj* gobj)
         iVar2 = Ground_801C3FA4(gobj, 0x11);
         if (iVar2) {
             if (HSD_JObjGetFlags(iVar2) & 0x10) {
-                HSD_JObjClearFlags(iVar2, 0x10);
+                HSD_JObjClearFlags(iVar2, JOBJ_HIDDEN);
             } else {
-                HSD_JObjSetFlags(iVar2, 0x10);
+                HSD_JObjSetFlags(iVar2, JOBJ_HIDDEN);
             }
             grTe_804D6A48 = 0.0f;
         }

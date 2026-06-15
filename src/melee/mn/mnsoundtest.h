@@ -2,6 +2,7 @@
 #define MELEE_MN_SOUNDTEST_H
 
 #include <placeholder.h>
+
 #include <baselib/controller.h>
 #include <baselib/sislib.h>
 extern HSD_PadStatus HSD_PadCopyStatus[4];
@@ -14,7 +15,7 @@ typedef struct {
     u16 unk4;
     f32 unk8;
     f32 unkC;
-    UNK_T unk10;
+    HSD_Text* unk10;
     HSD_Text* unk14;
     HSD_Text* unk18;
     HSD_Text* unk1C;
@@ -48,10 +49,10 @@ typedef struct {
 /* 24AD58 */ void mnSoundTest_8024AD58(HSD_GObj*, u8);
 /* 24AED0 */ void fn_8024AED0(HSD_GObj*);
 /* 24B2B0 */ void fn_8024B2B0(HSD_GObj*);
-/* 24B7E4 */ UNK_RET fn_8024B7E4(UNK_PARAMS);
-/* 24B8B4 */ UNK_RET fn_8024B8B4(UNK_PARAMS);
-/* 24BAF0 */ UNK_RET fn_8024BAF0(UNK_PARAMS);
-/* 24BCA0 */ UNK_RET mnSoundTest_8024BCA0(UNK_PARAMS);
-/* 24BEE0 */ UNK_RET mnSoundTest_8024BEE0(int);
+/* 24B7E4 */ void fn_8024B7E4(HSD_GObj*);
+/* 24B8B4 */ void fn_8024B8B4(HSD_GObj*, f32);
+/* 24BAF0 */ void fn_8024BAF0(HSD_GObj*);
+/* 24BCA0 */ void mnSoundTest_8024BCA0(int);
+/* 24BEE0 */ HSD_GObjProc* mnSoundTest_8024BEE0(s32);
 
 #endif

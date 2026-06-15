@@ -7,11 +7,11 @@
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
-#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcommon.h"
 #include "ft/ftparts.h"
 #include "ft/types.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ftCommon/ftCo_Dash.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_Guard.h"
@@ -51,7 +51,7 @@ void on21EC(HSD_GObj* gobj)
     if (ABS(fp->input.lstick.x) >= p_ftCommonData->x3C &&
         fp->x673 < p_ftCommonData->x40 + p_ftCommonData->x44)
     {
-        fp->x2070.x2072_b4 = true;
+        fp->x2070.count_thrown_items = true;
         fp->fv.lk.x4 = true;
     } else {
         fp->fv.lk.x4 = false;
@@ -161,7 +161,7 @@ float calcAnglePos(HSD_GObj* gobj, Vec3* pos, float dist)
         }
     }
     if (angle < 0) {
-        angle += 2 * M_PI;
+        angle += M_TAU;
     }
     return angle;
 }
@@ -193,8 +193,8 @@ void onAccessory4(HSD_GObj* gobj)
     {
         Vec3 pos;
         u8 _[4];
-        calcAnglePos(gobj, &pos, fp->fv.lk.x4 ? da->x20 : da->x24);
-        it_802A0534(fp->fv.lk.boomerang_gobj, &pos);
+        f32 angle = calcAnglePos(gobj, &pos, fp->fv.lk.x4 ? da->x20 : da->x24);
+        it_802A0534(fp->fv.lk.boomerang_gobj, &pos, angle);
         fp->cmd_vars[cmd_unk0_bool] = false;
         fp->cmd_vars[cmd_specials2_anim_bool] = false;
     }

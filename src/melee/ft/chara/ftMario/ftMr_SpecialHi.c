@@ -8,11 +8,11 @@
 
 #include "ft/fighter.h"
 #include "ft/ft_081B.h"
-#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcommon.h"
 #include "ft/ftparts.h"
 #include "ft/types.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ftCommon/ftCo_FallSpecial.h"
 #include "ftCommon/ftCo_Landing.h"
 
@@ -45,7 +45,7 @@ void ftMr_SpecialAirHi_Enter(HSD_GObj* gobj)
     ftAnim_8006EBA4(gobj);
 }
 
-// 0x800E1B24
+/// 0x800E1B24
 void ftMr_SpecialHi_Anim(HSD_GObj* gobj)
 {
     Fighter* fp;
@@ -59,7 +59,7 @@ void ftMr_SpecialHi_Anim(HSD_GObj* gobj)
     }
 }
 
-// 0x800E1B84
+/// 0x800E1B84
 void ftMr_SpecialAirHi_Anim(HSD_GObj* gobj)
 {
     u8 _[8];
@@ -88,7 +88,7 @@ void ftMr_SpecialHi_IASA(HSD_GObj* gobj)
     if (ftCheckThrowB3(fp)) {
         if (abs(fp->input.lstick.x) > sa->specialhi.reverse_stick_range) {
             ftCommon_UpdateFacing(fp);
-            ftParts_80075AF0(fp, 0, M_PI_2 * fp->facing_dir);
+            ftPartSetRotY(fp, 0, M_PI_2 * fp->facing_dir);
         }
     }
 }

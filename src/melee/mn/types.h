@@ -10,14 +10,19 @@
 #include <baselib/sislib.h>
 
 typedef struct {
-    u8 cursor; // @todo are these arbitrary variables the menus can use in any
-               // way?
+    u8 cursor;
     u8 unk1;
     u8 unk2;
     u8 unk3;
     HSD_Text* text;
 } Menu;
-// size 0x8
+/// size 0x8
+
+struct CountEntry {
+    u8 id;
+    u8 pad[3];
+    u32 val;
+};
 
 #ifdef M2C
 typedef struct Menu_GObj Menu_GObj;
@@ -83,6 +88,25 @@ struct PlayerInitData {
     /*0x1C*/ float x1C; ///< defense ratio
     /*0x20*/ float x20;
 };
+
+struct lbl_8046B668_t {
+    /* 0x00 */ s8 arr1[0x1C];
+    /* 0x1C */ s8 arr2[0x1C];
+};
+STATIC_ASSERT(sizeof(struct lbl_8046B668_t) == 0x38);
+
+typedef struct PerfLabelLine {
+    /* 0x00 */ struct PerfLabelLine* next;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ char text[0x80];
+} PerfLabelLine; /* size = 0x88 */
+STATIC_ASSERT(sizeof(PerfLabelLine) == 0x88);
+
+typedef struct lbl_8046B378_t {
+    /* 0x000 */ PerfLabelLine line0;
+    /* 0x088 */ PerfLabelLine line1;
+} lbl_8046B378_t; /* size = 0x110 */
+STATIC_ASSERT(sizeof(lbl_8046B378_t) == 0x110);
 
 struct StartMeleeRules {
     u32 x0_0 : 3; // match mode? 1 = stock mode, 2 = coin mode?
@@ -154,21 +178,21 @@ struct StartMeleeRules {
     u64 x20; // item mask
     int x28;
     float x2C;
-    float x30; // damage ratio
-    float x34; // game speed
+    float x30;         // damage ratio
+    float x34;         // game speed
     void (*x38)(int);  // on unpause callback
     void (*x3C)(int);  // on pause callback (conditional?)
     int (*x40)(void);  // on pause callback
     void (*x44)(void); // on VS match start callback
     void (*x48)(void); // ingame pre-frame callback
     void (*x4C)(void); // ingame post-frame callback
-    void (*x50)(int);  // on VS match end callback
+    void (*x50)(u8);   // on VS match end callback
     struct {
         u8 pad_x0[0x10];
         u8 x10_b0 : 1;
         u8 x10_b1 : 1;
     }* x54;
-    int x58;
+    struct lbl_8046B668_t* x58;
     u8 pad_x5C[0x60 - 0x5C];
 };
 
@@ -188,6 +212,33 @@ struct VsModeData {
     /* +7 */ u8 unk_0x7;
     /* +8 */ StartMeleeData data;
 };
+
+typedef enum CSSMatchType {
+    VS_MELEE = 0x0,
+    VS_CAMERA = 0x1,
+    VS_STAMINA = 0x2,
+    VS_SUDDEN_DEATH = 0x3,
+    VS_GIANT = 0x4,
+    VS_TINY = 0x5,
+    VS_INVISIBLE = 0x6,
+    VS_FIXED_CAMERA = 0x7,
+    VS_SINGLE_BUTTON = 0x8,
+    VS_LIGHTNING = 0x9,
+    VS_SLOWMO = 0xA,
+    REG_CLASSIC = 0xB,
+    REG_ADVENTURE = 0xC,
+    REG_ALLSTAR = 0xD,
+    EVENT_MATCH = 0xE,
+    STADIUM_TARGET = 0xF,
+    STADIUM_HOMERUN = 0x10,
+    STADIUM_MULTIMAN_10 = 0x11,
+    STADIUM_MULTIMAN_100 = 0x12,
+    STADIUM_3_MIN_MELEE = 0x13,
+    STADIUM_15_MIN_MELEE = 0x14,
+    STADIUM_ENDLESS_MELEE = 0x15,
+    STADIUM_CRUEL_MELEE = 0x16,
+    TRAINING_MODE = 0x17
+} CSSMatchType;
 
 struct CSSData {
     u16 unk_0x0; ///< 1p port?
@@ -313,15 +364,15 @@ struct CSSTag {
 };
 
 struct CSSKOStar {
-    HSD_Text* text;         // 0x00
-    float x4;               // 0x04
-    u8 joint;               // 0x08
-    u8 joint2;              // 0x09
-    int xc;                 // 0x0C
-    int x10;                // 0x10
-    int x14;                // 0x14
-    int x18;                // 0x18
-    int x1c;                // 0x1C
+    HSD_Text* text; // 0x00
+    float x4;       // 0x04
+    u8 joint;       // 0x08
+    u8 joint2;      // 0x09
+    int xc;         // 0x0C
+    int x10;        // 0x10
+    int x14;        // 0x14
+    int x18;        // 0x18
+    int x1c;        // 0x1C
 };
 
 struct CSSDoorsData {
@@ -342,8 +393,9 @@ struct CSSDoorsData {
     u8 xcc;
     u8 xcd;
     u8 xce;
-    int xcf;
-    int xd3;
+    u8 scroll_flag;
+    float xcf;
+    HSD_Text* xd3;
     float xd7;
     float xdb;
     float xdf;
@@ -354,6 +406,9 @@ struct CSSDoorsData {
 
 struct CSSDoorsData2 {
     u8 xf0[5];
+    u8 stocks;
+    u8 xf6;
+    u8 xf7;
     float xf8;
     float xfc;
     float x100;
@@ -363,10 +418,10 @@ struct CSSDoorsData2 {
     CSSKOStar ko_stars[4]; // 0x110
 };
 
-struct mnGallery_804A0B90_t {
+struct mnSnap_804A0B90_t {
     char pad_0[0x96000];
 };
-STATIC_ASSERT(sizeof(struct mnGallery_804A0B90_t) == 0x96000);
+STATIC_ASSERT(sizeof(struct mnSnap_804A0B90_t) == 0x96000);
 
 struct SSSData {
     /* +00 */ u8 unk_stage;
@@ -380,7 +435,158 @@ struct SSSData {
 struct AnimLoopSettings {
     /* +00 */ f32 start_frame;
     /* +04 */ f32 end_frame;
-    /* +08 */ f32 loop_frame; ///< if -1.0f, dont loop
+    /* +08 */ f32 loop_frame; ///< if this is -0.1f, dont loop
 };
+
+/// User data for VS Records diagram screen (mnDiagram)
+struct Diagram {
+    /* 0x00 */ u8 saved_menu; ///< Saved menu ID on entry
+    /* 0x01 */ u8 pad_1;
+    /* 0x02 */ u16 saved_selection; ///< Saved hovered selection on entry
+    /* 0x04 */ u8 anim_state;       ///< 0 = idle, 1 = intro anim playing
+    /* 0x05 */ u8 pad_5[3];
+    /* 0x08 */ HSD_JObj* jobjs[13]; ///< JObj references, filled by lb_80011E24
+    /* 0x3C */ u16
+        fighter_cursor_pos;          ///< Fighter mode cursor (row << 8 | col)
+    /* 0x3E */ u16 name_cursor_pos;  ///< Name mode cursor (row << 8 | col)
+    /* 0x40 */ HSD_GObj* popup_gobj; ///< Popup window GObj (or NULL)
+    /* 0x44 */ u8 is_name_mode;      ///< 0 = fighter mode, 1 = name mode
+    /* 0x45 */ u8 pad_45[3];
+    /* 0x48 */ HSD_Text* col_header_text; ///< Column header text object
+    /* 0x4C */ HSD_Text* row_header_text; ///< Row header text object
+};
+
+struct MenuKindData {
+    AnimLoopSettings* anim_loop;
+    float start_frame;
+    u16* description_indices; ///< array of sis idx's for each selection
+    u8 selection_count;       ///< number of options/cursors in the menu
+    void (*think)(HSD_GObj*);
+};
+
+/// User data for VS Records page 2 (character details screen)
+/// Total size: 0xC8 bytes
+struct Diagram2 {
+    /* 0x00 */ u8 saved_menu; ///< Saved menu ID on entry
+    /* 0x01 */ u8 pad_1;
+    /* 0x02 */ u16 saved_selection; ///< Saved hovered selection on entry
+    /* 0x04 */ u8 anim_state;       ///< 0 = idle, 1 = intro anim playing
+    /* 0x05 */ u8 pad_5[3];
+    /* 0x08 */ HSD_JObj* x8;
+    /* 0x0C */ HSD_JObj* xC;
+    /* 0x10 */ HSD_JObj* x10;
+    /* 0x14 */ HSD_JObj* fighter_mode_header; ///< shown in fighter mode
+    /* 0x18 */ HSD_JObj* x18;
+    /* 0x1C */ HSD_JObj* x1C;
+    /* 0x20 */ HSD_JObj* name_mode_header; ///< shown in name mode
+    /* 0x24 */ HSD_JObj* x24;
+    /* 0x28 */ HSD_JObj* icon_parent;   ///< parent for character icons
+    /* 0x2C */ HSD_JObj* row0_ref;      ///< row 0 position reference
+    /* 0x30 */ HSD_JObj* row1_ref;      ///< row 1 position reference
+    /* 0x34 */ HSD_JObj* down_arrow;    ///< hidden when at bottom
+    /* 0x38 */ HSD_JObj* up_arrow;      ///< hidden when scroll_offset == 0
+    /* 0x3C */ HSD_JObj* left_arrow;    ///< hidden at first selection
+    /* 0x40 */ HSD_JObj* right_arrow;   ///< hidden at last selection
+    /* 0x44 */ u16 scroll_offset;       ///< current scroll position
+    /* 0x46 */ u8 selected_fighter_idx; ///< fighter mode selection
+    /* 0x47 */ u8 selected_name_idx;    ///< name mode selection
+    /* 0x48 */ u8 is_name_mode;         ///< 0 = fighter, 1 = name mode
+    /* 0x49 */ u8 pad_49[3];
+    /* 0x4C */ HSD_Text* row_labels[10]; ///< stat category label text
+    /* 0x74 */ HSD_Text* row_values[10]; ///< stat value text
+    /* 0x9C */ HSD_Text* row_icons[10];  ///< optional stat icons
+    /* 0xC4 */ HSD_Text* header_text;    ///< entity name header
+};
+
+/// User data for VS Records page 3 (stat rankings screen)
+/// Total size: 0x78 bytes
+struct Diagram3 {
+    /* 0x00 */ u8 saved_menu;
+    /* 0x01 */ u8 saved_selection;
+    /* 0x02 */ u8 pad_2[2];
+    /* 0x04 */ u8 scroll_offset;
+    /* 0x05 */ u8 anim_state;
+    /* 0x06 */ u8 is_name_mode;
+    /* 0x07 */ u8 pad_7;
+    /* 0x08 */ HSD_JObj* jobjs[10];
+    /* 0x30 */ HSD_Text* row_labels[10];
+    /* 0x58 */ HSD_Text* title_text;
+    /* 0x5C */ HSD_Text* value_text;
+    /* 0x60 */ HSD_Text* row_icons[5];
+    /* 0x74 */ HSD_GObj* popup_gobj;
+};
+
+/// VS Records stat types for mnDiagram2 (page 2 of VS Records menu).
+/// Fighter mode shows stats 0x00-0x14 (21 types).
+/// Name mode shows stats 0x00-0x17 (24 types, including character icon stats).
+typedef enum VSRecordsStatType {
+    /* 0x00 */ VSSTAT_TOTAL_KOS,      ///< Total KOs across all opponents
+    /* 0x01 */ VSSTAT_TOTAL_FALLS,    ///< Total falls (deaths)
+    /* 0x02 */ VSSTAT_SD_COUNT,       ///< Self-destructs (FD+0x34 / ND+0xF0)
+    /* 0x03 */ VSSTAT_HIT_PERCENTAGE, ///< Attack accuracy % (calculated)
+    /* 0x04 */ VSSTAT_DAMAGE_DEALT, ///< Total damage dealt (FD+0x40 / ND+0xFC)
+    /* 0x05 */ VSSTAT_DAMAGE_TAKEN, ///< Total damage received (FD+0x44 /
+                                    ///< ND+0x100)
+    /* 0x06 */ VSSTAT_DAMAGE_RECOVERED, ///< Damage healed (FD+0x48 / ND+0x104)
+    /* 0x07 */ VSSTAT_PEAK_DAMAGE, ///< Highest % survived (FD+0x4C / ND+0x108)
+    /* 0x08 */ VSSTAT_MATCH_COUNT, ///< Total matches played (FD+0x4E /
+                                   ///< ND+0x10A)
+    /* 0x09 */ VSSTAT_VICTORIES,   ///< Total wins (FD+0x50 / ND+0x10C)
+    /* 0x0A */ VSSTAT_LOSSES,      ///< Total losses (FD+0x52 / ND+0x10E)
+    /* 0x0B */ VSSTAT_PLAY_TIME,   ///< Total play time in frames (FD+0x54 /
+                                   ///< ND+0x110)
+    /* 0x0C */ VSSTAT_PLAY_PERCENTAGE, ///< % of total VS play time
+                                       ///< (calculated)
+    /* 0x0D */ VSSTAT_AVG_PLAYERS,     ///< Average player count (calculated)
+    /* 0x0E */ VSSTAT_WALK_DISTANCE,   ///< Distance walked in ft (FD+0x5C /
+                                       ///< ND+0x118)
+    /* 0x0F */ VSSTAT_RUN_DISTANCE,    ///< Distance run in ft (FD+0x60 /
+                                       ///< ND+0x11C)
+    /* 0x10 */ VSSTAT_FALL_DISTANCE,   ///< Distance fallen in ft (FD+0x64 /
+                                       ///< ND+0x120)
+    /* 0x11 */ VSSTAT_PEAK_HEIGHT,     ///< Max height reached in ft (FD+0x68 /
+                                       ///< ND+0x124)
+    /* 0x12 */ VSSTAT_COINS_COLLECTED, ///< Coins picked up (FD+0x6C /
+                                       ///< ND+0x128)
+    /* 0x13 */ VSSTAT_COINS_SWIPED, ///< Coins stolen from opponents (FD+0x70 /
+                                    ///< ND+0x12C)
+    /* 0x14 */ VSSTAT_COINS_LOST,   ///< Coins lost to opponents (FD+0x74 /
+                                    ///< ND+0x130)
+    /* 0x15 */ VSSTAT_MOST_PLAYED,  ///< Most played fighter (Name mode only,
+                                    ///< icon)
+    /* 0x16 */ VSSTAT_SECOND_PLAYED, ///< 2nd most played fighter (Name mode
+                                     ///< only, icon)
+    /* 0x17 */ VSSTAT_LEAST_PLAYED,  ///< Least played fighter (Name mode only,
+                                     ///< icon)
+
+    VSSTAT_COUNT_FIGHTER = 0x15, ///< Number of stats in fighter mode
+    VSSTAT_COUNT_NAME = 0x18,    ///< Number of stats in name mode
+} VSRecordsStatType;
+
+typedef struct GlyphVariantEntry {
+    /* 0x00 */ u8 selection;
+    /* 0x01 */ u8 pad_01[3];
+    /* 0x04 */ HSD_JObj* jobjs[7];
+    /* 0x20 */ HSD_Text* text;
+} GlyphVariantEntry; /* size = 0x24 */
+
+typedef struct NameNewEntry {
+    /* 0x00 */ u8 x0;
+    /* 0x01 */ u8 x1;
+    /* 0x02 */ u8 x2;
+    /* 0x03 */ u8 x3;
+    /* 0x04 */ HSD_JObj* jobjs[19];
+    /* 0x50 */ u8 mode;
+    /* 0x51 */ u8 last_key_sel;
+    /* 0x52 */ u8 pad_52[2];
+    /* 0x54 */ HSD_GObj* variant_gobj;
+    /* 0x58 */ u8 cursor_pos;
+    /* 0x59 */ u8 name_index;
+    /* 0x5A */ u8 auto_history[5];
+    /* 0x5F */ u8 pad_5F;
+    /* 0x60 */ HSD_Text* key_text;
+    /* 0x64 */ HSD_Text* name_disp_text;
+    /* 0x68 */ HSD_Text* desc_text;
+} NameNewEntry; /* size = 0x6C */
 
 #endif

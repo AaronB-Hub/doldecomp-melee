@@ -2,7 +2,12 @@
 
 #include "lbcardgame.static.h"
 
-#include "un/un_3028.h"
+#include "gm/gm_unsplit.h"
+#include "gm/gmmain_lib.h"
+#include "if/textlib.h"
+#include "lb/lbarchive.h"
+#include "lb/lbcardnew.h"
+#include "lb/lblanguage.h"
 
 #include <dolphin/card.h>
 #include <dolphin/os.h>
@@ -14,13 +19,6 @@
 #include <sysdolphin/baselib/gobjproc.h>
 #include <sysdolphin/baselib/hsd_3AA7.h>
 #include <sysdolphin/baselib/jobj.h>
-#include <melee/gm/gm_unsplit.h>
-#include <melee/gm/gmmain_lib.h>
-#include <melee/lb/lb_0192.h>
-#include <melee/lb/lbarchive.h>
-#include <melee/lb/lbcardnew.h>
-#include <melee/lb/lblanguage.h>
-#include <melee/un/un_2FC9.h>
 
 static struct {
     u32 x0, x4, x8;
@@ -35,13 +33,22 @@ static struct {
     u32 pad[5];
     struct gmm_x1868* x14;
     struct {
-        UNK_T x0;
-        UNK_T x4;
+        u32 x0;
+        u32 x4;
         UNK_T x8;
     } unk_arr[8];
-} lb_803BAB74 = {
-    0, // TODO
-};
+} lb_803BAB74 = { { 0, 3, 0, 0x1790, 0 },
+                  NULL,
+                  {
+                      { 0x1F2C, 1, NULL },
+                      { 0x1F2C, 1, NULL },
+                      { 0x1F2C, 1, NULL },
+                      { 0x1F2C, 1, NULL },
+                      { 0x1F2C, 1, NULL },
+                      { 0x1F2C, 1, NULL },
+                      { 0x1F2C, 1, NULL },
+                      { -1, 0, NULL },
+                  } };
 
 void lb_8001C600(void)
 {
@@ -59,8 +66,8 @@ const char* lb_8001C658(void)
     int i;
 
     s64 temp_r6 = OSGetTime();
-    temp_r6 /= OS_TIMER_CLOCK;
-    OSTicksToCalendarTime(OSSecondsToTicks(temp_r6), &time);
+    u32 seconds = OSTicksToSeconds(temp_r6);
+    OSTicksToCalendarTime(OSSecondsToTicks((u64) seconds), &time);
     for (i = 0; i < 0x40; i++) {
         lb_80433318._1C[i] = 0;
     }
@@ -98,9 +105,7 @@ u32 lb_8001C87C(void)
 
 int lb_8001C8BC(void)
 {
-    if (!lb_80433318.enable) {
-        __assert("lbcardgame.c", 0x140, "_p(enable)");
-    }
+    HSD_ASSERTMSG(0x140, lb_80433318.enable, "_p(enable)");
 
     return lb_8001BC18(0, "SuperSmashBros0110290334", (void**) &lb_803BAB74,
                        &lb_803BAB60, lb_8001C658(), lb_8001C820(),
@@ -184,7 +189,6 @@ void lb_8001CC84(void)
 {
     int temp_r24;
     int temp_r3;
-    int var_r3;
 
     do {
         switch (lb_80433318.x10) {
@@ -210,7 +214,7 @@ void lb_8001CC84(void)
                 if (temp_r3 != 0) {
                     lb_80433318.x14 = 1;
                 }
-                lb_80433318.x10 = 0;
+                lb_80433318.x10 = temp_r3 = 0;
             }
             break;
         }
@@ -226,10 +230,8 @@ void lb_8001CDB4(void)
 
 void lb_8001CE00(void)
 {
-    if (!lb_80433318.enable) {
-        __assert("lbcardgame.c", 0x2A3, "_p(enable)");
-    }
-    *gmMainLib_8015CD98() += gmMainLib_8015FC74();
+    HSD_ASSERTMSG(0x2A3, lb_80433318.enable, "_p(enable)");
+    *gm_GetPowerTime() += gmMainLib_8015FC74();
     lb_80433318.xC = true;
 }
 
@@ -274,7 +276,7 @@ void lb_8001CF18(void)
 
         HSD_GObjObject_80390A70(gobj, HSD_GObj_804D7849, jobj);
         GObj_SetupGXLink(gobj, HSD_GObj_JObjCallback, 0x13, 0);
-        HSD_GObjProc_8038FD54(gobj, fn_8001CEC0, 0);
+        HSD_GObj_SetupProc(gobj, fn_8001CEC0, 0);
         gm_8016895C(jobj, lb_80433318.x64->models[0], 0);
         HSD_JObjReqAnimAll(jobj, 0.0F);
         HSD_JObjAnimAll(jobj);

@@ -73,7 +73,7 @@ StageCallbacks grTPe_803E90F0[4] = {
 };
 
 StageData grTPe_803E914C = {
-    (1 << 0) | (1 << 1) | (1 << 2) | (1 << 4) | (1 << 5),
+    TPEACH,
     grTPe_803E90F0,
     "/GrTPe.dat",
     grTPeach_802228B8,
@@ -108,7 +108,7 @@ void grTpeach_UnkStage0_OnLoad(void) {}
 
 void grTpeach_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTPeach_80222950(void)
@@ -118,30 +118,17 @@ bool grTPeach_80222950(void)
 
 Ground_GObj* grTPeach_80222958(int index)
 {
-    /// @todo Can't move below @c callbacks.
     HSD_GObj* gobj;
-
     StageCallbacks* callbacks = &grTPe_803E90F0[index];
-    gobj = Ground_801C14D0(index);
-    if (gobj != NULL) {
-        Ground* gp = GET_GROUND(gobj);
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
 
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+    gobj = Ground_GetStageGObj(index);
+
+    if (gobj != NULL) {
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtpeach.c", 195,
-                 index);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 195, index);
     }
+
     return gobj;
 }
 

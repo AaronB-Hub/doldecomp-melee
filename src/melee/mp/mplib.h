@@ -9,7 +9,9 @@
 #include "ft/forward.h"
 #include "gr/forward.h"
 #include "lb/forward.h"
-#include "mp/forward.h"
+
+#include "mp/types.h"
+
 #include <baselib/forward.h>
 
 #include <common_structs.h>
@@ -22,6 +24,7 @@
 /* 04D184 */ void mpPruneEmptyLines(MapCollData* coll_data);
 /* 04D288 */ void mpLibLoad(MapCollData* coll_data);
 /* 04DB78 */ int mpLineGetNext(int line_id);
+/* 04DBB4 */ bool mpLib_8004DBB4(int index, Vec3* out);
 /* 04DC04 */ int mpLineGetPrev(int line_id);
 /* 04DD90 */ int mpLib_8004DD90_Floor(int line_id, Vec3*, float* y_out,
                                       u32* flags_out, Vec3* normal_out);
@@ -162,7 +165,7 @@
 /* 056B6C */ int mpJointFromLine(int line_id);
 /* 056C54 */ bool mpLib_80056C54(int line_id, Vec3* pos, int* line_id_out,
                                  Vec3* vec_out, u32* flags_out,
-                                 Vec3* normal_out, float, float, float, float);
+                                 Vec3* normal_out, float, float);
 /* 057424 */ void mpLib_80057424(int joint_id);
 /* 057528 */ void mpLib_80057528(int line_id);
 /* 0575B0 */ void mpLib_800575B0(int line_id);
@@ -172,7 +175,7 @@
 /* 057FDC */ void mpLib_80057FDC(int joint_id);
 /* 058044 */ void mpLib_80058044(int joint_id);
 /* 0580AC */ void mpJointSetB10(int joint_id);
-/* 0580C8 */ void mpJointSetCb1(int joint_id, Ground*, mpLib_Callback);
+/* 0580C8 */ void mpJointSetCb1(int joint_id, void*, mpLib_Callback);
 /* 0580E0 */ void mpJointClearCb1(int joint_id);
 /* 0580FC */ void mpJointGetCb1(int joint_id, mpLib_Callback*, Ground**);
 /* 05811C */ void mpLib_8005811C(CollData*, int ledge_id);
@@ -200,5 +203,6 @@
 /* 05A220 */ void mpLib_DrawSpecialPoints(void);
 /* 05A2DC */ void mpLib_8005A2DC(void);
 /* 05A340 */ void mpLib_DrawZones(void);
+/* 458868 */ extern mpCollisionBox mpLib_80458868[2];
 
 #endif

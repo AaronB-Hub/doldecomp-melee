@@ -10,12 +10,12 @@
 
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
-#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftdata.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
 #include "ftCLink/ftCl_Init.h"
 #include "ftCommon/ftCo_Attack1.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ftCommon/ftCo_AttackHi3.h"
 #include "ftCommon/ftCo_AttackHi4.h"
 #include "ftCommon/ftCo_AttackLw3.h"
@@ -25,7 +25,7 @@
 #include "ftCommon/ftCo_Guard.h"
 #include "ftCommon/ftCo_SpecialS.h"
 #include "ftDrMario/ftDr_Init.h"
-#include "ftKirby/ftKb_Init.h"
+#include "ftKirby/ftkirby.h"
 #include "ftPeach/ftPe_Init.h"
 #include "ftZelda/ftZd_Init.h"
 #include "lb/lb_00B0.h"
@@ -124,7 +124,7 @@ void ftCo_800DEAE8(Fighter_GObj* gobj, FtMotionId msid0, FtMotionId msid1)
 void ftCo_800DEBD0(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    if (g_debugLevel >= 3) {
+    if (DbLevel >= 3) {
         if (fp->kind == FTKIND_PEACH) {
             ftPe_Init_8011B93C(gobj);
         }

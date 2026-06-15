@@ -8,10 +8,10 @@
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0892.h"
-#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftcolanim.h"
 #include "ft/ftcommon.h"
 #include "ft/inlines.h"
+#include "ftCommon/ftCo_Attack100.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_FallSpecial.h"
 #include "ftCommon/ftCo_Landing.h"
@@ -470,7 +470,7 @@ void shootNeedles(Fighter_GObj* gobj)
                 Item_GObj* item_gobj =
                     it_802AFD8C(gobj, &pos, 79, fp->facing_dir);
                 if (item_gobj != NULL) {
-                    item_gobj = it_802AFEA8(item_gobj, gobj, 0);
+                    it_802AFEA8(item_gobj, gobj, 0);
                 }
             }
 

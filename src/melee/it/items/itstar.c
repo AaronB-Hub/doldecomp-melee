@@ -2,6 +2,7 @@
 
 #include "it/inlines.h"
 #include "it/it_2725.h"
+#include "it/itmaplib.h"
 #include "it/itCommonItems.h"
 #include "it/types.h"
 
@@ -20,7 +21,7 @@ ItemStateTable it_803F57A0[] = {
     },
 };
 
-void it_3F14_Logic10_Spawned(Item_GObj* item_gobj)
+void itStar_Logic10_Spawned(Item_GObj* item_gobj)
 {
     Item* item = GET_ITEM(item_gobj);
     itStar_ItemVars* star = item->xC4_article_data->x4_specialAttributes;
@@ -79,12 +80,12 @@ bool itStar_UnkMotion0_Coll(Item_GObj* item_gobj)
     return false;
 }
 
-bool it_3F14_Logic10_DmgDealt(Item_GObj* item_gobj)
+bool itStar_Logic10_DmgDealt(Item_GObj* item_gobj)
 {
     return true;
 }
 
-void it_3F14_Logic10_EvtUnk(Item_GObj* item_gobj, HSD_GObj* ref)
+void itStar_Logic10_EvtUnk(Item_GObj* item_gobj, HSD_GObj* ref)
 {
     it_8026B894(item_gobj, ref);
 }

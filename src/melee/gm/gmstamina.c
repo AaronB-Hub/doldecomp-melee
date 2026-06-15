@@ -33,7 +33,6 @@
 #include <melee/mn/mngallery.h>
 #include <melee/mn/types.h>
 #include <melee/pl/player.h>
-#include <melee/un/un_2FC9.h>
 #include <melee/vi/types.h>
 #include <melee/vi/vi0102.h>
 #include <melee/vi/vi0402.h>
@@ -41,7 +40,7 @@
 #include <melee/vi/vi1101.h>
 #include <melee/vi/vi1201v1.h>
 
-MinorScene gm_803DF138_MinorScenes[] = {
+GameScene gm_803DF138_Scenes[] = {
     {
         0,
         3,
@@ -49,7 +48,7 @@ MinorScene gm_803DF138_MinorScenes[] = {
         gm_801B91C8,
         gm_801B922C,
         {
-            MN_CSS,
+            GS_CSS,
             &gm_804807B0,
             &gm_804807B0,
         },
@@ -61,7 +60,7 @@ MinorScene gm_803DF138_MinorScenes[] = {
         gm_801B9254,
         gm_801B927C,
         {
-            MN_SSS,
+            GS_SSS,
             &gm_80480668,
             &gm_80480668,
         },
@@ -73,7 +72,7 @@ MinorScene gm_803DF138_MinorScenes[] = {
         gm_801B931C,
         gm_801B9560,
         {
-            MN_VS,
+            GS_VS,
             &gm_80480530,
             &gm_80479D98,
         },
@@ -89,7 +88,7 @@ static struct {
 
 extern MatchExitInfo gm_80479D98;
 
-void gm_801B91C8(MinorScene* arg0)
+void gm_801B91C8(GameScene* arg0)
 {
     VsModeData* vs = &gmMainLib_804D3EE0->unk_10D0;
     CSSData* css = gm_801A427C(arg0);
@@ -99,17 +98,17 @@ void gm_801B91C8(MinorScene* arg0)
     lbDvd_800174BC();
 }
 
-void gm_801B922C(MinorScene* scene)
+void gm_801B922C(GameScene* scene)
 {
     gm_801A5680(scene, &gmMainLib_804D3EE0->unk_10D0);
 }
 
-void gm_801B9254(MinorScene* scene)
+void gm_801B9254(GameScene* scene)
 {
     gm_801A5754(scene, &gmMainLib_804D3EE0->unk_10D0);
 }
 
-void gm_801B927C(MinorScene* arg0)
+void gm_801B927C(GameScene* arg0)
 {
     VsModeData* vs = &gmMainLib_804D3EE0->unk_10D0;
     SSSData* sss = gm_801A4284(arg0);
@@ -122,10 +121,10 @@ void gm_801B927C(MinorScene* arg0)
         lbAudioAx_80027168();
         return;
     }
-    gm_SetScenePendingMinor(0);
+    gm_SetPendingScene(0);
 }
 
-void gm_801B931C(MinorScene* arg0)
+void gm_801B931C(GameScene* arg0)
 {
     VsModeData* vs = &gmMainLib_804D3EE0->unk_10D0;
     StartMeleeData* start = gm_801A427C(arg0);
@@ -154,7 +153,7 @@ void gm_801B931C(MinorScene* arg0)
     gm_80168FC4();
 }
 
-void gm_801B9560(MinorScene* scene)
+void gm_801B9560(GameScene* scene)
 {
     VsModeData* vs = &gmMainLib_804D3EE0->unk_10D0;
     gm_80168710(&gm_80479D98.match_end, vs);
@@ -260,5 +259,5 @@ void fn_801B9850(void)
         }
         gm_804975F8.slomo_counter[i] = 0;
     }
-    HSD_GObjProc_8038FD54(GObj_Create(0xF, 0x11, 0), fn_801B96E8, 0x15);
+    HSD_GObj_SetupProc(GObj_Create(0xF, 0x11, 0), fn_801B96E8, 0x15);
 }

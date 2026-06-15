@@ -33,7 +33,7 @@
 /// @todo Move elsewhere.
 #define MAX_STICK_MAG 0.999f
 
-// points velocity toward facing direction
+/// points velocity toward facing direction
 void ftPk_SpecialHi_UpdateVel(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
@@ -268,7 +268,7 @@ void ftPk_SpecialHi_8012642C(HSD_GObj* gobj)
     float tempf = (fp->facing_dir * atan2f(fp->self_vel.x, fp->self_vel.y)) +
                   (pika_attr->x78 - half_pi);
 
-    ftParts_8007592C(fp, ftParts_GetBoneIndex(fp, FtPart_XRotN), tempf);
+    ftPartSetRotX(fp, ftParts_GetBoneIndex(fp, FtPart_XRotN), tempf);
     scl.x = pika_attr->x7C_scale.x;
     scl.y = pika_attr->x7C_scale.y;
     scl.z = pika_attr->x7C_scale.z;
@@ -336,9 +336,9 @@ void ftPk_SpecialHiStart1_Coll(HSD_GObj* gobj)
             float angle =
                 atan2f(collData->floor.normal.x, collData->floor.normal.y);
             float angle2 = (fighter2->facing_dir * angle) + pika_attr->x68;
-            ftParts_8007592C(fighter2,
-                             ftParts_GetBoneIndex(fighter2, FtPart_XRotN),
-                             angle2);
+            ftPartSetRotX(fighter2,
+                          ftParts_GetBoneIndex(fighter2, FtPart_XRotN),
+                          angle2);
         }
         scl.x = pika_attr->x6C_scale.x;
         scl.y = pika_attr->x6C_scale.y;
@@ -463,7 +463,7 @@ void ftPk_SpecialHi_ChangeMotion_Unk03(HSD_GObj* gobj)
         float angle = (fp->facing_dir * atan2f(collData->floor.normal.x,
                                                collData->floor.normal.y)) +
                       pika_attr->x68;
-        ftParts_8007592C(fp, ftParts_GetBoneIndex(fp, FtPart_XRotN), angle);
+        ftPartSetRotX(fp, ftParts_GetBoneIndex(fp, FtPart_XRotN), angle);
     }
 
     scl.x = pika_attr->x6C_scale.x;
@@ -481,7 +481,7 @@ static inline float get_max_and_fill_stack(void)
     return MAX_STICK_MAG;
 }
 
-// grounded up b zip
+/// grounded up b zip
 void ftPk_SpecialHi_80126C0C(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
@@ -550,7 +550,7 @@ void ftPk_SpecialHi_80126C0C(HSD_GObj* gobj)
     ftPk_SpecialHi_80126E1C(gobj);
 }
 
-// aerial up b zip
+/// aerial up b zip
 void ftPk_SpecialHi_80126E1C(HSD_GObj* gobj)
 {
     float temp_f2_2;
@@ -640,7 +640,7 @@ static inline bool return_and_fill_stack(void)
     return 0;
 }
 
-// seems to check whether to perform a second up b zip
+/// seems to check whether to perform a second up b zip
 bool ftPk_SpecialHi_80127064(HSD_GObj* gobj)
 {
     Fighter* fp = gobj->user_data;

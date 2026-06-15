@@ -27,13 +27,26 @@
 #include <lb/lbaudio_ax.h>
 #include <sc/types.h>
 
-
 inline int mnInfoBonus_802528F8_inline(int j)
 {
     if (*mnInfoBonus_804D6C80) {
         return TRUE;
     }
     return gm_8016F120(j);
+}
+
+inline void textSize(HSD_Text* text)
+{
+    text->font_size.x = 0.0521F;
+    text->font_size.y = 0.0521F;
+}
+
+static void textSetup(struct mnInfoBonus_804A09B0_t* o)
+{
+    o->x40 =
+        HSD_SisLib_803A5ACC(0, 1, -9.5F, 9.1F, 17.F, 364.68332F, 38.38772F);
+    textSize(o->x40);
+    HSD_SisLib_803A6368(o->x40, 0xA5);
 }
 
 int mnInfoBonus_802528F8(void)
@@ -152,8 +165,8 @@ void fn_80252C50(HSD_GObj* gobj)
     u64 temp_r3;
     u32 pad_0;
 
-    if (mn_804D6BC8.x0 != 0) {
-        --mn_804D6BC8.x0;
+    if (mn_804D6BC8.cooldown != 0) {
+        --mn_804D6BC8.cooldown;
         mn_804D6BC8.x2 = 0;
         mn_804D6BC8.x4 = 0;
         return;
@@ -164,16 +177,14 @@ void fn_80252C50(HSD_GObj* gobj)
         }
         --o->x44;
         return;
-    }
-
-    // TODO some GC/Wii decomp members are suspicious of this block.
+    } ///< @todo some GC/Wii decomp members are suspicious of this block.
     // Investigate further Context: inadvertent hack to remove an extra `li
     // r29,0` operation using i = 0
     i = 0;
-    temp_r3 = Menu_GetAllEvents();
+    temp_r3 = Menu_GetAllInputs();
     if (((u64) temp_r3 & 0x20) != 0) {
         lbAudioAx_80024030(i);
-        mn_804A04F0.x11 = i;
+        mn_804A04F0.entering_menu = i;
         mn_80229894(0x1C, 1U, 3);
         for (i = 0; i < 5; ++i) {
             // Weird code end
@@ -185,9 +196,8 @@ void fn_80252C50(HSD_GObj* gobj)
         HSD_GObjPLink_80390228(o->x4C);
         o->x4C = NULL;
         return;
-    }
-    // TODO inline button getter
-    if (g_debugLevel >= 3 && HSD_PadCopyStatus->button & 0x40 &&
+    } ///< @todo inline button getter
+    if (DbLevel >= 3 && HSD_PadCopyStatus->button & 0x40 &&
         HSD_PadCopyStatus->button & 0x20 && HSD_PadCopyStatus->button & 0x100)
     {
         o->x0 = 0;
@@ -201,7 +211,7 @@ void fn_80252C50(HSD_GObj* gobj)
             mnInfoBonus_802529B4();
         }
     } else if (((u64) temp_r3 & 2) != 0 &&
-               mnInfoBonus_802528F8_wrapper() /* TODO don't inline! */ > 5)
+               mnInfoBonus_802528F8_wrapper() /* @todo don't inline! */ > 5)
     {
         lbAudioAx_80024030(2);
         ++o->x0;
@@ -238,16 +248,18 @@ void fn_80252E4C(HSD_GObj* arg0)
     if (o->x0 > 0) {
         HSD_JObjClearFlags(fn_80252E4C_inline_GetJObjNext(
                                fn_80252E4C_inline_GetJObjChild(temp_r30)),
-                           0x10);
+                           JOBJ_HIDDEN);
     } else {
         HSD_JObjSetFlags(fn_80252E4C_inline_GetJObjNext(
                              fn_80252E4C_inline_GetJObjChild(temp_r30)),
-                         0x10);
+                         JOBJ_HIDDEN);
     }
     if (mnInfoBonus_802528F8_wrapper() > 5) {
-        HSD_JObjClearFlags(fn_80252E4C_inline_GetJObjChild(temp_r30), 0x10U);
+        HSD_JObjClearFlags(fn_80252E4C_inline_GetJObjChild(temp_r30),
+                           JOBJ_HIDDEN);
     } else {
-        HSD_JObjSetFlags(fn_80252E4C_inline_GetJObjChild(temp_r30), 0x10U);
+        HSD_JObjSetFlags(fn_80252E4C_inline_GetJObjChild(temp_r30),
+                         JOBJ_HIDDEN);
     }
     HSD_JObjReqAnimAll(temp_r30, (f32) o->x48);
     HSD_JObjAnimAll(temp_r30);
@@ -281,12 +293,12 @@ inline void mnInfoBonus_80252F8C_inline0(struct mnInfoBonus_804A09B0_t* o)
     StaticModelDesc* model_desc;
 
     model_desc = &o->x50;
-    gobj = GObj_Create(6U, 7U, 0x80U);
+    gobj = GObj_Create(6, 7, 0x80);
     o->x4C = gobj;
     jobj = HSD_JObjLoadJoint(model_desc->joint);
 
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D7849, jobj);
-    GObj_SetupGXLink(gobj, HSD_GObj_JObjCallback, 4U, 0x80U);
+    GObj_SetupGXLink(gobj, HSD_GObj_JObjCallback, 4, 0x80);
     HSD_JObjAddAnimAll(jobj, model_desc->animjoint, model_desc->matanim_joint,
                        model_desc->shapeanim_joint);
     HSD_JObjReqAnimAll(jobj, 0.F);
@@ -294,16 +306,9 @@ inline void mnInfoBonus_80252F8C_inline0(struct mnInfoBonus_804A09B0_t* o)
 
     HSD_JObjSetFlags(
         mnInfoBonus_inline_GetJObjNext(mnInfoBonus_inline_GetJObjChild(jobj)),
-        0x10U);
-    HSD_JObjSetFlags(mnInfoBonus_inline_GetJObjChild(jobj), 0x10U);
-    mnInfoBonus_inline_SetGObjFlag(
-        HSD_GObjProc_8038FD54(gobj, fn_80252E4C, 0U));
-}
-
-inline void mnInfoBonus_80252F8C_inline1(HSD_Text* text)
-{
-    text->font_size.x = 0.0521F;
-    text->font_size.y = 0.0521F;
+        JOBJ_HIDDEN);
+    HSD_JObjSetFlags(mnInfoBonus_inline_GetJObjChild(jobj), JOBJ_HIDDEN);
+    mnInfoBonus_inline_SetGObjFlag(HSD_GObj_SetupProc(gobj, fn_80252E4C, 0));
 }
 
 void mnInfoBonus_80252F8C(void)
@@ -312,10 +317,10 @@ void mnInfoBonus_80252F8C(void)
     HSD_Archive* archive;
     u8 pad0[0x8];
 
-    mn_804D6BC8.x0 = 5;
-    mn_804A04F0.x1 = mn_804A04F0.x0;
-    mn_804A04F0.x0 = 0x1F;
-    mn_804A04F0.x2 = 0;
+    mn_804D6BC8.cooldown = 5;
+    mn_804A04F0.prev_menu = mn_804A04F0.cur_menu;
+    mn_804A04F0.cur_menu = 0x1F;
+    mn_804A04F0.hovered_selection = 0;
     memzero(o, sizeof(*o));
 
     o->x44 = 8;
@@ -327,12 +332,9 @@ void mnInfoBonus_80252F8C(void)
         "MenMainConBo_Top_matanim_joint", &o->x50.shapeanim_joint,
         "MenMainConBo_Top_shapeanim_joint", 0);
     mnInfoBonus_inline_SetGObjFlag(
-        HSD_GObjProc_8038FD54(GObj_Create(0U, 1U, 0x80U), fn_80252C50, 0U));
+        HSD_GObj_SetupProc(GObj_Create(0U, 1U, 0x80U), fn_80252C50, 0U));
 
     mnInfoBonus_80252F8C_inline0(o);
 
-    o->x40 =
-        HSD_SisLib_803A5ACC(0, 1, -9.5F, 9.1F, 17.F, 364.68332F, 38.38772F);
-    mnInfoBonus_80252F8C_inline1(o->x40);
-    HSD_SisLib_803A6368(o->x40, 0xA5);
+    textSetup(o);
 }

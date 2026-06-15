@@ -64,7 +64,7 @@ static StageCallbacks grTFx_803E89D8[4] = {
 };
 
 StageData grTFx_803E8A34 = {
-    46,
+    TFOX,
     grTFx_803E89D8,
     "/GrTFx.dat",
     grTFox_80220B84,
@@ -98,7 +98,7 @@ void grTfox_UnkStage0_OnLoad(void) {}
 
 void grTfox_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grTFox_80220C24(void)
@@ -109,28 +109,16 @@ bool grTFox_80220C24(void)
 HSD_GObj* grTFox_80220C2C(s32 arg0)
 {
     HSD_GObj* gobj;
-    StageCallbacks* cb;
-    Ground* gp;
+    StageCallbacks* callbacks = &grTFx_803E89D8[arg0];
 
-    cb = &grTFx_803E89D8[arg0];
-    gobj = Ground_801C14D0(arg0);
+    gobj = Ground_GetStageGObj(arg0);
+
     if (gobj != NULL) {
-        gp = gobj->user_data;
-        gp->x8_callback = 0;
-        gp->xC_callback = 0;
-        GObj_SetupGXLink(gobj, &grDisplay_801C5DB0, 3, 0);
-        if (cb->callback3 != 0U) {
-            gp->x1C_callback = cb->callback3;
-        }
-        if (cb->callback0 != NULL) {
-            cb->callback0(gobj);
-        }
-        if (cb->callback2 != 0U) {
-            HSD_GObjProc_8038FD54(gobj, cb->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtfox.c", 0xCB, arg0);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 0xCB, arg0);
     }
+
     return gobj;
 }
 

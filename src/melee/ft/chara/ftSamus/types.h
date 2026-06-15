@@ -60,19 +60,19 @@ typedef struct _ftSamusAttributes {
     /* +74 */ Vec3 x74_vec;
     /* +80 */ float x80;
     /* +84 */ ftCollisionBox height_attributes;
-    /* +9C */ UNK_T x9C;
-    /* +A0 */ UNK_T xA0;
-    /* +A4 */ UNK_T xA4;
-    /* +A8 */ UNK_T xA8;
-    /* +AC */ UNK_T xAC;
-    /* +B0 */ UNK_T xB0;
-    /* +B4 */ UNK_T xB4;
-    /* +B8 */ UNK_T xB8;
+    /* +9C */ s32 x9C;
+    /* +A0 */ s32 xA0;
+    /* +A4 */ s32 xA4;
+    /* +A8 */ s32 xA8;
+    /* +AC */ s32 xAC;
+    /* +B0 */ s32 xB0;
+    /* +B4 */ s32 xB4;
+    /* +B8 */ s32 xB8;
     /* +BC */ int xBC;
     /* +C0 */ int xC0;
     /* +C4 */ int xC4;
     /* +C8 */ int xC8;
-    /* +CC */ UNK_T xCC;
+    /* +CC */ f32 xCC;
     /* +D0 */ UNK_T xD0;
 } ftSs_DatAttrs;
 
@@ -90,12 +90,19 @@ union ftSamus_MotionVars {
         s32 x0;
     } unk2;
 
-    /// @todo Proper state name.
+    /// SpecialN charge shot state - x4 is frame counter (integer)
     struct ftSamus_State3Vars {
         s32 x0;
         s32 x4;
         float x8;
     } unk3;
+
+    /// Grapple beam state - x4 is duration (float)
+    struct ftSamus_GrappleVars {
+        s32 x0;
+        float x4;
+        float x8;
+    } grapple;
 
     /// @todo Proper state name.
     struct ftSamus_State5Vars {
@@ -106,6 +113,11 @@ union ftSamus_MotionVars {
     struct ftSamus_State6Vars {
         s32 x0;
     } unk6;
+
+    /// @todo Proper state name.
+    struct ftSamus_State7Vars {
+        f32 x0;
+    } unk7;
 };
 
 #endif

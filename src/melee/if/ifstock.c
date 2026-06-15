@@ -1,16 +1,15 @@
-#include <placeholder.h>
-
-#include "gm/forward.h"
-#include "sc/forward.h"
+#include "if/ifstock.h"
 
 #include "if/ifstock.static.h"
-
-#include "if/ifstock.h"
+#include <placeholder.h>
 
 #include "baselib/gobj.h"
 #include "baselib/gobjgxlink.h"
 #include "baselib/jobj.h"
 #include "ef/efsync.h"
+
+#include "gm/forward.h"
+
 #include "gm/gm_1601.h"
 #include "gm/gm_16AE.h"
 #include "gm/types.h"
@@ -23,6 +22,9 @@
 #include "lb/lbarchive.h"
 #include "lb/lbvector.h"
 #include "pl/player.h"
+
+#include "sc/forward.h"
+
 #include "sc/types.h"
 
 #include <baselib/aobj.h>
@@ -33,48 +35,62 @@
 #include <baselib/mobj.h>
 #include <baselib/tobj.h>
 
+struct IfStockStealAnim {
+    Vec3 start;
+    Vec3 mid;
+    Vec3 end;
+};
+
 int ifStock_802F7EFC(int arg0, int arg1)
 {
     Vec3 pos;
+    struct ifStock_804A1378* stock;
+    struct ifStock_804A1378_x204* arg0_data;
+    struct ifStock_804A1378_x204* arg1_data;
+    struct IfStockStealAnim* anim;
+    int slot;
     int i, j;
+    stock = &ifStock_804A1378;
+    arg0_data = &stock->x204[arg0];
+    arg1_data = &stock->x204[arg1];
     if (Player_GetStocks(arg1) == 0) {
         return 1;
     }
-    ifStock_804A1378.player[arg1].stocks = Player_GetStocks(arg1);
-    if (ifStock_804A1378.player[arg1].stocks < 0) {
-        ifStock_804A1378.player[arg1].stocks = 1;
+    stock->player[arg1].stocks = Player_GetStocks(arg1);
+    if (stock->player[arg1].stocks < 0) {
+        stock->player[arg1].stocks = 1;
     }
-    if (ifStock_804A1378.x204[arg1].x0[10] == 0) {
-        i = 5;
-    } else if (ifStock_804A1378.x204[arg1].x0[11] == 0) {
-        i = 6;
+    if (arg1_data->x0[10] == 0) {
+        slot = 5;
+    } else if (arg1_data->x0[11] == 0) {
+        slot = 6;
     } else {
         return 2;
     }
-    ifStock_804A1378.x204[arg1].x0[i + 5] = 1;
-    ifStock_804A1378.x204[arg1].x0[2] = 0;
-    ifStock_804A1378.x204[arg1].x0[i - 2] = arg0;
-    if (ifStock_804A1378.player[arg1].stocks <= 5 &&
-        ifStock_804A1378.player[arg1].stocks > 0)
-    {
-        ifStock_804A1378.x204[arg1].x0[ifStock_804A1378.player[arg1].stocks] =
-            10;
+    arg1_data->x0[slot + 5] = 1;
+    arg0_data->x0[2] = 0;
+    arg1_data->x0[slot - 2] = arg0;
+    if (stock->player[arg1].stocks <= 5 && stock->player[arg1].stocks > 0) {
+        arg1_data->x0[stock->player[arg1].stocks + 4] = 10;
     }
     i = 0;
-    if (ifStock_804A1378.player[arg1].stocks <= 5 &&
-        ifStock_804A1378.player[arg1].stocks > 0)
-    {
+    if (stock->player[arg1].stocks <= 5 && stock->player[arg1].stocks > 0) {
         i = 1;
     }
     if (i != 0) {
-        j = ifStock_804A1378.player[arg1].stocks;
+        j = stock->player[arg1].stocks;
     } else {
         j = 1;
     }
-    HSD_JObjGetTranslation(ifStock_804A1378.player[arg1].x4[0], &pos);
-    HSD_JObjReqAnimAll(ifStock_804A1378.player[arg1].x4[j], 0.0f);
-    HSD_JObjAnimAll(ifStock_804A1378.player[arg1].x4[j]);
-    HSD_JObjGetTranslation(ifStock_804A1378.player[arg1].x4[j], 0);
+    HSD_JObjGetTranslation(stock->player[arg1].x4[0], &pos);
+    HSD_JObjReqAnimAll(stock->player[arg1].x4[j], 0.0f);
+    HSD_JObjAnimAll(stock->player[arg1].x4[j]);
+    anim = (struct IfStockStealAnim*) &arg1_data->x0
+        [0xC + (slot - 5) * sizeof(struct IfStockStealAnim)];
+    HSD_JObjGetTranslation(stock->player[arg1].x4[j], &anim->start);
+    anim->start.x += pos.x;
+    anim->start.y += pos.y;
+    anim->start.z += pos.z;
     i = 0;
     if (Player_GetStocks(arg0) < 5 && Player_GetStocks(arg0) > 0) {
         i = 1;
@@ -84,10 +100,16 @@ int ifStock_802F7EFC(int arg0, int arg1)
     } else {
         j = 0;
     }
-    HSD_JObjGetTranslation(ifStock_804A1378.player[arg0].x4[0], &pos);
-    HSD_JObjReqAnimAll(ifStock_804A1378.player[arg0].x4[j], 0.0f);
-    HSD_JObjAnimAll(ifStock_804A1378.player[arg0].x4[j]);
-    HSD_JObjGetTranslation(ifStock_804A1378.player[arg1].x4[j], 0);
+    HSD_JObjGetTranslation(stock->player[arg0].x4[0], &pos);
+    HSD_JObjReqAnimAll(stock->player[arg0].x4[j], 0.0f);
+    HSD_JObjAnimAll(stock->player[arg0].x4[j]);
+    HSD_JObjGetTranslation(stock->player[arg0].x4[1], &anim->end);
+    anim->end.x += (2.4f * j) + pos.x;
+    anim->end.y = anim->start.y;
+    anim->end.z += pos.z;
+    anim->mid.x = 0.5f * (anim->end.x + anim->start.x);
+    anim->mid.z = 0.5f * (anim->end.z + anim->start.z);
+    anim->mid.y = 10.0f + anim->start.y;
     return 0;
 }
 
@@ -95,107 +117,129 @@ void ifStock_802F8298(HSD_GObj* gobj)
 {
     struct IfStockUserData* user_data = GET_IFSTOCK(gobj);
     HSD_JObj* jobj = gobj->hsd_obj;
+    struct ifStock_804A1378* stock = &ifStock_804A1378;
     HSD_JObj* jobj2;
+    HSD_JObj* jobj_anim = jobj;
     int i;
-    Vec3 vecA, vecB, vecC;
-    ifStock_804A1378.player[user_data->player].stocks =
+    Vec3 vecA, vecB;
+    PAD_STACK(24);
+    stock->player[user_data->player].stocks =
         Player_GetStocks(user_data->player);
-    if (ifStock_804A1378.player[user_data->player].stocks > 99) {
-        ifStock_804A1378.player[user_data->player].stocks = 99;
+    if (stock->player[user_data->player].stocks > 99) {
+        stock->player[user_data->player].stocks = 99;
     }
-    if (ifStock_804A1378.player[user_data->player].stocks < 0) {
-        ifStock_804A1378.player[user_data->player].stocks = 1;
+    if (stock->player[user_data->player].stocks < 0) {
+        stock->player[user_data->player].stocks = 1;
     }
-    if (ifStock_804A1378.player[user_data->player].stocks <= 5) {
-        HSD_JObjSetFlagsAll(ifStock_804A1378.player[user_data->player].x3C,
+    if (stock->player[user_data->player].stocks <= 5) {
+        HSD_JObjSetFlagsAll(stock->player[user_data->player].x3C,
                             JOBJ_HIDDEN);
         for (i = 0; i < 5; i++) {
-            jobj2 = ifStock_804A1378.player[user_data->player].x4[i + 3];
-            if (i < ifStock_804A1378.player[user_data->player].stocks) {
+            jobj2 = stock->player[user_data->player].x4[i + 1];
+            if (i < stock->player[user_data->player].stocks) {
                 HSD_JObjClearFlagsAll(jobj2, JOBJ_HIDDEN);
-                if (ifStock_804A1378.x204[user_data->player].x0[2] != 0) {
-                    ifStock_804A1378.x204[user_data->player].x0[i + 5] = 0;
+                if (stock->x204[user_data->player].x0[2] != 0) {
+                    stock->x204[user_data->player].x0[i + 5] = 0;
                 } else {
-                    ifStock_804A1378.x204[user_data->player].x0[i + 5] = 10;
+                    stock->x204[user_data->player].x0[i + 5] = 10;
                 }
             } else {
-                if (ifStock_804A1378.x204[user_data->player].x0[2] == 0) {
-                    ifStock_804A1378.x204[user_data->player].x0[i + 5] = 10;
+                if (stock->x204[user_data->player].x0[2] == 0) {
+                    stock->x204[user_data->player].x0[i + 5] = 10;
                 }
-                if (ifStock_804A1378.x204[user_data->player].x0[i + 5] == 0) {
-                    HSD_JObjGetTranslation(0, &vecA);
-                    HSD_JObjGetTranslation(0, &vecB);
-                    vecC.x = vecA.x + vecB.x;
-                    vecC.y = vecA.y + vecB.y;
-                    vecC.z = vecA.z + vecB.z;
-                    efSync_Spawn(0x474, gobj, &vecC);
+                if (stock->x204[user_data->player].x0[i + 5] == 0) {
+                    HSD_JObjGetTranslation(jobj, &vecA);
+                    HSD_JObjGetTranslation(jobj2, &vecB);
+                    vecB.x += vecA.x;
+                    vecB.y += vecA.y;
+                    vecB.z += vecA.z;
+                    efSync_Spawn(0x474, gobj, &vecB);
                 }
-                if (ifStock_804A1378.x204[user_data->player].x0[i + 5] < 10) {
-                    ifStock_804A1378.x204[user_data->player].x0[i + 5] += 1;
+                if (stock->x204[user_data->player].x0[i + 5] < 10) {
+                    stock->x204[user_data->player].x0[i + 5] += 1;
                 }
             }
             HSD_JObjReqAnimAll(
-                jobj2, ifStock_804A1378.x204[user_data->player].x0[i + 5]);
+                jobj2, stock->x204[user_data->player].x0[i + 5]);
             HSD_TObjReqAnimAll(jobj2->u.dobj->mobj->tobj,
                                gm_80168BF8(user_data->player));
             HSD_AObjSetRate(jobj2->u.dobj->mobj->tobj->aobj, 0.0f);
         }
     } else {
-        HSD_JObjClearFlagsAll(ifStock_804A1378.player[user_data->player].x3C,
+        HSD_JObjClearFlagsAll(stock->player[user_data->player].x3C,
                               JOBJ_HIDDEN);
-        if (ifStock_804A1378.player[user_data->player].stocks >= 10) {
+        if (stock->player[user_data->player].stocks >= 10) {
             HSD_JObjReqAnimAll(
-                ifStock_804A1378.player[user_data->player].x44,
-                (int) (ifStock_804A1378.player[user_data->player].stocks /
+                stock->player[user_data->player].x44,
+                (int) (stock->player[user_data->player].stocks /
                        10));
             HSD_JObjReqAnimAll(
-                ifStock_804A1378.player[user_data->player].x40,
-                ifStock_804A1378.player[user_data->player].stocks % 10);
+                stock->player[user_data->player].x40,
+                stock->player[user_data->player].stocks % 10);
         } else {
             HSD_JObjReqAnimAll(
-                ifStock_804A1378.player[user_data->player].x44,
-                ifStock_804A1378.player[user_data->player].stocks);
-            HSD_JObjSetFlagsAll(ifStock_804A1378.player[user_data->player].x40,
+                stock->player[user_data->player].x44,
+                stock->player[user_data->player].stocks);
+            HSD_JObjSetFlagsAll(stock->player[user_data->player].x40,
                                 JOBJ_HIDDEN);
         }
         for (i = 0; i < 5; i++) {
-            jobj2 = ifStock_804A1378.player[i].x4[3];
+            jobj2 = stock->player[user_data->player].x4[i + 1];
             if (i == 0) {
-                ifStock_804A1378.x204[user_data->player].x0[i + 5] = 0;
+                stock->x204[user_data->player].x0[i + 5] = 0;
             } else {
-                ifStock_804A1378.x204[user_data->player].x0[i + 5] = 10;
+                stock->x204[user_data->player].x0[i + 5] = 10;
             }
             HSD_JObjReqAnimAll(
-                jobj2, ifStock_804A1378.x204[user_data->player].x0[i + 5]);
+                jobj2, stock->x204[user_data->player].x0[i + 5]);
             HSD_TObjReqAnimAll(jobj2->u.dobj->mobj->tobj,
                                gm_80168BF8(user_data->player));
             HSD_AObjSetRate(jobj2->u.dobj->mobj->tobj->aobj, 0.0f);
         }
     }
     for (i = 5; i <= 6; i++) {
-        jobj2 = ifStock_804A1378.player[user_data->player].x24; // .x10[i]
-        if (ifStock_804A1378.x204[user_data->player].x0[5] == 0) {
+        jobj2 = stock->player[user_data->player].x4[i + 1];
+        if (stock->x204[user_data->player].x0[i + 5] == 0) {
             HSD_JObjSetFlagsAll(jobj2, JOBJ_HIDDEN);
         } else {
             HSD_JObjClearFlagsAll(jobj2, JOBJ_HIDDEN);
-            if (ifStock_804A1378.x204[user_data->player].x0[5] <= 10) {
-                lbVector_8000DE38(0, &vecA, 0);
+            if (stock->x204[user_data->player].x0[i + 5] <= 10) {
+                lbVector_8000DE38(
+                    (float (*)[4]) &stock->x204[user_data->player].x0
+                        [0xC + (i - 5) * sizeof(struct IfStockStealAnim)],
+                    &vecA, 0.1f * stock->x204[user_data->player].x0[i + 5]);
                 HSD_JObjGetTranslation(
-                    ifStock_804A1378.player[user_data->player].x4[0], &vecB);
+                    stock->player[user_data->player].x4[0], &vecB);
                 vecA.x -= vecB.x;
                 vecA.y -= vecB.y;
                 vecA.z -= vecB.z;
                 HSD_JObjSetTranslate(jobj2, &vecA);
-                if (ifStock_804A1378.x204[user_data->player].x0[i + 5] == 1) {
+                if (stock->x204[user_data->player].x0[i + 5] == 1) {
+                    struct IfStockStealAnim* anim =
+                        (struct IfStockStealAnim*) &stock->x204
+                            [user_data->player]
+                                .x0[0xC +
+                                    (i - 5) *
+                                        sizeof(struct IfStockStealAnim)];
+                    vecA.x = anim->start.x;
+                    vecA.y = anim->start.y;
                     efSync_Spawn(0x475, gobj, &vecA);
-                } else {
+                } else if (stock->x204[user_data->player].x0[i + 5] ==
+                           10) {
+                    struct IfStockStealAnim* anim =
+                        (struct IfStockStealAnim*) &stock->x204
+                            [user_data->player]
+                                .x0[0xC +
+                                    (i - 5) *
+                                        sizeof(struct IfStockStealAnim)];
+                    vecA.x = anim->end.x;
+                    vecA.y = anim->end.y;
                     efSync_Spawn(0x476, gobj, &vecA);
                 }
+                stock->x204[user_data->player].x0[i + 5]++;
             } else {
-                ifStock_804A1378.x204[user_data->player].x0[5] = 0;
-                ifStock_804A1378
-                    .x204[ifStock_804A1378.x204[user_data->player - 1]
-                              .x0[0x52]]
+                stock->x204[user_data->player].x0[i + 5] = 0;
+                stock->x204[stock->x204[user_data->player].x0[i - 2]]
                     .x0[2] = 1;
             }
         }
@@ -203,7 +247,7 @@ void ifStock_802F8298(HSD_GObj* gobj)
                            gm_80168BF8(user_data->player));
         HSD_AObjSetRate(jobj2->u.dobj->mobj->tobj->aobj, 0.0f);
     }
-    HSD_JObjAnimAll(0);
+    HSD_JObjAnimAll(jobj_anim);
 }
 
 void ifStock_802F89F8(HSD_GObj* gobj)
@@ -216,20 +260,24 @@ void ifStock_802F89F8(HSD_GObj* gobj)
     int i;
     int coins2;
     int count;
+    int digit;
+    int divisor;
+    int j;
     Player_GetCoins(player);
+    PAD_STACK(32);
     coins = Player_GetCoins(user_data->player);
     ifStock_804A1378.player[user_data->player].coins = coins;
-    if (coins > 99999) {
+    if ((u32) coins > 99999U) {
         coins = 99999;
     }
     count = 0;
     coins2 = coins;
     for (i = 0; i < 9; i++) {
-        coins2 = coins2 / 10;
-        count++;
-        if (coins2 != 0) {
+        if (coins2 == 0) {
             break;
         }
+        coins2 = coins2 / 10;
+        count++;
     }
     if (count > 5) {
         count = 5;
@@ -243,8 +291,17 @@ void ifStock_802F89F8(HSD_GObj* gobj)
             HSD_JObjClearFlagsAll(
                 ifStock_804A1378.player[user_data->player].x4[13 - i],
                 JOBJ_HIDDEN);
+            if (count - i == 1) {
+                digit = coins % 10;
+            } else {
+                divisor = 1;
+                for (j = 0; j < count - i - 1; j++) {
+                    divisor *= 10;
+                }
+                digit = (coins / divisor) % 10;
+            }
             HSD_JObjReqAnimAll(
-                ifStock_804A1378.player[user_data->player].x4[13 - i], 0.0f);
+                ifStock_804A1378.player[user_data->player].x4[13 - i], digit);
         } else {
             HSD_JObjSetFlagsAll(
                 ifStock_804A1378.player[user_data->player].x4[13 - i],
@@ -445,6 +502,7 @@ void ifStock_802F98E8(unsigned char player, int b)
     struct ifStock_804A1378_per_player* r26;
     int i;
     lbl_8046B6A0_t* ae44;
+    PAD_STACK(8);
     if (ifStock_804A1378.x0 != NULL) {
         user_data = &ifStock_804A1378.x204[player];
         ifStock_804A1378.x204[player].x0[0] = player;
@@ -463,7 +521,7 @@ void ifStock_802F98E8(unsigned char player, int b)
                 GObj_SetupGXLink(gobj, fn_802F94E0, 11, 0);
                 gm_8016895C(jobj, *ifStock_804A1378.x0, 0);
                 HSD_JObjReqAnimAll(jobj, 0.0f);
-                HSD_GObjProc_8038FD54(gobj, fn_802F9410, 17);
+                HSD_GObj_SetupProc(gobj, fn_802F9410, 17);
                 HSD_JObjSetTranslate(jobj, ifAll_802F3424(player));
                 lb_80011E24(jobj, ifStock_804A1378.player[player].x4, 0, 1, 2,
                             3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
@@ -532,15 +590,15 @@ void ifStock_802F98E8(unsigned char player, int b)
                     break;
                 case 2:
                     HSD_JObjSetFlagsAll(ifStock_804A1378.player[player].x28,
-                                        0x10);
+                                        JOBJ_HIDDEN);
                     HSD_JObjSetFlagsAll(ifStock_804A1378.player[player].x2C,
-                                        0x10);
+                                        JOBJ_HIDDEN);
                     HSD_JObjSetFlagsAll(ifStock_804A1378.player[player].x30,
-                                        0x10);
+                                        JOBJ_HIDDEN);
                     HSD_JObjSetFlagsAll(ifStock_804A1378.player[player].x34,
-                                        0x10);
+                                        JOBJ_HIDDEN);
                     HSD_JObjSetFlagsAll(ifStock_804A1378.player[player].x3C,
-                                        0x10);
+                                        JOBJ_HIDDEN);
                     for (i = 0; i < 7; i++) {
                         jobj = ifStock_804A1378.player[player].x4[i + 1];
                         if (i == 0) {
@@ -591,7 +649,7 @@ HSD_GObj* ifStock_802F9F48(int arg)
     gm_8016895C(jobj, *ifStock_804A1378.x0, 0);
     lb_80011E24(jobj, &jobj2, 1, -1);
     if (!arg) {
-        HSD_GObjProc_8038FD54(gobj, fn_802F8E08, 17);
+        HSD_GObj_SetupProc(gobj, fn_802F8E08, 17);
     }
     HSD_JObjSetTranslateZ(jobj, 10000.0f);
     HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
@@ -615,7 +673,7 @@ HSD_GObj* ifStock_802FA118(int arg)
     gm_8016895C(jobj, *q->x0, 0);
     lb_80011E24(jobj, &jobj2, 1, -1);
     if (arg == 0) {
-        HSD_GObjProc_8038FD54(gobj, fn_802F916C, 17);
+        HSD_GObj_SetupProc(gobj, fn_802F916C, 17);
     }
     HSD_JObjSetTranslateZ(jobj, 10000.0f);
     HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
@@ -662,7 +720,7 @@ void ifStock_802FA5BC(int arg)
     HSD_GObjObject_80390A70(gobj, HSD_GObj_804D7849, jobj);
     GObj_SetupGXLink(gobj, fn_802F9598, 11, 0);
     if (arg) {
-        HSD_GObjProc_8038FD54(gobj, fn_802F8DB0, 17);
+        HSD_GObj_SetupProc(gobj, fn_802F8DB0, 17);
     }
     gm_8016895C(jobj, q->x4, 0);
     HSD_JObjReqAnimAll(jobj, 10.0f);
@@ -674,6 +732,9 @@ void ifStock_802FA5BC(int arg)
 void fn_802FA6C4(HSD_GObj* arg)
 {
     int i;
+    char* p;
+    int j;
+    int k;
     char* q;
     char* w;
     if (gm_8016B184() && gm_8016A1F8()) {
@@ -681,16 +742,18 @@ void fn_802FA6C4(HSD_GObj* arg)
             ifStock_804A1774.x0 = 1;
             q = gm_80169520();
             w = gm_80169530();
-            for (i = 0; i < 130; i++) {
-                ifStock_804A1774.x10C[i + 1] = NULL;
-                ifStock_804A1774.x1[i] = q[i];
-                ifStock_804A1774.x83[i] = w[i];
+            for (k = 0; k != 130; k++) {
+                ifStock_804A1774.x10C[k + 1] = NULL;
+                ifStock_804A1774.x1[k] = *q++;
+                ifStock_804A1774.x83[k] = *w++;
             }
-            for (i = 0; i < 130; i++) {
+            i = 0;
+            p = &ifStock_804A1774.x0 + i;
+            for (; i < 130; i++, p++) {
                 if (ifStock_804A1774.x10C[1 + i]) {
                     HSD_GObjPLink_80390228(ifStock_804A1774.x10C[1 + i]);
                 }
-                if (ifStock_804A1774.x1[i] == -2) {
+                if (p[1] == -2) {
                     return;
                 }
                 ifStock_804A1774.x10C[1 + i] = ifStock_802F9F48(i);
@@ -698,10 +761,10 @@ void fn_802FA6C4(HSD_GObj* arg)
         }
     } else {
         if (ifStock_804A1774.x0 == 1) {
-            for (i = 0; i < 130; i++) {
-                if (ifStock_804A1774.x10C[1 + i]) {
-                    HSD_GObjPLink_80390228(ifStock_804A1774.x10C[1 + i]);
-                    ifStock_804A1774.x10C[1 + i] = NULL;
+            for (j = 129; j >= 0; j--) {
+                if (ifStock_804A1774.x10C[1 + j]) {
+                    HSD_GObjPLink_80390228(ifStock_804A1774.x10C[1 + j]);
+                    ifStock_804A1774.x10C[1 + j] = NULL;
                 }
             }
         }
@@ -715,7 +778,7 @@ void fn_802FA8C0(HSD_GObj* arg)
     int k = 0;
     int i;
     signed char* a97c = gm_8016A97C();
-    signed char* a98c = gm_8016A98C();
+    signed char* a98c = (signed char*) gm_8016A98C();
     float x = -21.0f;
     float y = 11.0f;
     for (i = 0; i < 0x82; i++) {
@@ -760,7 +823,7 @@ void fn_802FAC34(HSD_GObj* arg)
         if (ifStock_804A1ACC.x0 == 0) {
             ifStock_804A1ACC.x0 = 1;
             q = gm_8016A97C();
-            w = gm_8016A98C();
+            w = (char*) gm_8016A98C();
             for (i = 0; i < 130; i++) {
                 ifStock_804A1ACC.x10C[i + 1] = NULL;
                 ifStock_804A1ACC.x1[i] = q[i];
@@ -781,8 +844,8 @@ void fn_802FAC34(HSD_GObj* arg)
                     2.45f * (i % 5) + -21.0f,
                     -(2.45f * (int) (i / 5) - 11.0f));
                 if (i == 0) {
-                    HSD_GObjProc_8038FD54(ifStock_804A1ACC.x10C[i],
-                                          fn_802FA8C0, 17);
+                    HSD_GObj_SetupProc(ifStock_804A1ACC.x10C[i], fn_802FA8C0,
+                                       17);
                 }
             }
         }
@@ -817,7 +880,7 @@ void ifStock_802FAEC4(void)
     ifStock_804A1ACC.x108 = 0;
     ifStock_804A1ACC.x0 = 0;
     gobj = GObj_Create(14, 15, 0);
-    HSD_GObjProc_8038FD54(gobj, fn_802FAC34, 17);
+    HSD_GObj_SetupProc(gobj, fn_802FAC34, 17);
     ifStock_804A1ACC.x108 = (int) gobj;
     for (i = 0; i < 130; i++) {
         ifStock_804A1ACC.x10C[i] = NULL;
@@ -826,7 +889,7 @@ void ifStock_802FAEC4(void)
         ifStock_804A1774.x10C[0] = NULL;
         ifStock_804A1774.x0 = 0;
         gobj = GObj_Create(14, 15, 0);
-        HSD_GObjProc_8038FD54(gobj, fn_802FA6C4, 17);
+        HSD_GObj_SetupProc(gobj, fn_802FA6C4, 17);
         ifStock_804A1774.x10C[0] = gobj;
         for (i = 0; i < 130; i++) {
             ifStock_804A1774.x10C[i + 1] = NULL;

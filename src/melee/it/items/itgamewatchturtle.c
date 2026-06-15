@@ -5,10 +5,10 @@
 #include <melee/ft/chara/ftGameWatch/ftGw_AttackAir.h>
 #include <melee/it/inlines.h>
 #include <melee/it/it_26B1.h>
+#include <melee/it/itzako.h>
 #include <melee/it/item.h>
 #include <melee/it/items/types.h>
-
-void it_8027CE64(HSD_GObj*, Item_GObj*, s32); /* extern */
+#include "it/itzako.h"
 
 ItemStateTable it_803F7918[] = {
     {
@@ -29,7 +29,7 @@ Item_GObj* it_802C6F40(HSD_GObj* parent, Vec3* pos, Fighter_Part arg2, f32 dir)
 {
     SpawnItem spawn_item;
     HSD_GObj* item_gobj;
-    int* temp_r30;
+    void** temp_r30;
 
     spawn_item.kind = It_Kind_GameWatch_Turtle;
     spawn_item.prev_pos = *pos;
@@ -54,7 +54,7 @@ Item_GObj* it_802C6F40(HSD_GObj* parent, Vec3* pos, Fighter_Part arg2, f32 dir)
     return NULL;
 }
 
-void it_2725_Logic75_Destroyed(Item_GObj* item_gobj)
+void itGameWatchTurtle_Logic75_Destroyed(Item_GObj* item_gobj)
 {
     Item* it = GET_ITEM(item_gobj);
     if (it->owner != NULL) {
@@ -84,7 +84,7 @@ void it_802C70E0(Item_GObj* item_gobj)
     it_8026B73C(item_gobj);
 }
 
-void it_2725_Logic75_PickedUp(Item_GObj* item_gobj)
+void itGameWatchTurtle_Logic75_PickedUp(Item_GObj* item_gobj)
 {
     Item* it = GET_ITEM(item_gobj);
     it->xDAC_itcmd_var0 = 0;
@@ -115,7 +115,7 @@ bool itGamewatchturtle_UnkMotion1_Anim(Item_GObj* item_gobj)
     return false;
 }
 
-void it_2725_Logic75_EvtUnk(HSD_GObj* arg0, HSD_GObj* arg1)
+void itGameWatchTurtle_Logic75_EvtUnk(HSD_GObj* arg0, HSD_GObj* arg1)
 {
     it_8026B894(arg0, arg1);
 }

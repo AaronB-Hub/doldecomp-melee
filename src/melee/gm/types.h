@@ -35,22 +35,24 @@ struct DebugGameOverData {
     /* 18 */ u16 x18;
 };
 
-struct MinorScene {
+/// @note Colloquially known as "Minor Scene"
+struct GameScene {
     /* 00 */ u8 idx;
     /* 01 */ u8 preload;
     /* 02 */ u16 flags;
 
-    /* 04 */ void (*Prep)(MinorScene*);
-    /* 08 */ void (*Decide)(MinorScene*);
+    /* 04 */ void (*Prep)(GameScene*);
+    /* 08 */ void (*Decide)(GameScene*);
 
-    struct MinorSceneInfo {
+    struct GameSceneInfo {
         /* 0C */ u8 class_id;
-        /* 10 */ void* unk_struct_0; ///< data passed to OnLoad callback
-        /* 14 */ void* unk_struct_1; ///< data passed to OnLeave callback
+        /* 10 */ void* load_data;  ///< data passed to OnLoad callback
+        /* 14 */ void* leave_data; ///< data passed to OnLeave callback
     } info;
 };
 
-struct MajorScene {
+/// @note Colloquially known as "Major Scene"
+struct GameMode {
     u8 preload;
     u8 idx;
 
@@ -58,10 +60,10 @@ struct MajorScene {
     void (*Unload)(void);
     void (*Init)(void);
 
-    MinorScene* minor_scenes;
+    GameScene* scenes;
 }; // 803DACA4
 
-struct MinorSceneHandler {
+struct GameSceneHandler {
     u8 class_id;
 
     void (*OnFrame)(void);
@@ -71,17 +73,17 @@ struct MinorSceneHandler {
 }; // 803DA920
 
 typedef struct {
-    u8 curr_major;
-    u8 pending_major;
-    u8 prev_major;
-    u8 curr_minor;
-    u8 prev_minor;
-    u8 pending_minor;
-} SceneNums;
+    u8 curr_mode;
+    u8 pending_mode;
+    u8 prev_mode;
+    u8 curr_scene;
+    u8 prev_scene;
+    u8 pending_scene;
+} GameRouting;
 
 typedef struct {
-    SceneNums nums;
-    SceneNums nums2;
+    GameRouting routing;
+    GameRouting backup;
     u8 pending;
     u8 x0D;
     u8 x0E;
@@ -107,13 +109,34 @@ struct gmm_x1CB0 {
     /* +1C */ u8 padding_x16[0x1];
 };
 
-struct gmm_x1F2C {
-    u8 padding_x0[0x78];
-    s8 x78;
-    s8 x79;
-    UnkFlagStruct x7A;
-    s8 x7B;
-    struct {
+struct FighterData {
+    /* 0x00 */ u16 fighter_kos[25];
+    /* 0x32 */ u8 padding_0x32[2];
+    /* 0x34 */ u16 sd_count;
+    /* 0x36 */ u8 padding_0x36[2];
+    /* 0x38 */ u32 attacks_hit;
+    /* 0x3C */ u32 attacks_total;
+    /* 0x40 */ s32 damage_dealt;
+    /* 0x44 */ s32 damage_taken;
+    /* 0x48 */ s32 damage_recovered;
+    /* 0x4C */ u16 peak_damage;
+    /* 0x4E */ u16 match_count;
+    /* 0x50 */ u16 victories;
+    /* 0x52 */ u16 losses;
+    /* 0x54 */ u32 play_time;
+    /* 0x58 */ u32 total_player_count;
+    /* 0x5C */ s32 walk_distance;
+    /* 0x60 */ s32 run_distance;
+    /* 0x64 */ s32 fall_distance;
+    /* 0x68 */ s32 peak_height;
+    /* 0x6C */ s32 coins_collected;
+    /* 0x70 */ s32 coins_swiped;
+    /* 0x74 */ s32 coins_lost;
+    /* 0x78 */ s8 x78;
+    /* 0x79 */ s8 x79;
+    /* 0x7A */ UnkFlagStruct x7A;
+    /* 0x7B */ s8 x7B;
+    /* 0x7C */ struct {
         u16 b0 : 1;
         u16 b1 : 1;
         u16 b2 : 1;
@@ -124,7 +147,7 @@ struct gmm_x1F2C {
         u16 b789 : 3;      ///< stocks
         u16 b10_to_12 : 3; ///< stocks
         u16 b13_to_15 : 3; ///< stocks
-        s16 x7E;
+        u16 x7E;
         u8 x80;
         u8 x81;
         u8 x82;
@@ -143,22 +166,43 @@ struct gmm_x1F2C {
     } x7C;
 };
 
-struct gmm_x2FF8_inner {
-    /* 000 */ u8 padding[0x198];
-    /* 198 */ char namedata[8];
-    /* 1A0 */ s8 x1A0;
-    /* 1A1 */ u8 x1A1;
-    /* 1A2 */ s8 x1A2;
-    /* 1A3 */ u8 padding_x1A2;
+struct NameTagData {
+    /* 0x000 */ u16 vs_kos[120];
+    /* 0x0F0 */ u16 sd_count;
+    /* 0x0F2 */ u8 padding_0xF2[2];
+    /* 0x0F4 */ u32 attacks_hit;
+    /* 0x0F8 */ u32 attacks_total;
+    /* 0x0FC */ s32 damage_dealt;
+    /* 0x100 */ s32 damage_taken;
+    /* 0x104 */ s32 damage_recovered;
+    /* 0x108 */ u16 peak_damage;
+    /* 0x10A */ u16 match_count;
+    /* 0x10C */ u16 victories;
+    /* 0x10E */ u16 losses;
+    /* 0x110 */ u32 play_time;
+    /* 0x114 */ u32 total_player_count;
+    /* 0x118 */ s32 walk_distance;
+    /* 0x11C */ s32 run_distance;
+    /* 0x120 */ s32 fall_distance;
+    /* 0x124 */ s32 peak_height;
+    /* 0x128 */ s32 coins_collected;
+    /* 0x12C */ s32 coins_swiped;
+    /* 0x130 */ s32 coins_lost;
+    /* 0x134 */ u32 play_time_by_fighter[25];
+    /* 0x198 */ char namedata[8];
+    /* 0x1A0 */ s8 x1A0;
+    /* 0x1A1 */ u8 x1A1;
+    /* 0x1A2 */ s8 x1A2;
+    /* 0x1A3 */ u8 padding_x1A2;
 };
 
-struct gmm_x2FF8 {
-    struct gmm_x2FF8_inner inner[19];
+struct NameTagDataBank {
+    struct NameTagData inner[19];
 };
 
 struct GameRules {
-    /* 0x00 */ u8 unk_x0;
-    /* 0x01 */ u8 unk_x1;
+    /* 0x00 */ u8 force_main_menu;
+    /* 0x01 */ u8 bgm;
     /* 0x02 */ u8 mode;
     /* 0x03 */ u8 time_limit;
     /* 0x04 */ u8 stock_count;
@@ -170,10 +214,14 @@ struct GameRules {
     /* 0x0A */ u8 pause;
     /* 0x0B */ u8 score_display;
     /* 0x0C */ u8 unk_xc;
-    /* 0x0D */ char pad_D[3]; /* maybe part of unk_xc[4]? */
+    /* 0x0D */ u8 xD;
+    /* 0x0E */ u8 xE;
+    /* 0x0F */ u8 xF;
     /* 0x10 */ u8 unk_x10;
-    /* 0x11 */ char pad_11[3]; /* maybe part of unk_x10[4]? */
-    /* 0x14 */ s32 unk_14;     /* inferred */
+    /* 0x11 */ u8 x11;
+    /* 0x12 */ u8 x12;
+    /* 0x13 */ u8 x13;
+    /* 0x14 */ s32 unk_14; /* inferred */
 }; /* size = 0x18 */
 STATIC_ASSERT(sizeof(struct GameRules) == 0x18);
 
@@ -209,10 +257,14 @@ struct gmm_retval_EDBC {
 };
 
 struct gmm_x1868 {
-    /* 0x0000 */ u16 x1868; // unlocked characters bitmask
-    /* 0x0002 */ u16 x186A; // unlocked stages bitmask
-    /* 0x0004 */ u8 unk_4;
-    /* 0x0005 */ char pad_5[3]; /* maybe part of unk_4[4]? */
+    /* 0x0000 */ u16 x1868; ///< unlocked characters bitmask
+    /* 0x0002 */ u16 x186A; ///< unlocked stages bitmask
+    /* 0x0004 */ u8 x186C;  ///< unlocked features bitmask - score
+                            ///< display/random stage etc...
+    /// @remarks this would make sense to be apart of x186C, but seems unused.
+    // perhaps features got removed from the unlock system? item switch comes
+    // to mind as plausible
+    /* 0x0005 */ char pad_5[3];
     /* 0x0008 */ struct gmm_retval_ED98 unk_8;
     /* 0x0028 */ struct gmm_retval_EDB0 unk_28;
     /* 0x0030 */ struct gmm_retval_EDBC unk_30;
@@ -234,7 +286,7 @@ struct gmm_x1868 {
     /* 0x01D4 */ s32 x1A3C;
     /* 0x01D8 */ s32 x1A40;
     /* 0x01DC */ s32 x1A44;
-    /* 0x01E0 */ s32 x1A48;
+    /* 0x01E0 */ u32 x1A48;
     /* 0x01E4 */ s32 x1A4C;
     /* 0x01E8 */ s32 x1A50;
     /* 0x01EC */ int x1A54;
@@ -260,8 +312,8 @@ struct gmm_x1868 {
     /* 0x046A */ s16 x1CD2;
     /* 0x046C */ s32 x1CD4;
     /* 0x0470 */ u8 padding_x1CD4[0x254];
-    /* 0x06C4 */ struct gmm_x1F2C x1F2C[0x19];
-    /* 0x1790 */ struct gmm_x2FF8 x2FF8[2];
+    /* 0x06C4 */ struct FighterData x1F2C[0x19];
+    /* 0x1760 */ struct NameTagDataBank x2FF8[2];
 }; /* size = 0x55E8 */
 
 struct gmm_x0 {
@@ -354,6 +406,7 @@ struct lbl_8046B6A0_24C_t {
     u8 x4;
     u8 x5; ///< match mode
     u8 is_teams;
+    u8 x7;
     u32 x8;
     u8 xC;
     u8 xD;
@@ -375,12 +428,21 @@ struct lbl_8046B6A0_24C_t {
         u8 x5;
         u8 x6;
         u8 x7;
-        u8 pad8[0x20 - 8];
+        u8 x8;
+        u8 x9;
+        u16 xA;
+        u8 padC[2];
+        u16 xE;
+        u8 pad10[0x1C - 0x10];
+        u8 x1C;
+        u8 pad1D[0x20 - 0x1D];
         u32 x20;
         u32 x24;
         u32 x28;
         u32 x2C;
-        u8 pad60[0xA8 - 0x30];
+        u8 pad30[0x40 - 0x30];
+        u32 x40;
+        u8 pad44[0xA8 - 0x44];
     } x58[6];
     u8 pad3F0[0x44C - 0x3F0 - 0x58];
     struct lbl_8046B6A0_24C_44C_t {
@@ -457,7 +519,8 @@ struct lbl_8046B6A0_t {
         u8 x4_b7 : 1;
         u8 x5;
         u16 x6;
-        u16 x8;
+        u8 x8;
+        u8 x9;
         u8 respawn_timer;
         u8 xB;
         u16 xC;
@@ -519,12 +582,13 @@ typedef struct gm_803DF94C_t {
 } gm_803DF94C_t;
 
 struct MatchTeamData {
-    int score;
-    int subscore;
-    u8 is_big_loser;
-    u8 is_small_loser;
-    u8 active;
-};
+    /* 0x00 */ int score;
+    /* 0x04 */ int subscore;
+    /* 0x08 */ u8 is_big_loser;
+    /* 0x09 */ u8 is_small_loser;
+    /* 0x0A */ u8 active;
+}; // padded to 0x0C
+STATIC_ASSERT(sizeof(struct MatchTeamData) == 0xC);
 
 struct MatchPlayerData {
     u8 slot_type;
@@ -549,7 +613,11 @@ struct MatchPlayerData {
     int x24;
     u32 x28;
     int score;
-    u8 pad_x30[0x40 - 0x30];
+    u32 x30;
+    u8 x34;
+    u8 x35_pad[0x38 - 0x35];
+    u32 x38;
+    u32 x3C;
     u32 x40;
     u32 x44;
     u32 x48;
@@ -577,29 +645,31 @@ struct MatchPlayerData {
     int xA0;
     u32 xA4;
 };
+STATIC_ASSERT(sizeof(struct MatchPlayerData) == 0xA8);
 
 struct MatchEnd {
-    u32 x0; ///< timer
-    u8 result;
-    u8 x5;
-    u8 is_teams;
-    u8 x7;
-    u32 frame_count;
-    u8 xC;
-    u8 n_winners;
-    u8 n_team_winners;
-    u8 loser;
-    u8 winners[6];
-    u8 team_winners[5];
-    struct MatchTeamData team_standings[5];
-    struct MatchPlayerData player_standings[6];
-    u8 _x448[4];
-    struct UnkResultPlayerData {
+    /* 0x00 */ u32 x0; ///< timer
+    /* 0x04 */ u8 result;
+    /* 0x05 */ u8 x5;
+    /* 0x06 */ u8 is_teams;
+    /* 0x07 */ u8 x7;
+    /* 0x08 */ u32 frame_count;
+    /* 0x0C */ u8 xC;
+    /* 0x0D */ u8 n_winners;
+    /* 0x0E */ u8 n_team_winners;
+    /* 0x0F */ u8 loser;
+    /* 0x10 */ u8 winners[6];
+    /* 0x16 */ u8 team_winners[5];
+    /* 0x1B */ struct MatchTeamData team_standings[5];     // 0xC * 5 = 0x3C
+    /* 0x58 */ struct MatchPlayerData player_standings[6]; // 0xA8 * 6 = 0x3F0
+    /* 0x448 */ u8 _x448[4]; // offset by 1 because of the previous struct
+    /* 0x44c */ struct UnkResultPlayerData {
         u8 x0[0x100];
         char pad_x100[0x508 - 0x100];
-    } x44C[4];
-    u8 pad_x186C[0x227C - 0x186C];
+    } x44C[4]; // 0x508 * 4 = 0x1420
+    /* 0x186C */ u8 pad_x186C[0x227C - 0x186C];
 };
+STATIC_ASSERT(sizeof(struct MatchEnd) == 0x227C);
 
 struct MatchExitInfo {
     int x0;
@@ -621,7 +691,7 @@ struct Unk1PData {
     /* 01 */ u8 color;
     /* 02 */ u8 cpu_level;
     /* 03 */ u8 slot;
-    /* 04 */ u8 x4;
+    /* 04 */ u8 x4; ///< EntryName Slot
     /* 05 */ u8 stocks;
     /* 06 */ u8 x6;
     /* 07 */ u8 x7;
@@ -644,25 +714,28 @@ struct Unk1PData {
         /* 20 */ u32 x20;
         struct Unk1PData_x24 {
             /* 24 */ s8 ckind;
-            /* 28 */ int x4;
-            /* 2C */ int x8;
+            /* 25 */ u8 x1;
+            /* 26 */ u8 x2;
+            /* 27 */ u8 x3;
+            /* 28 */ f32 x4;
+            /* 2C */ f32 x8;
         } x24[3];
     } xC;
 };
 
 struct UnkAdventureData {
     /* 00 */ Unk1PData x0;
-    /* 48 */ UNK_T x48;
-    /* 4C */ u8 (*x4C)(int, u8, u8);
-    /* 50 */ UNK_T x50;
-    /* 54 */ UNK_T x54;
-    /* 58 */ UNK_T x58;
-    /* 5C */ UNK_T x5C;
-    /* 60 */ UNK_T x60;
-    /* 64 */ float (*x64)(int, u8);
-    /* 68 */ float (*x68)(int, u8);
-    /* 6C */ UNK_T x6C;
-    /* 70 */ UNK_T x70;
+    /* 48 */ u8 (*x48)(u8, u8);
+    /* 4C */ u8 (*x4C)(u8, u8, u8);
+    /* 50 */ u8 (*x50)(u8, u8, u8);
+    /* 54 */ u8 (*x54)(u8, u8, u8);
+    /* 58 */ u8 (*x58)(u8, u8, u8);
+    /* 5C */ u8 (*x5C)(u8, u8, u8);
+    /* 60 */ u8 (*x60)(u8, u8, u8);
+    /* 64 */ float (*x64)(u8, u8);
+    /* 68 */ float (*x68)(u8, u8);
+    /* 6C */ float (*x6C)(u8, u8);
+    /* 70 */ float (*x70)(u8, u8);
     /* 74 */ u8 x74;
     /* 75 */ u8 x75;
     /* 76 */ u8 x76;
@@ -674,24 +747,35 @@ struct UnkAdventureData {
 };
 
 struct UnkAllstarData {
-    /* 00 */ Unk1PData x0;
-    s8 pad_x0[0x74 - 0x48];
-    u16 x74;
-    u8 x76;
-    u8 x77;
-    s8 pad_x78[0x7C - 0x78];
-    u8 x7C;
-    s8 pad_x7D[0xA0 - 0x7D];
+    /*  +0 */ Unk1PData x0;
+    /* 48 */ u8 (*x48)(u8, u8);
+    /* 4C */ u8 (*x4C)(u8, u8, u8);
+    /* 50 */ u8 (*x50)(u8, u8, u8);
+    /* 54 */ u8 (*x54)(u8, u8, u8);
+    /* 58 */ u8 (*x58)(u8, u8, u8);
+    /* 5C */ u8 (*x5C)(u8, u8, u8);
+    /* 60 */ u8 (*x60)(u8, u8, u8);
+    /* 64 */ float (*x64)(u8, u8);
+    /* 68 */ float (*x68)(u8, u8);
+    /* 6C */ float (*x6C)(u8, u8);
+    /* 70 */ float (*x70)(u8, u8);
+    /* +74*/ u16 x74;    ///< current percent
+    /* +76*/ u8 x76[24]; ///< character id array
+    /* +8E*/ u8 x8E[2];
+    /* +90*/ u8 x90[4];
+    /* +94*/ u8 _94[0x9C - 0x94];
+    /* +9C*/ u32 x9C; ///< current time (frames)
 };
 
 struct TmData {
-    int x0;
-    int x4;
-    int x8;
-    int xC;
-    int x10;
-    int x14;
-    u8 pad_x18[0x20 - 0x18];
+    int cur_option;
+    int match_type;
+    int combatants;
+    int entrants;
+    int hmn_cpu_count;
+    int stage_selection_type;
+    int cpu_level;
+    s32 x1C;
     int x20;
     int x24;
     u32 x28; ///< stage id
@@ -704,6 +788,7 @@ struct TmData {
     u8 x32;
     u8 x33;
     u8 pad_x34[0x37 - 0x34];
+#pragma pack(push, 1)
     struct TmUnkMenuData {
         u8 x0;
         u8 x1;
@@ -718,9 +803,12 @@ struct TmData {
         u8 xB;
         u8 xC;
         u8 xD;
-        u8 pad_xE[0x11 - 0xE];
-    } x37[16]; ///< @todo needs to be larger, see gm_80190EA4
-    u8 pad_x158[0x4B8 - 0x158];
+        u8 xE;
+        u8 xF;
+        u8 pad_X10[0x12 - 0x10];
+    } x37[64];
+#pragma pack(pop)
+    u8 pad_x4B7[0x4B8 - 0x4B7];
     struct UnkSelections {
         u8 x0; ///< slot type
         u8 x1; ///< CSSIconHud
@@ -736,7 +824,7 @@ struct TmData {
     HSD_Text* x4E8[6];
     HSD_Text* x500[6];
     HSD_Text* x518[3];
-    u8 pad_x524[0x534 - 0x524];
+    HSD_Text* x524[4];
     HSD_Text* x534[3];
     u8 pad_x540[0x56B - 0x540];
 };
@@ -812,7 +900,12 @@ struct gm_80479D58_t {
 STATIC_ASSERT(sizeof(struct gm_80479D58_t) == 0x40);
 
 struct ResultsPlayerData {
-    /* +00 */ u8 x0; ///< flags
+    /* +00 */ u8 x0_0 : 1; ///< confirmed flag
+    /* +00 */ u8 x0_1 : 1;
+    /* +00 */ u8 x0_2 : 1;
+    /* +00 */ u8 x0_3 : 1;
+    /* +00 */ u8 x0_4 : 1;
+    /* +00 */ u8 x0_567 : 3;
     /* +01 */ u8 page;
     /* +02 */ u16 x2;
     /* +04 */ f32 scroll_offset;
@@ -832,8 +925,7 @@ struct ResultsPlayerData {
 struct ResultsData {
     /* +00 */ u8 x0_0 : 1;
     /* +00 */ u8 x0_1 : 1;
-    /* +00 */ u8 x0_2 : 1;
-    /* +00 */ u8 x0_3 : 1;
+    /* +00 */ u8 x0_23 : 2; ///< phase (0=idle, 1=init, 2=active)
     /* +00 */ u8 x0_4 : 1;
     /* +00 */ u8 x0_5 : 1;
     /* +00 */ u8 x0_6 : 1;
@@ -841,7 +933,7 @@ struct ResultsData {
 
     /* +01 */ u8 x1; ///< some sort of state
     /* +02 */ u8 num_pages;
-    /* +03 */ char pad_03[0x4 - 0x3];
+    /* +03 */ u8 x3;
     /* +04 */ u8 x4; ///< winner?
     /* +05 */ u8 x5; ///< team winner?
     /* +06 */ u8 x6; ///< also winner?
@@ -892,5 +984,61 @@ struct VsApproachData {
     u8 x0;
     u8 x1;
 };
+
+/// @brief data passed to OnLoad callback for GM_MENU
+struct MenuEnterData {
+    /* +00 */ u8 menu_kind;         ///< will set the next menu kind
+    /* +01 */ u8 hovered_selection; ///< will set the next hovered selection
+    /* +02 */ u8
+        load_assets; ///< checks if the assets need to be loaded or not
+    /* +03 */ s8 x3;
+};
+STATIC_ASSERT(sizeof(struct MenuEnterData) == 0x4);
+
+/// @brief data passed to OnLeave callback for GM_MENU
+struct MenuExitData {
+    /* +00 */ s8 pending_mode; ///< will set the next game mode
+    /* +01 */ u8 _1[0x3];
+};
+STATIC_ASSERT(sizeof(struct MenuExitData) == 0x4);
+
+struct gmClassicMatchup;
+
+typedef struct gm_803DDEC8Struct {
+    /* 0x00 */ u8 x0;
+    /* 0x01 */ u8 x1;
+    /* 0x02 */ u8 x2;
+    /* 0x03 */ u8 pad03;
+    /* 0x04 */ u16 x4;
+    /* 0x06 */ u16 x6;
+    /* 0x08 */ u8 x8;
+    /* 0x09 */ u8 pad09[3];
+    /* 0x0C */ struct gmClassicMatchup* xC;
+} gm_803DDEC8Struct;
+
+typedef struct CssSubStruct {
+    /* 0x000 */ u8 x00;
+    /* 0x001 */ u8 x01;
+    /* 0x002 */ u8 pad02;
+    /* 0x003 */ u8 x03;
+    /* 0x004 */ u8 pad04[0x10];
+    /* 0x014 */ PlayerInitData saved_players[4];
+    /* 0x0A4 */ HSD_GObj* gobj;
+    /* 0x0A8 */ HSD_JObj* jobjs[39];
+    /* 0x144 */ s32 anim_frames[39];
+    /* 0x1E0 */ s32 menu_values[7];
+    /* 0x1FC */ HSD_Text* text;
+    /* 0x200 */ u8 pad200[0x0C];
+} CssSubStruct;
+
+typedef struct TrainingModeState {
+    /* 0x000 */ s32 count;
+    /* 0x004 */ s32 mode;
+    /* 0x008 */ s32 char_data[25];
+    /* 0x06C */ s32 pad_6C[2];
+    /* 0x074 */ PlayerInitData players[4];
+    /* 0x104 */ s32 result_cache[4];
+    /* 0x114 */ CssSubStruct css;
+} TrainingModeState;
 
 #endif

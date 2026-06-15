@@ -33,9 +33,7 @@ struct ftHurtboxInit {
 union ftCommon_MotionVars {
     struct {
         /* fp+2340 */ int x0;
-        /* fp+2344 */ f32 x4;
-        /* fp+2348 */ UNK_T x8;
-        /* fp+234C */ UNK_T xC;
+        /* fp+2344 */ Vec3 x4;
         /* fp+2350 */ UNK_T x10;
         /* fp+2354 */ float x14;
         /* fp+2358 */ float x18;
@@ -227,6 +225,10 @@ union ftCommon_MotionVars {
         /* fp+2344 */ float anim_start;
     } rebound;
     struct {
+        /* fp+2340 */ u8 pad_x0[4];
+        /* fp+2344 */ u8 x4;
+    } downreflect;
+    struct {
         /* fp+2340 */ bool x0;
         /* fp+2344 */ float x4;
     } pass;
@@ -368,6 +370,7 @@ union ftCommon_MotionVars {
     } entry;
     struct {
         /* fp+2340 */ Item_GObj* x0;
+        /* fp+2344 */ int x4;
     } capturelikelike;
     struct {
         /* fp+2340 */ HSD_GObjEvent x0;
@@ -405,7 +408,10 @@ union ftCommon_MotionVars {
     struct {
         /* fp+2340 */ int x40;
         /* fp+2344 */ int x44;
-        /* fp+2348 */ u8 pad_x48[0x68 - 0x48];
+        /* fp+2348 */ u8 pad_x48[0x4C - 0x48];
+        /* fp+234C */ float x4C;
+        /* fp+2350 */ Vec3 x50;
+        /* fp+235C */ Vec3 x5C;
         /* fp+2368 */ int x68;
     } unk_deadup;
     struct {
@@ -428,6 +434,12 @@ union ftCommon_MotionVars {
         /* fp+2348 */ int x8;
         /* fp+234C */ Vec xC;
     } throw;
+    struct {
+        /* fp+2340 */ float x0;
+        /* fp+2344 */ float x4;
+        /* fp+2348 */ int x8;
+        /* fp+234C */ u8 xC;
+    } capturewait;
 };
 
 /// @todo Fake, need to find real size of #HitCapsule

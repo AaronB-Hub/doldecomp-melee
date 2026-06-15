@@ -1,10 +1,11 @@
 #include "db.h"
 
-#include <sysdolphin/baselib/controller.h>
-#include <sysdolphin/baselib/gobj.h>
-#include <sysdolphin/baselib/particle.h>
-#include <melee/gm/gm_unsplit.h>
-#include <melee/un/un_2FC9.h>
+#include "gm/gm_unsplit.h"
+
+#include <baselib/controller.h>
+#include <baselib/gobj.h>
+#include <baselib/particle.h>
+#include <baselib/video.h>
 
 /* 4D6B94 */ int db_ScreenshotNumber;
 /* 4D6B90 */ unsigned int db_ScreenshotPending;
@@ -74,8 +75,7 @@ void db_TakeScreenshotIfPending(void)
         if (temp_r3 != -1) {
             var_r30 = HSD_VIData.xfb[temp_r3].buffer;
         } else {
-            OSReport("cant find xfb!\n");
-            ((0) ? ((void) 0) : __assert("dbscreenshot.c", 61, "0"));
+            HSD_ASSERTREPORT(61, 0, "cant find xfb!\n");
         }
         temp_r5 = db_ScreenshotNumber;
         db_ScreenshotNumber = temp_r5 + 1;

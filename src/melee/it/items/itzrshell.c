@@ -5,7 +5,8 @@
 
 #include "gr/grzakogenerator.h"
 #include "it/it_26B1.h"
-#include "it/it_2725.h"
+#include "it/itzako.h"
+#include "it/itmaplib.h"
 #include "it/item.h"
 #include "it/types.h"
 
@@ -43,59 +44,59 @@ void it_802E02E8(Item_GObj* gobj)
     it_802DE040(gobj);
 }
 
-void it_2725_Logic12_PickedUp(Item_GObj* gobj)
+void itZRShell_Logic12_PickedUp(Item_GObj* gobj)
 {
     it_2725_Logic11_PickedUp(gobj);
 }
 
-void it_2725_Logic12_Thrown(Item_GObj* gobj)
+void itZRShell_Logic12_Thrown(Item_GObj* gobj)
 {
-    it_2725_Logic11_Thrown(gobj);
+    itZGShell_Logic11_Thrown(gobj);
 }
 
-void it_2725_Logic12_Dropped(Item_GObj* gobj)
+void itZRShell_Logic12_Dropped(Item_GObj* gobj)
 {
-    it_2725_Logic11_Dropped(gobj);
+    itZGShell_Logic11_Dropped(gobj);
 }
 
-void it_2725_Logic12_EnteredAir(Item_GObj* gobj)
+void itZRShell_Logic12_EnteredAir(Item_GObj* gobj)
 {
     it_2725_Logic11_EnteredAir(gobj);
 }
 
-void it_2725_Logic12_Destroyed(Item_GObj* gobj)
+void itZRShell_Logic12_Destroyed(Item_GObj* gobj)
 {
     grZakoGenerator_801CACB8(gobj);
 }
 
-bool it_2725_Logic12_DmgDealt(Item_GObj* gobj)
+bool itZRShell_Logic12_DmgDealt(Item_GObj* gobj)
 {
-    return it_2725_Logic11_DmgDealt(gobj);
+    return itZGShell_Logic11_DmgDealt(gobj);
 }
 
-bool it_2725_Logic12_DmgReceived(Item_GObj* gobj)
+bool itZRShell_Logic12_DmgReceived(Item_GObj* gobj)
 {
-    return it_2725_Logic11_DmgReceived(gobj);
+    return itZGShell_Logic11_DmgReceived(gobj);
 }
 
-bool it_2725_Logic12_Reflected(Item_GObj* gobj)
+bool itZRShell_Logic12_Reflected(Item_GObj* gobj)
 {
-    return it_2725_Logic11_Reflected(gobj);
+    return itZGShell_Logic11_Reflected(gobj);
 }
 
-bool it_2725_Logic12_Clanked(Item_GObj* gobj)
+bool itZRShell_Logic12_Clanked(Item_GObj* gobj)
 {
     return it_2725_Logic11_Clanked(gobj);
 }
 
-bool it_2725_Logic12_HitShield(Item_GObj* gobj)
+bool itZRShell_Logic12_HitShield(Item_GObj* gobj)
 {
     return it_2725_Logic11_HitShield(gobj);
 }
 
-bool it_2725_Logic12_ShieldBounced(Item_GObj* gobj)
+bool itZRShell_Logic12_ShieldBounced(Item_GObj* gobj)
 {
-    return it_2725_Logic11_ShieldBounced(gobj);
+    return itZGShell_Logic11_ShieldBounced(gobj);
 }
 
 void it_802E0468(Item_GObj* gobj, HSD_GObj* ref_gobj)

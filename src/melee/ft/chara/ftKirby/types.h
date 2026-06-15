@@ -20,42 +20,42 @@
 
 struct ftKb_FighterVars {
     /* fp+222C */ struct ftKb_Hat {
-        /*  +0   fp+222C */ UNK_T x0;
+        /*  +0   fp+222C */ Item_GObj* x0;
         /*  +4   fp+2230 */ s32 x4;
         /*  +8:0 fp+2234:0 */ u8 x8_b0 : 1;
         /*  +9   fp+2235 */ u8 x9[3];
         /*  +C   fp+2238 */ FighterKind kind;
         /* +10   fp+223C */ HSD_JObj* jobj;
         /* +14   fp+2240 */ DObjList x14;
-        /* +1C   fp+2248 */ u32 x1C;
-        /* +20   fp+224C */ UNK_T x20;
-        /* +24   fp+2250 */ u32 x24;
+        /* +1C   fp+2248 */ DObjList x1C;
+        /* +24   fp+2250 */ FtPartsVis x24;
     } hat;
-    /* fp+224C   */ HSD_DObj** x28;
-    /* fp+2250   */ u8 _2C[0x44 - 0x2C];
-    /* fp+2270   */ struct KirbyFV_x44_t {
-        int x0;
-    } x44;
-    /* fp+224C   */ u8 _48[0x60 - 0x48];
-    /* fp+228C   */ UNK_T x60;
+    /* fp+2270   */ CostumeTObjList x44;
+    /* fp+228C   */ s32 x60;
     /* fp+2290   */ bool x64;
-    /* fp+2294   */ u8 _68[0x74 - 0x68];
-    /* fp+22A0   */ u32 x74;
-    /* fp+22A4   */ u32 x78;
+    /* fp+2294   */ s32 x68;
+    /* fp+2298   */ s32 x6C;
+    /* fp+229C   */ u8 _70[0x74 - 0x70];
+    /* fp+22A0   */ Item_GObj* x74;
+    /* fp+22A4   */ Item_GObj* x78;
     /* fp+22A8   */ Item_GObj* ns_flash_gobj;
-    /* fp+2294   */ u8 x80[0x9C - 0x80];
+    /* fp+22AC   */ s32 x80;
+    /* fp+22B0   */ float x84; ///< Bowser fire breath scale 1
+    /* fp+22B4   */ float x88; ///< Bowser fire breath scale 2
+    /* fp+22B8   */ Vec3 x8C;
+    /* fp+22C4   */ Item_GObj* x98; ///< Mewtwo shadow ball item
     /* fp+22C8   */ int x9C;
-    /* fp+22CC   */ UNK_T xA0;
+    /* fp+22CC   */ HSD_GObj* xA0; ///< Mewtwo effect gobj
     /* fp+22D0   */ UNK_T xA4;
     /* fp+22D4   */ int xA8;
     /* fp+22D8   */ UNK_T xAC;
-    /* fp+22DC   */ u32 xB0;
+    /* fp+22DC   */ HSD_GObj* xB0; ///< Fox/Falco blaster item
     /* fp+22E0   */ int xB4;
-    /* fp+22E4   */ u32 xB8;
+    /* fp+22E4   */ Item_GObj* xB8; ///< Sheik needle item
     /* fp+22E8   */ int xBC;
     /* fp+22EC   */ Item_GObj* xC0;
     /* fp+22F0   */ bool xC4;
-    /* fp+22F4   */ UNK_T xC8;
+    /* fp+22F4   */ float xC8;
     /* fp+22F8   */ bool xCC;
     /* fp+22FC   */ Item_GObj* xD0; ///< Peach toad item
     /* fp+2300   */ int xD4;
@@ -170,7 +170,7 @@ struct ftKb_DatAttrs {
     /* +128 */ float specialn_kp_spew_flame_velocity;
     /* +12C */ float specialn_kp_flame_scale;
     /* +130 */ float specialn_kp_lowest_charge_graphic_size;
-    /* +134 */ u32 specialn_kp_screen_shake_frequency;
+    /* +134 */ s32 specialn_kp_screen_shake_frequency;
     /* +138 */ float specialn_kp_breath_x_offset;
     // Values repeat below here
     /* +13C */ float specialn_kp_breath_y_offset;
@@ -191,7 +191,7 @@ struct ftKb_DatAttrs {
     // Samus
     /* +168 */ float specialn_ss_charge_time;
     /* +16C */ float specialn_ss_aerial_shot_recoil;
-    /* +170 */ u32 specialn_ss_frames_per_charge_level;
+    /* +170 */ s32 specialn_ss_frames_per_charge_level;
     /* +174 */ float specialn_ss_freefall_toggle;
 
     // Peach
@@ -352,7 +352,7 @@ struct ftKb_DatAttrs {
     /* +388 */ float specialn_mt_ground_horizontal_momentum;
     /* +38C */ float specialn_mt_air_horizontal_momentum;
     /* +390 */ u32 specialn_mt_loops_to_full_charge;
-    /* +394 */ float specialn_mt_frames_to_transition;
+    /* +394 */ s32 specialn_mt_frames_to_transition;
     /* +398 */ float specialn_mt_freefall_toggle;
 
     // Ice Climbers
@@ -396,14 +396,26 @@ union ftKb_MotionVars {
     struct ftKb_SpecialHiVars {
         /* fp+2340 */ int x0;
         /* fp+2344 */ int x4;
-        /* fp+2348 */ int x8;
+        /* fp+2348 */ union {
+            int i;
+            float f;
+        } x8; ///< Used as both int and float
         /* fp+234C */ int xC;
-        /* fp+2350 */ int x10;
+        /* fp+2350 */ union {
+            int i;
+            float f;
+        } x10; ///< Used as both int and float
         /* fp+2354 */ int x14;
         /* fp+2358 */ Vec3 x18;
         char pad1[0x60];
         /* fp+23C4 */ float xC4;
     } specialhi;
+    struct ftKb_SpecialNKp_Vars {
+        /* fp+2340 */ int x0[4];
+        /* fp+2350 */ int x10;
+        /* fp+2354 */ int x14;
+        /* fp+2358 */ int x18;
+    } specialn_kp;
     struct ftKb_SpecialLWVars {
         /* fp+2340 */ s16 x0;
         /* fp+2342 */ s16 x2;
@@ -415,13 +427,13 @@ union ftKb_MotionVars {
         /* fp+2354 */ int x14;
         /* fp+2358 */ Vec3 x18;
         /* fp+2364 */ Vec3 x24;
-        /* fp+2370 */  Vec3 x30;
-        /* fp+237C */  Vec3 x3C;
-        /* fp+2388 */  Vec3 x48;
-        /* fp+2394 */  Vec3 x54;
-        /* fp+23A0 */  Vec3 x60;
-        /* fp+23AC */  Vec3 x6C;
-        /* fp+23B8 */  Vec3 x78;
+        /* fp+2370 */ Vec3 x30;
+        /* fp+237C */ Vec3 x3C;
+        /* fp+2388 */ Vec3 x48;
+        /* fp+2394 */ Vec3 x54;
+        /* fp+23A0 */ Vec3 x60;
+        /* fp+23AC */ Vec3 x6C;
+        /* fp+23B8 */ Vec3 x78;
         /* fp+23C4 */ float x84;
         /*fp+23C8 */ float x88[9];
     } speciallw;

@@ -1,4 +1,7 @@
 #include "gmmain_lib.static.h"
+
+#include "placeholder.h"
+
 #include <platform.h>
 
 #include <dolphin/os/OSReset.h>
@@ -7,12 +10,15 @@
 #include <melee/db/db.h>
 #include <melee/gm/gm_unsplit.h>
 #include <melee/gm/types.h>
+#include <melee/if/textlib.h>
 #include <melee/lb/lb_00B0.h>
 #include <melee/lb/lbaudio_ax.h>
 #include <melee/lb/lbcardnew.h>
 #include <melee/lb/lblanguage.h>
 #include <melee/lb/lbtime.h>
+#include <melee/mn/mnname.h>
 #include <melee/ty/toy.h>
+#include <melee/ty/tylist.h>
 
 GameRules gmMainLib_803D4A48 = {
     0,
@@ -27,18 +33,14 @@ GameRules gmMainLib_803D4A48 = {
     false, // friendly fire
     true,  // pause
     0,     // score display
-    0,
-    {
-        0,
-        8,
-        8,
-    },
-    0,
-    {
-        0,
-        8,
-        0,
-    },
+    0,     // unk_xc
+    0,     // xD
+    8,     // xE
+    8,     // xF
+    0,     // unk_x10
+    0,     // x11
+    8,     // x12
+    0,     // x13
     /* unk_14 */ -1,
 };
 
@@ -95,9 +97,9 @@ struct gmm_x1CB0* gmMainLib_8015CC58(void)
     return &gmMainLib_8015CC40()->x1CB0;
 }
 
-void* GetPersistentFighterData(s32 arg0)
+struct FighterData* GetPersistentFighterData(s32 arg0)
 {
-    struct gmm_x1F2C* base = gmMainLib_804D3EE0->thing.x1F2C;
+    struct FighterData* base = gmMainLib_804D3EE0->thing.x1F2C;
     return &base[arg0];
 }
 
@@ -116,10 +118,10 @@ short* gmMainLib_8015CC90(void)
     return &gmMainLib_804D3EE0->thing.x1CD0;
 }
 
-struct gmm_x2FF8_inner* GetPersistentNameData(s32 arg0)
+struct NameTagData* GetPersistentNameData(s32 arg0)
 {
-    struct gmm_x2FF8* base = &gmMainLib_804D3EE0->thing.x2FF8[0];
-    struct gmm_x2FF8_inner* inner = base[arg0 / 19].inner;
+    struct NameTagDataBank* base = &gmMainLib_804D3EE0->thing.x2FF8[0];
+    struct NameTagData* inner = base[arg0 / 19].inner;
     return &inner[arg0 % 19];
 }
 
@@ -128,7 +130,7 @@ void* gmMainLib_8015CCE4(void)
     return &gmMainLib_804D3EE0->unk_44;
 }
 
-void* gmMainLib_8015CCF0(void)
+u32* gmMainLib_8015CCF0(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A48;
 }
@@ -138,37 +140,37 @@ void* gmMainLib_8015CCFC(void)
     return &gmMainLib_804D3EE0->thing.x1A4C;
 }
 
-void* gmMainLib_8015CD08(void)
+void* gmMainLib_GetVsPlayContestants(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A30;
 }
 
-void* gmMainLib_8015CD14(void)
+void* gmMainLib_GetVsPlayTime(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A34;
 }
 
-void* gmMainLib_8015CD20(void)
+void* gmMainLib_GetCombinedVSPlayTime(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A38;
 }
 
-void* gmMainLib_8015CD2C(void)
+void* gmMainLib_GetTimeMatchTotal(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A18;
 }
 
-void* gmMainLib_8015CD38(void)
+void* gmMainLib_GetStockMatchTotal(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A1C;
 }
 
-void* gmMainLib_8015CD44(void)
+void* gmMainLib_GetCoinMatchTotal(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A20;
 }
 
-void* gmMainLib_8015CD50(void)
+void* gmMainLib_GetBonusMatchTotal(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A24;
 }
@@ -178,12 +180,12 @@ void* gmMainLib_8015CD5C(void)
     return &gmMainLib_804D3EE0->thing.x1A28;
 }
 
-void* gmMainLib_8015CD68(void)
+void* gmMainLib_GetMatchResetCounter(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A2C;
 }
 
-void* gmMainLib_8015CD74(void)
+void* gmMainLib_GetSingleplayerTime(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A3C;
 }
@@ -193,27 +195,27 @@ void* gmMainLib_8015CD80(void)
     return &gmMainLib_804D3EE0->thing.x1A44;
 }
 
-void* gmMainLib_8015CD8C(void)
+void* gmMainLib_GetPowerCount(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A50;
 }
 
-int* gmMainLib_8015CD98(void)
+int* gm_GetPowerTime(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A54;
 }
 
-void* gmMainLib_8015CDA4(void)
+void* gmMainLib_GetTotalDamage(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A58;
 }
 
-void* gmMainLib_8015CDB0(void)
+s32* gmMainLib_GetKOTotal(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A5C;
 }
 
-void* gmMainLib_8015CDBC(void)
+void* gmMainLib_GetSelfDestructTotal(void)
 {
     return &gmMainLib_804D3EE0->thing.x1A60;
 }
@@ -252,8 +254,8 @@ s8* gmMainLib_8015CE44(s32 arg0, s32 arg1)
         }
         return 0;
     } else {
-        struct gmm_x2FF8* base = &gmMainLib_804D3EE0->thing.x2FF8[0];
-        struct gmm_x2FF8_inner* inner = &base[arg1 / 19].inner[0];
+        struct NameTagDataBank* base = &gmMainLib_804D3EE0->thing.x2FF8[0];
+        struct NameTagData* inner = &base[arg1 / 19].inner[0];
         return &inner[arg1 % 19].x1A2;
     }
 }
@@ -297,7 +299,7 @@ bool gmMainLib_8015CF94(void)
 
 s8* gmMainLib_8015CFB4(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x78;
 }
 
@@ -310,14 +312,14 @@ void gmMainLib_8015D00C(u8 arg0)
 {
     u8 _[12];
 
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7A.b0 = true;
     gmMainLib_8015ED98()->xC |= 1 << arg0;
 }
 
 s32* gmMainLib_8015D06C(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x84;
 }
 
@@ -328,13 +330,13 @@ s32* gmMainLib_8015D084(u8 arg0)
 
 s32* gmMainLib_8015D0C0(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x88;
 }
 
 bool gmMainLib_8015D0D8(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b4;
 }
 
@@ -348,38 +350,38 @@ void gmMainLib_8015D134(u8 arg0)
 {
     u8 _[12];
 
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b4 = true;
     gmMainLib_8015ED98()->x10 |= 1 << arg0;
 }
 
 u8* gmMainLib_8015D194(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x80;
 }
 
 s32 gmMainLib_8015D1AC(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b789;
 }
 
 void gmMainLib_8015D1C8(u8 arg0, int stocks)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b789 = stocks;
 }
 
 s32* gmMainLib_8015D1E8(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x8C;
 }
 
 bool gmMainLib_8015D200(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b5;
 }
 
@@ -393,38 +395,38 @@ void gmMainLib_8015D25C(u8 arg0)
 {
     u8 _[12];
 
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b5 = true;
     gmMainLib_8015ED98()->x14 |= 1 << arg0;
 }
 
 u8* gmMainLib_8015D2BC(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x81;
 }
 
 s32 gmMainLib_8015D2D4(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b10_to_12;
 }
 
 void gmMainLib_8015D2F0(u8 arg0, int stocks)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b10_to_12 = stocks;
 }
 
 s32* gmMainLib_8015D310(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x90;
 }
 
 bool gmMainLib_8015D328(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b6;
 }
 
@@ -438,32 +440,32 @@ void gmMainLib_8015D384(u8 arg0)
 {
     u8 _[12];
 
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b6 = true;
     gmMainLib_8015ED98()->x18 |= 1 << arg0;
 }
 
 u8* gmMainLib_8015D3E4(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x82;
 }
 
 s32 gmMainLib_8015D3FC(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b13_to_15;
 }
 
 void gmMainLib_8015D418(u8 arg0, int stocks)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b13_to_15 = stocks;
 }
 
 u32* gmMainLib_8015D438(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x94;
 }
 
@@ -474,7 +476,7 @@ s32* gmMainLib_8015D450(u8 arg0)
 
 bool gmMainLib_8015D48C(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b0;
 }
 
@@ -486,7 +488,7 @@ s32 gmMainLib_8015D4A8(u8 arg0)
 
 void gmMainLib_8015D4E8(u8 arg0, s32 arg1)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b0 = arg1;
 }
 
@@ -495,7 +497,7 @@ bool gmMainLib_8015D508(void)
     struct gmm_x1868* base = &gmMainLib_804D3EE0->thing;
     s32 i;
     for (i = 0; i < 25; ++i) {
-        struct gmm_x1F2C* _x1F2C = base->x1F2C;
+        struct FighterData* _x1F2C = base->x1F2C;
         if (!_x1F2C[(u8) i].x7C.b0) {
             return false;
         }
@@ -531,79 +533,79 @@ bool gmMainLib_8015D640(void)
 
 s32* gmMainLib_8015D6A4(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x98;
 }
 
 bool gmMainLib_8015D6BC(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b1;
 }
 
 void gmMainLib_8015D6D8(u8 arg0, s32 arg1)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b1 = arg1;
 }
 
 s32* gmMainLib_8015D6F8(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x9C;
 }
 
 bool gmMainLib_8015D710(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b2;
 }
 
 void gmMainLib_8015D72C(u8 arg0, s32 arg1)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b2 = arg1;
 }
 
 u16* gmMainLib_8015D74C(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.xA0;
 }
 
 bool gmMainLib_8015D764(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return base[arg0].x7C.b3;
 }
 
 void gmMainLib_8015D780(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     base[arg0].x7C.b3 = 1;
 }
 
 u16* gmMainLib_8015D7A4(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.xA2;
 }
 
 s32* gmMainLib_8015D7BC(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.xA4;
 }
 
 s32* gmMainLib_8015D7D4(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.xA8;
 }
 
-s16* gmMainLib_8015D7EC(u8 arg0)
+u16* gmMainLib_8015D7EC(u8 arg0)
 {
-    struct gmm_x1F2C* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
+    struct FighterData* base = &gmMainLib_804D3EE0->thing.x1F2C[0];
     return &base[arg0].x7C.x7E;
 }
 
@@ -671,16 +673,16 @@ u32* gmMainLib_8015D970(ssize_t idx)
     return &base[idx];
 }
 
-// https://decomp.me/scratch/CJy8X
-// register swap
+/// https://decomp.me/scratch/CJy8X
 bool gmMainLib_8015D984(u32 arg0)
 {
-    u8 _[16];
+    PAD_STACK(16);
 
     if (gmMainLib_8015DA90(arg0) == 0) {
-        u32* base = &gmMainLib_804D3EE0->unk_6C[0];
-        u32* qwe = &base[arg0];
-        *qwe = lbTime_8000AFBC();
+        u32* temp_r31 = (u32*) gmMainLib_804D3EE0;
+        temp_r31 += arg0;
+        temp_r31 = (u32*) ((u8*) temp_r31 + 0x6C);
+        *temp_r31 = lbTime_8000AFBC();
 
         gmMainLib_8015D9F4(arg0);
         gmMainLib_8015DA40(arg0);
@@ -727,7 +729,7 @@ void gmMainLib_8015DAB4(u32 arg0)
     base[arg0 / 32] |= (1 << (arg0 % 32));
 }
 
-s32 gmMainLib_8015DADC(u32 arg0)
+bool gmMainLib_8015DADC(u32 arg0)
 {
     u32* base = &gmMainLib_804D3EE0->thing.x1C88[0];
     return (1 << (arg0 % 32)) & base[arg0 / 32];
@@ -767,13 +769,112 @@ void gmMainLib_8015DB80(void)
     }
 }
 
-/// #gmMainLib_8015DBF4
+s32 gmMainLib_8015DBF4(s32 arg0)
+{
+    extern VsModeData gm_80497618;
+    s32 j;
+    u8 val;
 
-/// #gmMainLib_8015EA80
+#define ADJ_NAMETAG_78(field)                                                 \
+    do {                                                                      \
+        val = (field);                                                        \
+        if (val == (u8) arg0) {                                               \
+            (field) = 0x78;                                                   \
+        } else if (val > (u8) arg0 && val != 0x78) {                          \
+            (field) = val - 1;                                                \
+        }                                                                     \
+    } while (0)
+
+#define ADJ_VMD(vmd)                                                          \
+    do {                                                                      \
+        for (j = 0; j < 6; j++) {                                             \
+            ADJ_NAMETAG_78((vmd)->data.players[j].xA);                        \
+        }                                                                     \
+    } while (0)
+
+    ADJ_NAMETAG_78(gmMainLib_804D3EE0->unk_51C.x4);
+    ADJ_NAMETAG_78(gmMainLib_804D3EE0->unk_522.x4);
+    ADJ_NAMETAG_78(gmMainLib_804D3EE0->unk_528.x4);
+    ADJ_NAMETAG_78(gmMainLib_804D3EE0->unk_530.x4);
+    ADJ_NAMETAG_78(gmMainLib_804D3EE0->unk_530.unk_584.unk_586);
+
+    ADJ_VMD(&gm_80497618);
+
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_1490);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_D10);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_590);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_6D0);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_810);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_950);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_A90);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_BD0);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_E50);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_F90);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_10D0);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_1210);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_1350);
+    ADJ_VMD(&gmMainLib_804D3EE0->unk_1490);
+
+    {
+        GameRules* gr = &gmMainLib_804D3EE0->x1850;
+
+        val = gr->unk_x10;
+        if (val == (u8) arg0) {
+            gr->unk_x10 = 0;
+        } else if (val > (u8) arg0 && val != 0x78) {
+            gr->unk_x10 = val - 1;
+        }
+
+        val = gr->x11;
+        if (val == (u8) arg0) {
+            gr->x11 = 0;
+        } else if (val > (u8) arg0 && val != 0x78) {
+            gr->x11 = val - 1;
+        }
+
+        val = gr->x13;
+        if (val == (u8) arg0) {
+            gr->x13 = 0;
+        } else if (val > (u8) arg0 && val != 0x78) {
+            gr->x13 = val - 1;
+        }
+    }
+
+#undef ADJ_VMD
+#undef ADJ_NAMETAG_78
+
+    return arg0;
+}
+
+void gmMainLib_8015EA80(void)
+{
+    s32 i;
+
+    for (i = 0; i < 6; i++) {
+        s8* ptr = gmMainLib_8015CE44(i, 0x78);
+        if (ptr != NULL) {
+            *ptr = 5;
+        }
+    }
+    {
+        VsModeData* base = &gmMainLib_804D3EE0->unk_590;
+        s32 j;
+        for (i = 0; i < 6; i++) {
+            for (j = 0; j < 6; j++) {
+                base[i].data.players[j].handicap = 9;
+            }
+        }
+        for (i = 7; i < 13; i++) {
+            for (j = 0; j < 6; j++) {
+                base[i].data.players[j].handicap = 9;
+            }
+        }
+    }
+}
 
 int gmMainLib_8015ECB0(void)
 {
-    return gmMainLib_804D3EE0->x1850.unk_x1;
+    return gmMainLib_804D3EE0->x1850.bgm;
 }
 
 void gmMainLib_8015ECBC(void)
@@ -783,12 +884,12 @@ void gmMainLib_8015ECBC(void)
     GameRules* rules = &gmMainLib_804D3EE0->x1850;
     if (gm_80164600() && gm_80164ABC()) {
         if (HSD_Randi(4) != 0) {
-            rules->unk_x1 = 0x34;
+            rules->bgm = 0x34;
         } else {
-            rules->unk_x1 = 0x36;
+            rules->bgm = 0x36;
         }
     } else {
-        rules->unk_x1 = 0x34;
+        rules->bgm = 0x34;
     }
 }
 
@@ -859,63 +960,63 @@ struct gmm_x1868_1A8_t* gmMainLib_8015EDC8(void)
 
 s32 gmMainLib_8015EDD4(void)
 {
-    return gmMainLib_804D3EE0->thing.unk_4 & 4;
+    return gmMainLib_804D3EE0->thing.x186C & 4;
 }
 
 void gmMainLib_8015EDE4(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 |= 4;
+    gmMainLib_804D3EE0->thing.x186C |= 4;
 }
 
 void gmMainLib_8015EDF8(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 &= 0xFFFFFFFB;
+    gmMainLib_804D3EE0->thing.x186C &= 0xFFFFFFFB;
 }
 
 s32 gmMainLib_8015EE0C(void)
 {
-    return gmMainLib_804D3EE0->thing.unk_4 & 1;
+    return gmMainLib_804D3EE0->thing.x186C & 1;
 }
 
 void gmMainLib_8015EE1C(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 |= 1;
+    gmMainLib_804D3EE0->thing.x186C |= 1;
 }
 
 void gmMainLib_8015EE30(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 &= 0xFFFFFFFE;
+    gmMainLib_804D3EE0->thing.x186C &= 0xFFFFFFFE;
 }
 
 s32 gmMainLib_8015EE44(void)
 {
-    return gmMainLib_804D3EE0->thing.unk_4 & 2;
+    return gmMainLib_804D3EE0->thing.x186C & 2;
 }
 
 void gmMainLib_8015EE54(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 |= 2;
+    gmMainLib_804D3EE0->thing.x186C |= 2;
 }
 
 void gmMainLib_8015EE68(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 &= 0xFFFFFFFD;
+    gmMainLib_804D3EE0->thing.x186C &= 0xFFFFFFFD;
     gmMainLib_804D3EE0->thing.x1CB0.stage_mask = gmMainLib_803D4A60[6];
 }
 
 s32 gmMainLib_8015EE90(void)
 {
-    return gmMainLib_804D3EE0->thing.unk_4 & 8;
+    return gmMainLib_804D3EE0->thing.x186C & 8;
 }
 
 void gmMainLib_8015EEA0(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 |= 8;
+    gmMainLib_804D3EE0->thing.x186C |= 8;
 }
 
 void gmMainLib_8015EEB4(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 &= 0xFFFFFFF7;
+    gmMainLib_804D3EE0->thing.x186C &= 0xFFFFFFF7;
 }
 
 void gmMainLib_8015EEC8(void)
@@ -924,7 +1025,7 @@ void gmMainLib_8015EEC8(void)
     PAD_STACK(0x10);
 
     for (i = 0; i < 0x19; i++) {
-        struct gmm_x1F2C* data = GetPersistentFighterData(i);
+        struct FighterData* data = GetPersistentFighterData(i);
         memzero(&data->x7C, sizeof(data->x7C));
     }
     memzero(&gmMainLib_804D3EE0->thing.x1A68, 0xD8);
@@ -953,11 +1054,68 @@ void gmMainLib_8015EF30(struct gmMainLib_8015EF30_s* arg0)
     arg0->x38 = 0;
 }
 
-/// #gmMainLib_8015EF84
+void InitializePersistentNameData(s32 arg0)
+{
+    struct NameTagData* data;
+    struct NameTagDataBank* bank;
+    int i;
 
-/// #gmMainLib_8015F150
+    PAD_STACK(16);
 
-/// #gmMainLib_8015F260
+    bank = gmMainLib_804D3EE0->thing.x2FF8;
+    data = &bank[(u8) arg0 / 19].inner[(u8) arg0 % 19];
+    for (i = 0; i < 120; i++) {
+        data->vs_kos[i] = 0;
+    }
+    gmMainLib_8015EF30((struct gmMainLib_8015EF30_s*) &data->sd_count);
+    for (i = 0; i < 25; i++) {
+        data->play_time_by_fighter[i] = 0;
+    }
+    data->x1A2 = 5;
+}
+
+void gmMainLib_8015F150(void)
+{
+    s32 i;
+    PAD_STACK(8);
+
+    for (i = 0; i < 0x19; i++) {
+        int j;
+        struct FighterData* data = &gmMainLib_804D3EE0->thing.x1F2C[(u8) i];
+        for (j = 0; j < 0x19; j++) {
+            data->fighter_kos[j] = 0;
+        }
+        gmMainLib_8015EF30(
+            (struct gmMainLib_8015EF30_s*) &gmMainLib_804D3EE0->thing
+                .x1F2C[(u8) i]
+                .sd_count);
+    }
+}
+
+void gmMainLib_8015F260(void)
+{
+    s32 i;
+
+    PAD_STACK(16);
+
+    for (i = 0; i < 120; i++) {
+        struct NameTagData* data;
+        struct NameTagDataBank* bank;
+
+        int j;
+        bank = gmMainLib_804D3EE0->thing.x2FF8;
+        data = &bank[(u8) i / 19].inner[(u8) i % 19];
+
+        for (j = 0; j < 120; j++) {
+            data->vs_kos[j] = 0;
+        }
+        gmMainLib_8015EF30((struct gmMainLib_8015EF30_s*) &data->sd_count);
+        for (j = 0; j < 25; j++) {
+            data->play_time_by_fighter[j] = 0;
+        }
+        data->x1A2 = 5;
+    }
+}
 
 void gmMainLib_8015F464(void)
 {
@@ -1035,33 +1193,130 @@ void gmMainLib_8015F588(bool arg0)
 
 /// #gmMainLib_8015F600
 
-void gmMainLib_8015FA34(int arg0)
+static u8 gmMainLib_804D3EE4;
+
+void gmMainLib_8015F600(int arg0, int arg1)
+{
+    s32 i;
+    PAD_STACK(112);
+
+    if (arg0 == 1) {
+        s32 j = 0;
+        do {
+            struct FighterData* fdata = gmMainLib_804D3EE0->thing.x1F2C;
+            for (i = 0; i < 25; i++) {
+                fdata[(u8) j].fighter_kos[i] = 0;
+            }
+            gmMainLib_8015EF30(
+                (struct gmMainLib_8015EF30_s*) &gmMainLib_804D3EE0->thing
+                    .x1F2C[(u8) j]
+                    .sd_count);
+            j++;
+        } while (j < 25);
+
+        memzero(&gmMainLib_804D3EE0->thing.x1CD0, 0x25C);
+        un_80311960();
+
+        if (arg1 == 0) {
+            un_803124BC();
+            Trophy_SetUnlockState((s32) (s16) un_80305058(2, 0x63, 0, 100.0f),
+                                  1);
+        }
+
+        gmMainLib_804D3EE0->thing.x1CB0 =
+            *(struct gmm_x1CB0*) gmMainLib_803D4A60;
+
+        {
+            s32 lang;
+            switch (lbLang_GetLanguageSetting()) {
+            case 0:
+                lang = 0;
+                break;
+            case 1:
+                lang = 1;
+                break;
+            }
+            lbLang_SetSavedLanguage(lang);
+        }
+
+        memzero(&gmMainLib_804D3EE0->thing, 0x448);
+        gm_801623FC(0x32);
+        gm_IncrementPowerCount();
+
+        if (arg1 == 0 && un_803048C0(0xA5) > 0 && gm_80164430(0x14U) == 0) {
+            gm_80164504(0x14U);
+        }
+    } else {
+        s32 bank_offset = (arg0 - 2) * 19;
+        s32 j;
+
+        j = 0;
+        do {
+            s32 idx = j + bank_offset;
+            struct NameTagData* data =
+                &gmMainLib_804D3EE0->thing.x2FF8[(u8) idx / 19]
+                     .inner[(u8) idx % 19];
+
+            for (i = 0; i < 120; i++) {
+                data->vs_kos[i] = 0;
+            }
+            gmMainLib_8015EF30((struct gmMainLib_8015EF30_s*) &data->sd_count);
+
+            for (i = 0; i < 25; i++) {
+                data->play_time_by_fighter[i] = 0;
+            }
+            data->x1A2 = 5;
+
+            {
+                char* src = mnName_8023749C((s32) (u8) idx);
+                if (src != NULL) {
+                    s32 k = 0;
+                    while ((s8) gmMainLib_804D3EE4 != (s8) (u8) *src) {
+                        data->namedata[k] = (u8) *src;
+                        k++;
+                        src++;
+                    }
+                    data->namedata[k] = gmMainLib_804D3EE4;
+                } else {
+                    data->namedata[0] = (u8) gmMainLib_804D3EE4;
+                }
+            }
+            data->x1A1 = 1;
+            j++;
+        } while (j < 19);
+    }
+}
+
+#pragma push
+#pragma inline_depth(3)
+void gmMainLib_8015FA34(s32 arg0)
 {
     GXRenderModeObj* var_r3;
-    int i;
+    s32 i;
+
+    PAD_STACK(50);
 
     for (i = 1; i < 9; i++) {
         if ((arg0 != 0 && arg0 != 2) || lb_8001B6E0(i) != 0) {
             gmMainLib_8015F600(i, 0);
         } else if (i == 1 && !gmMainLib_8046B0F0.x0) {
-            gm_80162B98();
+            gm_IncrementPowerCount();
         }
     }
-    if (g_debugLevel > 2 && db_804D6B20 != 0) {
-        gmMainLib_804D3EE0->thing.unk_4 = -1;
+    if (DbLevel > 2 && db_804D6B20 != 0) {
+        gmMainLib_804D3EE0->thing.x186C = 0xFF;
         gm_80164F18();
         gm_8016468C();
         gm_8017297C();
         gm_801741FC();
     }
     lbAudioAx_80028690();
-    // TODO the call to gmMainLib_8015CC40 shouldn't be inlined
     gmMainLib_8015F500();
 }
-
+#pragma pop
 void gmMainLib_8015FB68(void)
 {
-    gmMainLib_804D3EE0->thing.unk_4 = 0;
+    gmMainLib_804D3EE0->thing.x186C = 0;
     gm_8016505C();
     gm_801647D0();
     gm_801729EC();

@@ -6,6 +6,7 @@
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
+#include "gr/inlines.h"
 #include "gr/types.h"
 
 #include "lb/forward.h"
@@ -20,8 +21,8 @@
 
 static void grFigure3_8020E504(bool number);
 static void grFigure3_8020E508(void);
-static void grFigure3_UnkStage0_OnLoad(void);
-static void grFigure3_UnkStage0_OnStart(void);
+static void grFigure3_OnLoad(void);
+static void grFigure3_OnStart(void);
 static bool grFigure3_8020E5A0(void);
 static HSD_GObj* grFigure3_8020E5A8(int gobj_id);
 static void grFigure3_8020E690(Ground_GObj* gobj);
@@ -49,13 +50,13 @@ static StageCallbacks grEF2_803E63D8[3] = {
 };
 
 StageData grEF2_803E6420 = {
-    0x00000046,
+    FIGURE3,
     grEF2_803E63D8,
     "/GrEF3.dat",
     grFigure3_8020E508,
     grFigure3_8020E504,
-    grFigure3_UnkStage0_OnLoad,
-    grFigure3_UnkStage0_OnStart,
+    grFigure3_OnLoad,
+    grFigure3_OnStart,
     grFigure3_8020E5A0,
     grFigure3_8020E788,
     grFigure3_8020E790,
@@ -82,11 +83,11 @@ static void grFigure3_8020E508(void)
     Ground_801C3BB4();
 }
 
-static void grFigure3_UnkStage0_OnLoad(void) {}
+static void grFigure3_OnLoad(void) {}
 
-static void grFigure3_UnkStage0_OnStart(void)
+static void grFigure3_OnStart(void)
 {
-    grZakoGenerator_801CAE04(false);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 static bool grFigure3_8020E5A0(void)
@@ -99,25 +100,12 @@ static HSD_GObj* grFigure3_8020E5A8(int gobj_id)
     HSD_GObj* gobj;
     StageCallbacks* callbacks = &grEF2_803E63D8[gobj_id];
 
-    gobj = Ground_801C14D0(gobj_id);
+    gobj = Ground_GetStageGObj(gobj_id);
 
     if (gobj != NULL) {
-        Ground* gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grfigure3.c", 195,
-                 gobj_id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 195, gobj_id);
     }
 
     return gobj;

@@ -9,11 +9,12 @@
 
 #include <dolphin/mtx.h>
 
-/* 2B3368 */ void* it_802B3368(Item_GObj* gobj);
-/* 2B338C */ void it_802B338C(Item_GObj*, Vec3*, float facing_dir, u32);
+/* 2B3368 */ Item_GObj* it_802B3368(Item_GObj* gobj);
+/* 2B338C */ Item_GObj* it_802B338C(Item_GObj* owner, Vec3* pos,
+                                    f32 facing_dir, u32 kind);
 /* 2B34E4 */ void it_2725_Logic106_Destroyed(Item_GObj*);
 /* 2B3544 */ void it_802B3544(Item_GObj* gobj);
-/* 2B3554 */ UNK_RET it_802B3554(UNK_PARAMS);
+/* 2B3554 */ void it_802B3554(Item_GObj* gobj, HSD_GObj* owner);
 /* 2B3680 */ bool itPikachutjoltground_UnkMotion0_Anim(Item_GObj* gobj);
 /* 2B36BC */ bool itPikachutjoltground_UnkMotion1_Anim(Item_GObj* gobj);
 /* 2B3790 */ void itPikachutjoltground_UnkMotion0_Phys(Item_GObj* gobj);
@@ -25,7 +26,7 @@
 /* 2B3CA8 */ bool it_2725_Logic106_Absorbed(Item_GObj*);
 /* 2B3D0C */ bool it_2725_Logic106_HitShield(Item_GObj*);
 /* 2B3D70 */ bool it_2725_Logic106_ShieldBounced(Item_GObj*);
-/* 2B3EDC */ void it_2725_Logic106_EvtUnk(Item_GObj*, Item_GObj*);
+/* 2B3EDC */ void itPikachuTJoltGround_Logic106_EvtUnk(Item_GObj*, Item_GObj*);
 /* 3F7190 */ extern ItemStateTable it_803F7190[];
 
 #endif

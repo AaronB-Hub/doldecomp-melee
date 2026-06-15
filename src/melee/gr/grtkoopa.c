@@ -6,6 +6,7 @@
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
+#include "gr/inlines.h"
 #include "gr/types.h"
 
 #include "lb/forward.h"
@@ -52,7 +53,7 @@ static StageCallbacks grTKp_803E8C70[4] = {
 };
 
 StageData grTKp_803E8CCC = {
-    (1 << 0) | (1 << 4) | (1 << 5),
+    TKOOPA,
     grTKp_803E8C70,
     "/GrTKp.dat",
     grTKoopa_8022164C,
@@ -85,7 +86,7 @@ static void grTkoopa_UnkStage0_OnLoad(void) {}
 
 static void grTkoopa_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 static bool grTKoopa_802216E4(void)
@@ -98,24 +99,12 @@ static HSD_GObj* grTKoopa_802216EC(int gobj_id)
     HSD_GObj* gobj;
     StageCallbacks* callbacks = &grTKp_803E8C70[gobj_id];
 
-    gobj = Ground_801C14D0(gobj_id);
+    gobj = Ground_GetStageGObj(gobj_id);
+
     if (gobj != NULL) {
-        Ground* gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtkoopa.c", 195,
-                 gobj_id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 195, gobj_id);
     }
 
     return gobj;

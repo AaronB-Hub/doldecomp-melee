@@ -2,6 +2,8 @@
 
 #include "gm_unsplit.h"
 
+#include "baselib/jobj.h"
+
 #include <sysdolphin/baselib/cobj.h>
 #include <sysdolphin/baselib/gobj.h>
 #include <sysdolphin/baselib/gobjgxlink.h>
@@ -14,7 +16,6 @@
 #include <melee/cm/camera.h>
 #include <melee/ef/efasync.h>
 #include <melee/ef/eflib.h>
-#include <melee/ft/ft_0C31.h>
 #include <melee/ft/ftdemo.h>
 #include <melee/gr/ground.h>
 #include <melee/gr/stage.h>
@@ -39,11 +40,11 @@ static Vec3 gm_803DB2E0 = { 0.5, -7, 0 };
 bool gm_801A659C(int arg0)
 {
     switch (gm_801A4310()) {
-    case MJ_CLASSIC_GOVER:
+    case GM_CLASSIC_GOVER:
         return gm_80160474(arg0, 3);
-    case MJ_ADVENTURE_GOVER:
+    case GM_ADVENTURE_GOVER:
         return gm_80160474(arg0, 4);
-    case MJ_DEBUG_GOVER:
+    case GM_DEBUG_GOVER:
         return gm_80160474(arg0, gm_801BF050());
     default:
         return gm_80160474(arg0, 5);
@@ -88,8 +89,8 @@ static struct {
 
 void fn_801A6664(HSD_GObj* arg0)
 {
-    HSD_SObj_803A477C_t* temp_r3;
-    HSD_SObj_803A477C_t* temp_r3_2;
+    HSD_SObj* temp_r3;
+    HSD_SObj* temp_r3_2;
 
     HSD_JObjAnimAll((HSD_JObj*) arg0->hsd_obj);
     if ((s32) gm_804D6758 != 0) {
@@ -186,8 +187,8 @@ void gm_801A68D8(void)
     Item_80266FA8();
     Item_80266FCC();
     Stage_8022524C();
-    efLib_8005B4B8();
-    efAsync_8006737C(0);
+    efLib_Init();
+    efAsync_LoadSync(0);
     ftDemo_ObjAllocInit();
     Player_80036E20(gm_801BEFB0(), gm_804D6744, 2);
     Player_80036CF0(0);
@@ -202,7 +203,7 @@ void gm_801A68D8(void)
     temp_r3 = Player_GetEntity(0);
     gm_804D674C = temp_r3;
     lb_8000BA0C(GET_JOBJ(temp_r3), 0.6F);
-    HSD_GObjProc_8038FD54(temp_r3, fn_801A6868, 4);
+    HSD_GObj_SetupProc(temp_r3, fn_801A6868, 4);
 
     temp_r3_2 = Player_GetEntityAtIndex(0, 1);
     if (temp_r3_2 != NULL) {
@@ -275,12 +276,12 @@ void fn_801A6C30(HSD_GObj* gobj)
 
 static u8 gm_804D6740;
 static SceneDesc* gm_804D6748;
-static UNK_T gm_804D6798;
-static HSD_Archive* gm_804D679C;
-static SceneDesc* gm_804D67A0;
-static SceneDesc* gm_804D67A4;
-static SceneDesc* gm_804D67A8;
-static SceneDesc* gm_804D67AC;
+HSD_Joint* gm_804D6798;
+HSD_Archive* gm_804D679C;
+SceneDesc* gm_804D67A0;
+SceneDesc* gm_804D67A4;
+SceneDesc* gm_804D67A8;
+SceneDesc* gm_804D67AC;
 
 void gm_801A6C54(void)
 {
@@ -297,7 +298,7 @@ void gm_801A6C54(void)
     HSD_CObjAddAnim(cobj, gm_804D6748->cameras[0].anims[0]);
     HSD_CObjReqAnim(cobj, 0.0F);
     HSD_CObjAnim(cobj);
-    HSD_GObjProc_8038FD54(gobj, fn_801A6C30, 0);
+    HSD_GObj_SetupProc(gobj, fn_801A6C30, 0);
 
     for (i = 0; i < 2; i++) {
         gm_804808F8[i][0].image_ptr = NULL;
@@ -331,7 +332,7 @@ void gm_801A6DC0(void)
     HSD_CObjAddAnim(cobj, gm_804D6748->cameras[0].anims[0]);
     HSD_CObjReqAnim(cobj, 0.0F);
     HSD_CObjAnim(cobj);
-    HSD_GObjProc_8038FD54(gobj, fn_801A6B6C, 0);
+    HSD_GObj_SetupProc(gobj, fn_801A6B6C, 0);
 
     for (i = 0; i < 2; i++) {
         gm_80480964[i][0].image_ptr = NULL;
@@ -348,7 +349,7 @@ static void data_reorder(HSD_JObj* jobj)
 
 void gm_801A6EE4(void)
 {
-    MajorSceneKind var_r29;
+    GameModeKind var_r29;
 
     PAD_STACK(4);
 
@@ -356,17 +357,17 @@ void gm_801A6EE4(void)
     un_803124BC();
     un_803102D0();
     switch (gm_801A4310()) {
-    case MJ_CLASSIC_GOVER:
-        var_r29 = MJ_CLASSIC;
+    case GM_CLASSIC_GOVER:
+        var_r29 = GM_CLASSIC;
         break;
-    case MJ_ADVENTURE_GOVER:
-        var_r29 = MJ_ADVENTURE;
+    case GM_ADVENTURE_GOVER:
+        var_r29 = GM_ADVENTURE;
         break;
-    case MJ_DEBUG_GOVER:
+    case GM_DEBUG_GOVER:
         var_r29 = gm_801BF050();
         break;
     default:
-        var_r29 = MJ_ALLSTAR;
+        var_r29 = GM_ALLSTAR;
         break;
     }
     lbArchive_LoadSymbols(gm_801604DC(gm_801BEFB0(), var_r29), &gm_804D6798,
@@ -377,12 +378,12 @@ void gm_801A6EE4(void)
         "cut3BgScene", 0);
     lbArchive_LoadSymbols("GmRgStnd.dat", &gm_804D67AC, "standScene", 0);
     switch (var_r29) {
-    case MJ_CLASSIC_GOVER:
-    case MJ_CLASSIC:
+    case GM_CLASSIC_GOVER:
+    case GM_CLASSIC:
         gm_804D679C = lbArchive_LoadSymbols("TyMcCmDs.dat", NULL);
         break;
-    case MJ_ADVENTURE_GOVER:
-    case MJ_ADVENTURE:
+    case GM_ADVENTURE_GOVER:
+    case GM_ADVENTURE:
         gm_804D679C = lbArchive_LoadSymbols("TyMcR1Ds.dat", NULL);
         break;
     default:
@@ -394,28 +395,18 @@ void gm_801A6EE4(void)
 void gm_801A7070_OnEnter(void* unused)
 {
     s32 temp_r29;
-    s32 temp_r27_4;
-    s32 var_r27;
+    HSD_JObj* temp_r27_4;
     HSD_GObj* temp_r27;
     HSD_GObj* temp_r27_2;
     HSD_GObj* temp_r27_3;
     HSD_GObj* temp_r3;
     HSD_GObj* temp_r3_2;
     HSD_GObj* temp_r3_3;
+    HSD_JObj* var_r27_2;
     HSD_GObj* temp_r3_4;
     HSD_GObj* temp_r3_6;
     HSD_JObj* temp_r3_5;
     HSD_JObj* temp_r3_7;
-    HSD_JObj* var_r27_2;
-    HSD_JObj* var_r27_3;
-    HSD_JObj* var_r3_10;
-    HSD_JObj* var_r3_11;
-    HSD_JObj* var_r3_4;
-    HSD_JObj* var_r3_5;
-    HSD_JObj* var_r3_6;
-    HSD_JObj* var_r3_7;
-    HSD_JObj* var_r3_8;
-    HSD_JObj* var_r3_9;
 
     f32 temp_f31;
     f32 temp_f31_2;
@@ -427,14 +418,10 @@ void gm_801A7070_OnEnter(void* unused)
     f32 temp_f31_8;
 
     HSD_JObj* temp_r3_8;
-    HSD_JObj* var_r3_15;
-    HSD_JObj* var_r3_16;
-    HSD_JObj* var_r3_17;
-    HSD_JObj* var_r3_18;
-    HSD_JObj* var_r3_19;
     int i;
     HSD_GObj* gobj;
     HSD_LObj* lobj;
+    PAD_STACK(108);
 
     gm_804D6740 = 0x1E;
     gm_804D6750 = 0x320;
@@ -449,15 +436,20 @@ void gm_801A7070_OnEnter(void* unused)
     gm_804D6784 = 0;
     gm_804D6794 = 0;
     gm_804D6790 = 7;
+
     lbAudioAx_80026F2C(0x1C);
     lbAudioAx_8002702C(0x1C, 0x10000000000000);
     lbAudioAx_80027168();
     lbAudioAx_80027648();
+    /// archive loads
     gm_801A6EE4();
+    /// create lights
     temp_r27 = GObj_Create(0xB, 3, 0);
     lobj = lb_80011AC4(gm_804D6748->lights);
     HSD_GObjObject_80390A70(temp_r27, HSD_GObj_804D784A, lobj);
     GObj_SetupGXLink(temp_r27, HSD_GObj_LObjCallback, 0, 0);
+    /// the rest of the gobj spawns creates/handles multiple cameras or deal
+    /// with sobjs
     gm_801A6C54();
     gm_801A6DC0();
     temp_r27_2 = GObj_Create(0x13, 0x14, 0);
@@ -490,6 +482,8 @@ void gm_801A7070_OnEnter(void* unused)
     GObj_SetupGXLink(temp_r3_3, HSD_SObjLib_803A49E0, 0x12, 0);
     gm_801A68D8();
     gm_801A4B90();
+
+    // create jobj
     temp_r3_4 = GObj_Create(0xE, 0xF, 0);
     gm_804D6768 = temp_r3_4;
     temp_r3_5 = HSD_JObjLoadJoint(gm_804D6798);
@@ -500,159 +494,49 @@ void gm_801A7070_OnEnter(void* unused)
     HSD_JObjSetScaleY(temp_r3_5, temp_f31);
     HSD_JObjSetScaleZ(temp_r3_5, temp_f31);
 
-    HSD_GObjProc_8038FD54(temp_r3_4, fn_801A6664, 0x17);
+    HSD_GObj_SetupProc(temp_r3_4, fn_801A6664, 0x17);
     temp_r27_4 = Player_80036EA0(0);
-    if (temp_r3_5 == NULL) {
-        var_r3_4 = NULL;
-    } else {
-        var_r3_4 = temp_r3_5->child;
-    }
-    if (var_r3_4 == NULL) {
-        var_r3_5 = NULL;
-    } else {
-        var_r3_5 = var_r3_4->child;
-    }
-    if (var_r3_5 == NULL) {
-        var_r3_6 = NULL;
-    } else {
-        var_r3_6 = var_r3_5->child;
-    }
-    if (var_r3_6 == NULL) {
-        var_r3_7 = NULL;
-    } else {
-        var_r3_7 = var_r3_6->child;
-    }
-    lb_8000C1C0(var_r3_7, (HSD_JObj*) temp_r27_4);
-    if (temp_r3_5 == NULL) {
-        var_r3_8 = NULL;
-    } else {
-        var_r3_8 = temp_r3_5->child;
-    }
-    if (var_r3_8 == NULL) {
-        var_r3_9 = NULL;
-    } else {
-        var_r3_9 = var_r3_8->child;
-    }
-    if (var_r3_9 == NULL) {
-        var_r3_10 = NULL;
-    } else {
-        var_r3_10 = var_r3_9->child;
-    }
-    if (var_r3_10 == NULL) {
-        var_r3_11 = NULL;
-    } else {
-        var_r3_11 = var_r3_10->child;
-    }
-    lb_8000C290(var_r3_11, (HSD_JObj*) temp_r27_4);
+    lb_8000C1C0(HSD_JObjGetChild(HSD_JObjGetChild(
+                    HSD_JObjGetChild(HSD_JObjGetChild(temp_r3_5)))),
+                temp_r27_4);
+    lb_8000C290(HSD_JObjGetChild(HSD_JObjGetChild(
+                    HSD_JObjGetChild(HSD_JObjGetChild(temp_r3_5)))),
+                temp_r27_4);
     gm_801A4B90();
     temp_r3_6 = GObj_Create(0xE, 0xF, 0);
     gm_804D6778 = temp_r3_6;
     temp_r3_7 = HSD_JObjLoadJoint(gm_804D67AC->models[0]->joint);
     HSD_GObjObject_80390A70(temp_r3_6, HSD_GObj_804D7849, temp_r3_7);
     GObj_SetupGXLink(temp_r3_6, HSD_GObj_JObjCallback, 0xB, 0);
+
     temp_r29 = gm_801A659C(gm_801BEFB0());
-    if (temp_r3_7 == NULL) {
-        var_r27_2 = NULL;
-    } else {
-        var_r27_2 = temp_r3_7->child;
-    }
+    var_r27_2 = HSD_JObjGetChild(temp_r3_7);
     temp_f31_2 = -un_803060BC(temp_r29, 0);
-    if (var_r27_2 == NULL) {
-        __assert("jobj.h", 0x3A4, "jobj");
-    }
-    var_r27_2->translate.x = temp_f31_2;
-    if (!(var_r27_2->flags & 0x02000000)) {
-        ftCo_800C6AFC(var_r27_2);
-    }
+    HSD_JObjSetTranslateXWithMtxDirty(var_r27_2, temp_f31_2);
     temp_f31_3 = -un_803060BC(temp_r29, 1);
-    if (var_r27_2 == NULL) {
-        __assert("jobj.h", 0x3B3, "jobj");
-    }
-    var_r27_2->translate.y = temp_f31_3;
-    if (!(var_r27_2->flags & 0x02000000)) {
-        ftCo_800C6AFC(var_r27_2);
-    }
+    HSD_JObjSetTranslateYWithMtxDirty(var_r27_2, temp_f31_3);
     temp_f31_4 = -un_803060BC(temp_r29, 2);
-    if (var_r27_2 == NULL) {
-        __assert("jobj.h", 0x3C2, "jobj");
-    }
-    var_r27_2->translate.z = temp_f31_4;
-    if (!(var_r27_2->flags & 0x02000000)) {
-        ftCo_800C6AFC(var_r27_2);
-    }
+    HSD_JObjSetTranslateZWithMtxDirty(var_r27_2, temp_f31_4);
+
     temp_f31_5 = -(0.017453292f * un_803060BC(temp_r29, 5));
-    if (var_r27_2 == NULL) {
-        __assert("jobj.h", 0x294, "jobj");
-    }
-    if (var_r27_2->flags & 0x20000) {
-        __assert("jobj.h", 0x295, "!(jobj->flags & JOBJ_USE_QUATERNION)");
-    }
-    var_r27_2->rotate.y = temp_f31_5;
-    if (!(var_r27_2->flags & 0x02000000)) {
-        ftCo_800C6AFC(var_r27_2);
-    }
+    HSD_JObjSetRotationYWithMtxDirty(var_r27_2, temp_f31_5);
     temp_f31_6 = 1.0f / un_803060BC(temp_r29, 3);
-    temp_f31_7 = un_803060BC(temp_r29, 4) * temp_f31_6;
-    if (var_r27_2 == NULL) {
-        __assert("jobj.h", 0x308, "jobj");
-    }
-    var_r27_2->scale.x = temp_f31_7;
-    if (!(var_r27_2->flags & 0x02000000)) {
-        ftCo_800C6AFC(var_r27_2);
-    }
-    if (var_r27_2 == NULL) {
-        __assert("jobj.h", 0x317, "jobj");
-    }
-    var_r27_2->scale.y = temp_f31_7;
-    if (!(var_r27_2->flags & 0x02000000)) {
-        ftCo_800C6AFC(var_r27_2);
-    }
-    if (var_r27_2 == NULL) {
-        __assert("jobj.h", 0x326, "jobj");
-    }
-    var_r27_2->scale.z = temp_f31_7;
-    if (!(var_r27_2->flags & 0x02000000)) {
-        ftCo_800C6AFC(var_r27_2);
-    }
+    temp_f31_7 = un_803060BC(temp_r29, 4);
+    temp_f31_7 = temp_f31_7 * temp_f31_6;
+    HSD_JObjSetScaleXWithMtxDirty(var_r27_2, temp_f31_7);
+    HSD_JObjSetScaleYWithMtxDirty(var_r27_2, temp_f31_7);
+    HSD_JObjSetScaleZWithMtxDirty(var_r27_2, temp_f31_7);
     temp_f31_8 = gm_803DB2EC[gm_801BEFB0()];
     HSD_JObjSetScaleX(temp_r3_7, temp_f31_8);
     HSD_JObjSetScaleY(temp_r3_7, temp_f31_8);
     HSD_JObjSetScaleZ(temp_r3_7, temp_f31_8);
 
-    HSD_GObjProc_8038FD54(temp_r3_6, fn_801A6844, 0x17);
+    HSD_GObj_SetupProc(temp_r3_6, fn_801A6844, 0x17);
     temp_r3_8 = gm_804D6768->hsd_obj;
-    if (temp_r3_8 == NULL) {
-        var_r3_15 = NULL;
-    } else {
-        var_r3_15 = temp_r3_8->child;
-    }
-    if (var_r3_15 == NULL) {
-        var_r3_16 = NULL;
-    } else {
-        var_r3_16 = var_r3_15->child;
-    }
-    if (var_r3_16 == NULL) {
-        var_r3_17 = NULL;
-    } else {
-        var_r3_17 = var_r3_16->child;
-    }
-    if (var_r3_17 == NULL) {
-        var_r3_18 = NULL;
-    } else {
-        var_r3_18 = var_r3_17->child;
-    }
-    if (var_r3_18 == NULL) {
-        var_r3_19 = NULL;
-    } else {
-        var_r3_19 = var_r3_18->child;
-    }
-    if (var_r3_19 == NULL) {
-        var_r27_3 = NULL;
-    } else {
-        var_r27_3 = var_r3_19->next;
-    }
-    lb_8000C1C0(temp_r3_6->hsd_obj, var_r27_3);
-    lb_8000C290(temp_r3_6->hsd_obj, var_r27_3);
+    temp_r3_8 = HSD_JObjGetNext(HSD_JObjGetChild(HSD_JObjGetChild(
+        HSD_JObjGetChild(HSD_JObjGetChild(HSD_JObjGetChild(temp_r3_8))))));
+    lb_8000C1C0(temp_r3_6->hsd_obj, temp_r3_8);
+    lb_8000C290(temp_r3_6->hsd_obj, temp_r3_8);
     lbAudioAx_800237A8(0x7EF40, 0x7FU, 0x40U);
 }
 

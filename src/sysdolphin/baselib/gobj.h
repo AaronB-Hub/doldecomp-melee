@@ -73,8 +73,8 @@ typedef struct _HSD_GObjList {
     /* +20 */ HSD_GObj* fighters;
     /* +24 */ HSD_GObj* items;
     /* +28 */ HSD_GObj* x28;
-    /* +2C */ HSD_GObj* x2C; // Effects? (See efLib_8005B704)
-    /* +30 */ HSD_GObj* x30; // Effects? (See efLib_8005B704)
+    /* +2C */ HSD_GObj* x2C; // Effects? (See efLib_SetFlags)
+    /* +30 */ HSD_GObj* x30; // Effects? (See efLib_SetFlags)
     /* +34 */ HSD_GObj* x34;
     /* +38 */ HSD_GObj* x38;
     /* +3C */ HSD_GObj* x3C;
@@ -104,10 +104,10 @@ extern HSD_GObj* HSD_GObj_804D7814;
 extern HSD_GObj* HSD_GObj_804D7818;
 extern HSD_GObj* HSD_GObj_804D781C;
 extern HSD_GObj** HSD_GObj_804D7820;
-extern HSD_GObj** HSD_GObj_804D7824;
+extern HSD_GObj** HSD_GObjGXLinkHead;
 extern HSD_GObj** plinklow_gobjs;
-// TODO: GObjList is a fake type, this is just a double pointer
-// (pointer to array of HSD_GObj*, indexed by p_link)
+/// @todo GObjList is a fake type, this is just a double pointer
+/// (pointer to array of HSD_GObj*, indexed by p_link)
 extern HSD_GObjList* HSD_GObj_Entities;
 extern HSD_GObjProc* HSD_GObj_804D7830;
 extern s32 HSD_GObj_804D7834;

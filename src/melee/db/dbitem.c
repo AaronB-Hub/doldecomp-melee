@@ -2,19 +2,21 @@
 
 #include "dbitem.static.h"
 
+#include "ef/efsync.h"
+#include "ft/ftlib.h"
+#include "gm/gm_unsplit.h"
+#include "if/textdraw.h"
+#include "if/textlib.h"
+#include "it/inlines.h"
+#include "it/it_266F.h"
+#include "it/it_26B1.h"
+#include "it/it_2725.h"
+#include "it/it_3F14.h"
+#include "it/item.h"
+#include "it/types.h"
+#include "pl/player.h"
+
 #include <sysdolphin/baselib/gobj.h>
-#include <melee/ef/efsync.h>
-#include <melee/ft/ftlib.h>
-#include <melee/gm/gm_unsplit.h>
-#include <melee/it/inlines.h>
-#include <melee/it/it_266F.h>
-#include <melee/it/it_26B1.h>
-#include <melee/it/it_2725.h>
-#include <melee/it/item.h>
-#include <melee/it/types.h>
-#include <melee/pl/player.h>
-#include <melee/un/un_2FC9.h>
-#include <melee/un/un_3028.h>
 
 void fn_SetupItemAndPokemonMenu(void)
 {
@@ -32,7 +34,7 @@ void fn_SetupItemAndPokemonMenu(void)
 
 void fn_80225A54(int player)
 {
-    if (g_debugLevel == 4) {
+    if (DbLevel == 4) {
         if (db_ButtonsDown(player) & HSD_PAD_B) {
             if (db_ButtonsPressed(player) & HSD_PAD_DPADRIGHT) {
                 Item_804A0C64.x4 = Item_804A0C64.x0;
@@ -183,7 +185,7 @@ void db_80225D64(Item_GObj* item, Fighter_GObj* owner)
     it->xDAA_byte |= db_ShowItemCollisionBubbles;
 }
 
-// TODO avoid auto-inlining into fn_CheckItemAndPokemonMenu
+/// @todo avoid auto-inlining into fn_CheckItemAndPokemonMenu
 #pragma push
 #pragma dont_inline on
 void fn_ToggleItemCollisionBubbles(void)

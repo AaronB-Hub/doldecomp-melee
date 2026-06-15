@@ -19,7 +19,7 @@ void ftCamera_80076018(UnkFloat6_Camera* in, UnkFloat6_Camera* out, float mul)
     out->xC.z = in->xC.z * mul;
 }
 
-// Camera_CopyPlayerPositionToCameraBoxPosition
+/// Camera_CopyPlayerPositionToCameraBoxPosition
 void ftCamera_80076064(Fighter* fp)
 {
     CmSubject* camera_box;
@@ -48,8 +48,8 @@ void ftCamera_80076064(Fighter* fp)
     camera_box->x1C = camera_box->x10;
 }
 
-// Fighter_UpdateCameraBox
-// Camera_UpdatePlayerCameraBoxPosition
+/// Fighter_UpdateCameraBox
+/// Camera_UpdatePlayerCameraBoxPosition
 void ftCamera_UpdateCameraBox(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
@@ -104,9 +104,8 @@ void ftCamera_80076320(HSD_GObj* gobj)
     ftCamera_UpdateCameraBox(gobj); // Fighter_UpdateCameraBox
     Stage_UnkSetVec3TCam_Offset(&center_pos);
 
-    if (!(Stage_GetBlastZoneTopOffset() - center_pos.y != 0.0F)) {
-        __assert("ftcamera.c", 137, "stGetPlyDeadUp() - center_pos.y != 0.0F");
-    }
+    HSD_ASSERTMSG(137, Stage_GetBlastZoneTopOffset() - center_pos.y != 0.0F,
+                  "stGetPlyDeadUp() - center_pos.y != 0.0F");
 
     temp_f31 = Stage_GetBlastZoneTopOffset() - center_pos.y;
     temp_f1 = Stage_GetCamBoundsTopOffset() - center_pos.y;

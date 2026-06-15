@@ -41,13 +41,13 @@
 /* 1C0800 */ void Ground_801C0800(StructPairWithStageID* pair);
 /* 1C0F78 */ void Ground_801C0F78(StructPairWithStageID* pair);
 /* 1C0FB8 */ void Ground_801C0FB8(StructPairWithStageID* pair);
-/* 1C1074 */ void Ground_801C1074(StructPairWithStageID* pair, s32);
+/* 1C1074 */ void Ground_DemoInit(StructPairWithStageID* pair, s32);
 /* 1C10B8 */ void Ground_801C10B8(HSD_GObj*, HSD_GObjEvent);
 /* 1C1154 */ void Ground_801C1154(void);
 /* 1C1158 */ void Ground_801C1158(void);
 /* 1C11AC */ void Ground_801C11AC(HSD_GObj* gobj);
 /* 1C13D0 */ HSD_JObj* Ground_801C13D0(s32, s32 depth);
-/* 1C14D0 */ HSD_GObj* Ground_801C14D0(int);
+/* 1C14D0 */ Ground_GObj* Ground_GetStageGObj(int);
 /* 1C1A20 */ HSD_GObj* Ground_801C1A20(HSD_Joint*, s32);
 /* 1C1D6C */ void Ground_801C1D6C(u32);
 /* 1C1D84 */ u32 Ground_801C1D84(void);
@@ -58,7 +58,7 @@
 /* 1C1DE4 */ void Ground_801C1DE4(s32*, s32*);
 /* 1C1E00 */ void Ground_801C1E00(s32);
 /* 1C1E18 */ s32 Ground_801C1E18(void);
-/* 1C1E84 */ void* Ground_801C1E84(void);
+/* 1C1E84 */ HSD_GObj* Ground_801C1E84(void);
 /* 1C1FFC */ void Ground_ApplyStageBackgroundColor(void);
 /* 1C205C */ void Ground_801C205C(GXColor* color);
 /* 1C2090 */ bool Ground_801C2090(GXColor* color);
@@ -66,7 +66,7 @@
 /* 1C2374 */ void Ground_801C2374(HSD_LObj* lobj);
 /* 1C247C */ HSD_Spline* Ground_801C247C(s32, s32);
 /* 1C28AC */ bool Ground_801C28AC(s32, u32, s32*);
-/* 1C2AD8 */ u8* Ground_801C2AD8(void);
+/* 1C2AD8 */ s32* Ground_801C2AD8(void);
 /* 1C2AE8 */ f32 Ground_801C2AE8(s32);
 /* 1C2BA4 */ HSD_GObj* Ground_801C2BA4(s32);
 /* 1C2C8C */ bool Ground_801C2C8C(void*);
@@ -101,6 +101,7 @@
 /* 1C39A0 */ void Ground_801C39A0(f32 left);
 /* 1C39B0 */ void Ground_801C39B0(f32 right);
 /* 1C39C0 */ void Ground_801C39C0(void);
+/* 1C3BA8 */ void Ground_801C3BA8(HSD_GObj*, StageCallbacks*, int, int);
 /* 1C3BB4 */ void Ground_801C3BB4(void);
 /* 1C3D44 */ s32 Ground_801C3D44(void*, f32, f32);
 /* 1C3DB4 */ s32 Ground_801C3DB4(void*, f32, f32);
@@ -138,7 +139,7 @@
 /* 1C5740 */ void Ground_801C5740(s32);
 /* 1C5750 */ void Ground_801C5750(void);
 /* 1C5764 */ s32 Ground_801C5764(void);
-/* 1C5774 */ s16 Ground_801C5774(void);
+/* 1C5774 */ s32 Ground_801C5774(void);
 /* 1C5784 */ void Ground_801C5784(s32);
 /* 1C5794 */ s32 Ground_801C5794(void);
 /* 1C57A4 */ HSD_GObj* Ground_801C57A4(void);

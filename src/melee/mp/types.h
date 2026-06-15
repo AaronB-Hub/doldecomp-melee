@@ -14,15 +14,14 @@
 
 struct mpIsland_80458E88_t {
     /*  +0 */ mp_UnkStruct0* next;
-    /*  +4 */ int x4;
-    /*  +8 */ S32Vec3 x8;
-    /* +14 */ S32Vec3 x14;
-    /* +20 */ int x20;
-    /* +24 */ short x24;
-    /* +26 */ short x26;
-    /* +28 */ short x28;
-    /* +2A */ short x2A;
-    /* +2C */ mp_UnkStruct3* ptr;
+    /*  +4 */ mp_UnkStruct0* x4;
+    /*  +8 */ mp_UnkStruct0* x8;
+    /*  +C */ mp_UnkStruct0* xC;
+    /* +10 */ mp_UnkStruct0* x10;
+    /* +14 */ mp_UnkStruct0* x14;
+    /* +18 */ mp_UnkStruct0* x18;
+    /* +1C */ mp_UnkStruct0* x1C;
+    /* +20 */ mp_UnkStruct0* x20;
 };
 
 struct mpIsland_PaletteEntry {
@@ -113,7 +112,7 @@ struct CollJoint {
     /* 0x18 */ Vec2 bounding_max;
     /* 0x20 */ HSD_JObj* x20;
     /* 0x24 */ mpLib_Callback x24;
-    /* 0x28 */ Ground* x28;
+    /* 0x28 */ void* x28;
     /* 0x2C */ mpLib_Callback x2C;
     /* 0x30 */ Ground* x30;
 }; /* size = 0x34 */
@@ -137,6 +136,13 @@ struct MapCollData {
     /* +24 */ MapJoint* joints;
     /* +28 */ int joint_count;
     /* +2C */ int x2C; /* inferred */
+};
+
+struct mpCollisionBox {
+    float top;
+    float bottom;
+    float left;
+    float right;
 };
 
 #endif

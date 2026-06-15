@@ -20,6 +20,7 @@ typedef struct HitResult HitResult;
 typedef struct HitVictim HitVictim;
 typedef struct HSD_AllocEntry HSD_AllocEntry;
 typedef struct HurtCapsule HurtCapsule;
+typedef struct lbCardNew_SnapshotEntry lbCardNew_SnapshotEntry;
 typedef struct lbRefract_CallbackData lbRefract_CallbackData;
 typedef struct PreloadCache PreloadCache;
 typedef struct PreloadCacheScene PreloadCacheScene;
@@ -72,9 +73,10 @@ typedef enum HitCapsuleState {
     HitCapsule_Enabled,
     HitCapsule_Unk2,
     HitCapsule_Unk3,
-    HitCapsule_Max = HitCapsule_Unk3,
+    HitCapsule_Unk4,
+    HitCapsule_Max = HitCapsule_Unk4,
 } HitCapsuleState;
-STATIC_ASSERT(HitCapsule_Max == 3);
+STATIC_ASSERT(HitCapsule_Max == 4);
 
 typedef enum HurtHeight {
     HurtHeight_Low,

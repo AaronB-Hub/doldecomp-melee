@@ -14,8 +14,8 @@
 #include "ft/ft_081B.h"
 #include "ft/ft_0877.h"
 #include "ft/ft_0892.h"
-#include "ft/ft_0C31.h"
 #include "ft/ftanim.h"
+#include "ft/ftCo_800C7CA0.h"
 #include "ft/ftcommon.h"
 #include "ft/ftparts.h"
 #include "ft/types.h"
@@ -105,11 +105,12 @@ static inline void inlineA0(Fighter_GObj* gobj, enum_t arg1, enum_t arg2,
 
 void ftCo_800978D4(Fighter_GObj* gobj)
 {
-    u8 _[8] = { 0 };
     Fighter* fp = gobj->user_data;
-    float param =
-        atan2f(-fp->coll_data.floor.normal.x, fp->coll_data.floor.normal.y);
-    inlineA0(gobj, 4, 1030, FtPart_TopN, &param);
+    float param = atan2f(-fp->coll_data.floor.normal.x,
+                         fp->coll_data.floor.normal.y);
+    PAD_STACK(12);
+    efAsync_Spawn(gobj, (u8*) gobj->user_data + 0x60c, 4, 0x406,
+                  fp->parts[FtPart_TopN].joint, &param);
     ftCo_800976A4(gobj);
 }
 
@@ -117,6 +118,7 @@ void ftCo_8009794C(Fighter_GObj* gobj)
 {
     u8 _[12] = { 0 };
     Fighter* fp = gobj->user_data;
+    PAD_STACK(16);
     if (fp->ground_or_air == GA_Air) {
         ftCommon_8007D7FC(fp);
     }
@@ -145,6 +147,7 @@ void ftCo_80097AF4(Fighter_GObj* gobj)
     HSD_JObj* jobj = fp->parts[ftParts_GetBoneIndex(fp, FtPart_HipN)].joint;
     float rot0, rot1;
     HSD_JObjSetupMatrix(jobj);
+    PAD_STACK(40);
     if (fp->x2226_b0) {
         rot0 = jobj->mtx[0][2];
         rot1 = jobj->mtx[1][2];
@@ -174,32 +177,28 @@ void ftCo_80097AF4(Fighter_GObj* gobj)
     }
 }
 
-#define SOLUTION 1
-void ftCo_80097D40(Fighter_GObj* gobj)
+static void inlineA1(Fighter_GObj* gobj)
 {
-    Fighter* fp = gobj->user_data;
-#if SOLUTION == 0
-    ftCo_80097D88(gobj);
-#else
-    u8 _[8] = { 0 };
+    Fighter* fp = GET_FIGHTER(gobj);
     if (fp->x2228_b2) {
         ftCo_80097AF4(gobj);
     } else {
         ftCo_8009794C(gobj);
     }
-#endif
-    M2C_FIELD(fp, s8*, 0x2344) = 0;
+}
+
+#define SOLUTION 1
+void ftCo_80097D40(Fighter_GObj* gobj)
+{
+    Fighter* fp = GET_FIGHTER(gobj);
+    inlineA1(gobj);
+    fp->mv.co.downspot.x4 = 0;
 }
 #undef SOLUTION
 
 void ftCo_80097D88(Fighter_GObj* gobj)
 {
-    Fighter* fp = gobj->user_data;
-    if (fp->x2228_b2) {
-        ftCo_80097AF4(gobj);
-    } else {
-        ftCo_8009794C(gobj);
-    }
+    inlineA1(gobj);
 }
 
 void ftCo_DownBound_Anim(Fighter_GObj* gobj)
@@ -256,13 +255,14 @@ void ftCo_80097E8C(Fighter_GObj* gobj)
 void ftCo_80097F38(Fighter_GObj* gobj)
 {
     Fighter* fp = gobj->user_data;
-    Fighter_ChangeMotionState(
-        gobj,
-        fp->motion_id == ftCo_MS_DownDamageU ? ftCo_MS_DownWaitU
-                                             : ftCo_MS_DownWaitD,
-        Ft_MF_SkipModel | Ft_MF_SkipMatAnim | Ft_MF_SkipNametagVis |
-            Ft_MF_KeepColAnimPartHitStatus,
-        0, 1, 0, NULL);
+    int new_var;
+    new_var = fp->motion_id == ftCo_MS_DownDamageU ? ftCo_MS_DownWaitU
+                                                   : ftCo_MS_DownWaitD;
+    Fighter_ChangeMotionState(gobj, new_var,
+                              Ft_MF_SkipModel | Ft_MF_SkipMatAnim |
+                                  Ft_MF_SkipNametagVis |
+                                  Ft_MF_KeepColAnimPartHitStatus,
+                              0, 1, 0, NULL);
     ftAnim_8006EBA4(gobj);
     ftCommon_8007E2F4(fp, 1);
 }

@@ -1,7 +1,7 @@
 #include "ftGk_Init.h"
 
-#include "ft/ft_0C31.h"
 #include "ft/ftcamera.h"
+#include "ft/ftCo_800C7434.h"
 #include "ft/ftparts.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
@@ -10,9 +10,9 @@
 #include "ftKoopa/forward.h"
 
 #include "ftKoopa/ftKp_Init.h"
-#include "ftKoopa/ftKp_SpecialN.h"
-#include "ftKoopa/ftKp_SpecialLw.h"
 #include "ftKoopa/ftKp_SpecialHi.h"
+#include "ftKoopa/ftKp_SpecialLw.h"
+#include "ftKoopa/ftKp_SpecialN.h"
 #include "ftKoopa/types.h"
 
 #include "it/forward.h"

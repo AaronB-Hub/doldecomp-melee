@@ -5,36 +5,52 @@
 
 #include <sysdolphin/baselib/forward.h>
 
+struct mn_802307F8_t {
+    /* 0x000 */ u8 x0;
+    /* 0x001 */ u8 x1;
+    /* 0x002 */ u8 x2;
+    /* 0x003 */ u8 x3;
+    /* 0x004 */ u8 x4;
+    /* 0x005 */ u8 x5;
+    /* 0x006 */ u8 x6;
+    /* 0x007 */ u8 x7_pad[0x009 - 0x007];
+    /* 0x009 */ u8 x9;
+    /* 0x00A */ u8 xA;
+    /* 0x00B */ u8 xB_pad[0x00C - 0x00B];
+    union {
+        /* 0x00C */ HSD_JObj* xC[17];
+        struct {
+            /* 0x00C */ HSD_JObj* xC0[10];
+            struct {
+                /* 0x00 */ HSD_JObj* x0;
+                /* 0x04 */ u8 x4_pad[0x24 - 0x04];
+            } x34[7];
+        };
+    };
+    /* 0x130 */ HSD_Text* text;
+};
+
 struct mn_80231634_t {
     /*  +0 */ char pad_0[0x10];
     /* +10 */ int x10;
 };
 
 /* 22F538 */ void fn_8022F538(HSD_GObj*);
-/* 22FB88 */ UNK_RET mn_8022FB88(UNK_PARAMS);
-/* 22FD18 */ UNK_RET mn_8022FD18(UNK_PARAMS);
-/* 22FEC8 */ UNK_RET mn_8022FEC8(UNK_PARAMS);
-/* 230198 */ UNK_RET mn_80230198(UNK_PARAMS);
-/* 230274 */ UNK_RET mn_80230274(UNK_PARAMS);
-/* 2307F8 */ UNK_RET mn_802307F8(UNK_PARAMS);
-/* 2308F0 */ UNK_RET mn_802308F0(UNK_PARAMS);
-/* 2309F0 */ UNK_RET fn_802309F0(UNK_PARAMS);
-/* 230D18 */ UNK_RET mn_80230D18(UNK_PARAMS);
+/* 22FB88 */ void mn_8022FB88(u8, void*);
+/* 22FD18 */ void mn_8022FD18(u8);
+/* 22FEC8 */ void mn_8022FEC8(HSD_GObj*, HSD_JObj*, u8, u8);
+/* 230198 */ void mn_80230198(HSD_GObj*, HSD_JObj*, u8);
+/* 230274 */ void mn_80230274(HSD_GObj*, int, int);
+/* 2307F8 */ void mn_802307F8(struct mn_802307F8_t*, s32, s32);
+/* 2308F0 */ void mn_802308F0(HSD_GObj*, int, int);
+/* 2309F0 */ void fn_802309F0(HSD_GObj*);
+/* 230D18 */ s32 mn_80230D18(struct mn_802307F8_t*, HSD_JObj*, s8);
 /* 230E38 */ HSD_GObj* mn_80230E38(int);
 /* 231634 */ int mn_80231634(struct mn_80231634_t*);
-/* 23164C */ UNK_RET mn_8023164C(UNK_PARAMS);
+/* 23164C */ void mn_8023164C(void);
 /* 231714 */ UNK_RET mn_80231714(UNK_PARAMS);
 /* 2317E4 */ void mn_802317E4(HSD_Archive*, int);
 /* 231804 */ void mn_80231804(HSD_Archive*, int);
-/* 231F80 */ UNK_RET mn_80231F80(UNK_PARAMS);
-/* 23201C */ UNK_RET fn_8023201C(UNK_PARAMS);
-/* 232458 */ UNK_RET mn_80232458(UNK_PARAMS);
-/* 2324E4 */ UNK_RET mn_802324E4(UNK_PARAMS);
-/* 232660 */ UNK_RET mn_80232660(UNK_PARAMS);
-/* 2327A4 */ UNK_RET mn_802327A4(UNK_PARAMS);
-/* 232D4C */ UNK_RET mn_80232D4C(UNK_PARAMS);
-/* 232F44 */ UNK_RET fn_80232F44(UNK_PARAMS);
-/* 233218 */ UNK_RET mn_80233218(UNK_PARAMS);
-/* 2339FC */ UNK_RET mn_802339FC(UNK_PARAMS);
+/* 231F80 */ bool mn_80231F80(u8);
 
 #endif

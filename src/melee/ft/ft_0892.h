@@ -4,7 +4,7 @@
 #include "ft/forward.h"
 
 /* 0892D4 */ void ft_800892D4(Fighter*);
-/* 089460 */ UNK_RET ft_80089460(UNK_PARAMS);
+/* 089460 */ void ft_80089460(Fighter*);
 /* 0895E0 */ void ft_800895E0(Fighter*, int);
 /* 089768 */ void ft_80089768(Vec2*);
 /* 089824 */ void ft_80089824(Fighter_GObj* gobj);
@@ -14,8 +14,8 @@
 /* 0898A8 */ struct Struct2074* ft_800898A8(Fighter_GObj* gobj);
 /* 0898B4 */ ft_800898B4_t* ft_800898B4(Fighter_GObj* gobj);
 /* 0898C0 */ bool ft_800898C0(HSD_GObj*);
-/* 089914 */ UNK_RET ft_80089914(UNK_PARAMS);
-/* 08998C */ UNK_RET fn_8008998C(UNK_PARAMS);
+/* 089914 */ s32 ft_80089914(HSD_GObj* gobj, int msid);
+/* 08998C */ s32 fn_8008998C(Fighter*, IKState*, Vec3*);
 /* 089B08 */ void ft_80089B08(Fighter_GObj* gobj);
 /* 08A1B8 */ void ft_8008A1B8(Fighter_GObj* gobj, int);
 /* 08A1FC */ bool ft_8008A1FC(Fighter_GObj* gobj);

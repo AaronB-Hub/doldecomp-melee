@@ -4,14 +4,17 @@
 #include <placeholder.h>
 
 #include "baselib/forward.h"
+
 #include "gm/types.h"
+
 #include "sc/forward.h"
 
 #include <dolphin/mtx.h>
 
 static struct ResultsData lbl_8046DBE8;
-static u32 lbl_804D3FA0;
-static u32 lbl_804D3FA4;
+static u32 lbl_804D3F8C;
+u32 lbl_804D3FA0 = 0x817C0000;
+u32 lbl_804D3FA4 = 0x817B0000;
 static s8 lbl_804D3FB0 = 0x30;
 
 #endif

@@ -3,44 +3,63 @@
 
 #include <placeholder.h>
 #include <platform.h>
+
+#include "gm/forward.h"
 #include "mn/forward.h"
 
 #include <dolphin/gx.h>
 #include <dolphin/mtx.h>
 #include <baselib/object.h>
 
-typedef struct _mn_unk1 {
-    u8 x0;  // current menu
-    u8 x1;  // previous menu
-    u16 x2; // selected index
-    s32 x4; // selected value
-    u64 x8;
-    u8 x10;
-    u8 x11;
-    u8 x12;
-    u8 x13;
-    GXColor* x14;
-} mn_unk1;
+typedef struct _MainMenuData {
+    /* 0x0000 */ MenuKind8 menu_kind;
+    /* 0x0001 */ MenuKind8 hovered_selection;
+    /* 0x0002 */ MenuState8 state;
+    /* 0x0003 */ u8 pad_3;
+    /* 0x0004 */ HSD_JObj* tree[42]; // 42 * 4 = 0xA8 bytes
+    /* 0x00AC */ HSD_Text* description;
+} MainMenuData;
 
-typedef struct _mn_unk2 {
-    u16 x0;
+typedef struct _MainMenuPanelData {
+    /* 0x0000 */ MenuKind8 cur_menu;
+    /* 0x0001 */ MenuKind8 prev_menu;
+    /* 0x0002 */ u8 x2;
+    /* 0x0003 */ MenuState8 state;
+} MainMenuPanelData;
+
+typedef struct _MenuFlow {
+    /* 0x0000 */ MenuKind8 cur_menu;
+    /* 0x0001 */ MenuKind8 prev_menu;
+    /* 0x0002 */ u16 hovered_selection;
+    /* 0x0004 */ u8 confirmed_selection;
+    /* 0x0005 */ u8 pad_5[3];
+    /* 0x0008 */ u64 buttons;
+    /* 0x0010 */ u8 x10;
+    /* 0x0011 */ u8 entering_menu; ///< bool
+    /* 0x0012 */ u8 light_lerp_frames;
+    /* 0x0013 */ u8 pad_13;
+    /* 0x0014 */ GXColor* light_color; ///< used for the main panel color
+} MenuFlow;
+
+typedef struct _MenuInputState {
+    u16 cooldown;
     u16 x2;
     s32 x4;
-} mn_unk2;
+} MenuInputState;
 
 /* 2295AC */ u8 mn_802295AC(void);
 /* 229624 */ u32 mn_80229624(u32);
 /* 229860 */ void mn_80229860(s8);
 /* 229894 */ void mn_80229894(s32, u16, s32);
-/* 229938 */ bool mn_80229938(s32 arg0, s32 arg1);
-/* 229A04 */ int mn_80229A04(int, int);
+/* 229938 */ bool mn_80229938(MenuKind, s32);
+/* 229A04 */ int mn_80229A04(MenuKind, int);
 /* 229B2C */ HSD_GObj* mn_80229B2C(void);
 /* 229BF4 */ void fn_80229BF4(HSD_GObj*);
 /* 229DC0 */ HSD_GObj* mn_80229DC0(void);
-/* 229F60 */ void mn_80229F60(HSD_GObj*, HSD_JObj*, int);
-/* 22A440 */ void mn_8022A440(HSD_GObj*, HSD_JObj*, s32);
-/* 22A5D0 */ void mn_8022A5D0(HSD_GObj*, int);
-/* 22ADD8 */ void mn_8022ADD8(HSD_GObj*, int);
+/* 229F60 */ void mn_80229F60(HSD_GObj*, HSD_JObj*, MainMenuSelection);
+/* 22A440 */ void mn_8022A440(HSD_GObj*, HSD_JObj*, MainMenuSelection);
+/* 22A5D0 */ void mn_8022A5D0(HSD_GObj*, MainMenuSelection);
+/* 22ADD8 */ void mn_8022ADD8(HSD_GObj*, bool);
 /* 22AF10 */ void fn_8022AF10(HSD_GObj*);
 /* 22AFEC */ void fn_8022AFEC(HSD_GObj*);
 /* 22B3A0 */ HSD_GObj* mn_8022B3A0(u8);
@@ -68,34 +87,36 @@ typedef struct _mn_unk2 {
 /* 22D7F4 */ void mn_8022D7F4(HSD_GObj*);
 /* 22DB10 */ void mn_8022DB10(HSD_GObj*);
 /* 22DD38 */ void mn_8022DD38_OnFrame(void);
-/* 22DDA8 */ void mn_8022DDA8_OnEnter(void*);
-/* 22E950 */ bool mn_8022E950(int);
-/* 22E978 */ void mn_8022E978(u8 item_idx, u8 enable); ///< set/unset item mask bit
+/* 22DDA8 */ void mn_8022DDA8_OnEnter(MenuEnterData*);
+/* 22E950 */ bool mn_IsFighterUnlocked(int);
+/* 22E978 */ void mn_8022E978(u8 item_idx,
+                              u8 enable); ///< set/unset item mask bit
 /* 22EA08 */ void mn_8022EA08(char* buf, u32 num);
 /* 22EA78 */ void mn_8022EA78(char* buf, int buf_end, u32 num);
 /* 22EAE0 */ void mn_8022EAE0(HSD_GObj*);
 /* 22EB04 */ void mn_8022EB04(void* user_data);
-/* 22EB24 */ s32 mn_8022EB24(s32, s32);
-/* 22EB78 */ s32 mn_8022EB78(s32);
-/* 22EBDC */ UNK_RET mn_8022EBDC(UNK_PARAMS);
-/* 22EC18 */ float mn_8022EC18(HSD_JObj*, float*, HSD_TypeMask);
+/* 22EB24 */ s32 mn_GetDigitAt(s32, s32);
+/* 22EB78 */ s32 mn_GetDigitCount(s32);
+/* 22EBDC */ void mn_8022EBDC(void);
+/* 22EC18 */ float mn_8022EC18(HSD_JObj*, AnimLoopSettings*, HSD_TypeMask);
 /* 22ED6C */ float mn_8022ED6C(HSD_JObj*, AnimLoopSettings*);
-/* 22EE84 */ float mn_8022EE84(HSD_JObj* arg0, AnimLoopSettings* arg1, HSD_TypeMask arg2);
+/* 22EE84 */ float mn_8022EE84(HSD_JObj* arg0, AnimLoopSettings* arg1,
+                               HSD_TypeMask arg2);
 /* 22EFD8 */ float mn_8022EFD8(HSD_JObj*, AnimLoopSettings*);
 /* 22F0F0 */ void mn_8022F0F0(int);
 /* 22F138 */ void mn_8022F138(u16, u16);
 /* 22F1A8 */ void mn_8022F1A8(u16, u16);
 /* 22F218 */ bool mn_8022F218(void);
-/* 22F268 */ UNK_RET mn_8022F268(UNK_PARAMS);
+/* 22F268 */ void mn_8022F268(void);
 /* 22F298 */ f32 mn_8022F298(HSD_JObj*);
-/* 22F360 */ UNK_RET mn_8022F360(HSD_AObj*, void*, u32);
+/* 22F360 */ void mn_8022F360(HSD_AObj* aobj, void* obj, u32 arg2);
 /* 22F3D8 */ void mn_8022F3D8(HSD_JObj*, u8, HSD_TypeMask);
 /* 22F410 */ int mn_8022F410(float* x, float* target, float dx);
 /* 22F470 */ int mn_8022F470(int* x, int* target, int dx);
-/* 22F4CC */ UNK_RET mn_8022F4CC(UNK_PARAMS);
+/* 22F4CC */ void mn_8022F4CC(void);
 
-/* 4A04F0 */ extern mn_unk1 mn_804A04F0;
+/* 4A04F0 */ extern MenuFlow mn_804A04F0;
 /* 4D6BB8 */ extern HSD_Archive* mn_804D6BB8;
-/* 4D6BC8 */ extern mn_unk2 mn_804D6BC8;
+/* 4D6BC8 */ extern MenuInputState mn_804D6BC8;
 
 #endif

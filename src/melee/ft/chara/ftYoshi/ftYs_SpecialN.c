@@ -12,20 +12,18 @@
 
 #include "ft/ft_081B.h"
 #include "ft/ft_0892.h"
-#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftcommon.h"
 #include "ft/ftparts.h"
 #include "ft/inlines.h"
 #include "ft/types.h"
-#include "ftCommon/ftCo_CaptureCut.h"
 #include "ftCommon/ftCo_CaptureYoshi.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_Throw.h"
 #include "ftCommon/ftCo_YoshiEgg.h"
 #include "ftYoshi/ftYs_Init.h"
 #include "ftYoshi/types.h"
-#include "it/items/it_27CF.h"
-#include "it/items/it_2F2B.h"
+#include "it/items/ityoshiegglay.h"
+#include "it/items/ityoshitongue.h"
 #include "lb/lb_00B0.h"
 
 #include <dolphin/mtx.h>
@@ -79,7 +77,7 @@ float ftYs_SpecialN_GetDatAttr24(HSD_GObj* gobj)
     return da->x24;
 }
 
-float ftYs_SpecialN_GetExtAttr28(Fighter_GObj* gobj)
+float ftYs_SpecialN_GetExtAttr28(void)
 {
     ftYoshiAttributes* ext_attr = gFtDataList[FTKIND_YOSHI]->ext_attr;
     return ext_attr->x28;
@@ -379,7 +377,7 @@ static inline void inlineB0(Fighter_GObj* gobj, HSD_GObjEvent on_anim_end)
     FORCE_PAD_STACK_32;
     FORCE_PAD_STACK_16;
     {
-        it_27CF_DatAttrs item_attrs;
+        itYoshiEggLay_DatAttrs item_attrs;
         FORCE_PAD_STACK_8;
         {
             if (fp->cmd_vars[1]) {

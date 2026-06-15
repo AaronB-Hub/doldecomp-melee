@@ -3,14 +3,16 @@
 
 #include <placeholder.h>
 
-#include "it/inlines.h"
+#include "dolphin/mtx.h"
+
+#include "mp/forward.h"
 
 /* 20E798 */ void grOldYoshi_8020E798(bool);
 /* 20E79C */ void grOldYoshi_8020E79C(void);
 /* 20E824 */ void grOldYoshi_8020E824(void);
 /* 20E828 */ void grOldYoshi_8020E828(void);
 /* 20E84C */ bool grOldYoshi_8020E84C(void);
-/* 20E854 */ UNK_RET grOldYoshi_8020E854(UNK_PARAMS);
+/* 20E854 */ HSD_GObj* grOldYoshi_8020E854(int);
 /* 20E93C */ void grOldYoshi_8020E93C(Ground_GObj*);
 /* 20E968 */ bool grOldYoshi_8020E968(Ground_GObj*);
 /* 20E970 */ void grOldYoshi_8020E970(Ground_GObj*);
@@ -35,8 +37,10 @@
 /* 20F080 */ bool grOldYoshi_8020F080(Ground_GObj*);
 /* 20F088 */ void grOldYoshi_8020F088(Ground_GObj*);
 /* 20F2A4 */ void grOldYoshi_8020F2A4(Ground_GObj*);
-/* 20F2A8 */ UNK_RET fn_8020F2A8(UNK_PARAMS);
-/* 20F31C */ UNK_RET grOldYoshi_8020F31C(UNK_PARAMS);
+/* 20F2A8 */ void fn_8020F2A8(Ground*, s32, CollData*, s32, mpLib_GroundEnum,
+                              float);
+/* 20F31C */ float grOldYoshi_8020F31C(float, float, float, float, float,
+                                       float);
 /* 20F404 */ DynamicsDesc* grOldYoshi_8020F404(enum_t);
 /* 20F40C */ bool grOldYoshi_8020F40C(Vec3*, int arg, HSD_JObj* jobj);
 

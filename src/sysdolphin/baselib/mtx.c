@@ -3,6 +3,7 @@
 #include "debug.h"
 #include "math.h"
 
+#include <MSL/math_ppc.h>
 #include <MSL/trigf.h>
 
 #define EPSILON 0.0000000001f
@@ -11,7 +12,7 @@
 HSD_ObjAllocData HSD_Mtx_804C2310;
 HSD_ObjAllocData HSD_Mtx_804C233C;
 
-// Calculates the determinant of the top 3x3 section of a 3x4 matrix
+/// Calculates the determinant of the top 3x3 section of a 3x4 matrix
 inline f32 HSD_CalcDeterminantMatrix3x4(Mtx m)
 {
     return m[0][0] * m[1][1] * m[2][2] + m[0][1] * m[1][2] * m[2][0] +
@@ -57,7 +58,7 @@ void HSD_MtxInverse(Mtx src, Mtx dest)
                    (-dest[2][0] * src[0][3] - dest[2][1] * src[1][3]));
 }
 
-// https://decomp.me/scratch/kalJY
+/// https://decomp.me/scratch/kalJY
 void HSD_MtxInverseConcat(Mtx inv, Mtx src, Mtx dest)
 {
     Mtx m;
@@ -74,7 +75,7 @@ void HSD_MtxInverseConcat(Mtx inv, Mtx src, Mtx dest)
     f32 temp10;
     f32 temp11;
     f32 temp12;
-    f32 new_var; // TODO: try to get rid of this
+    f32 new_var; ///< @todo try to get rid of this
 
     det = HSD_CalcDeterminantMatrix3x4(inv);
 
@@ -266,7 +267,7 @@ void HSD_MtxGetRotation(Mtx m, Vec3* vec)
     vec->z = 0;
 }
 
-// These parameters may not be right
+/// These parameters may not be right
 void HSD_MtxGetTranslate(Mtx mat, Vec3* vec)
 {
     vec->x = mat[0][3];
@@ -434,7 +435,7 @@ void HSD_MtxSRTQuat(Mtx arg0, Vec3* arg1, Quaternion* arg2, Vec3* arg3,
     MTXConcat(temp, arg0, arg0);
 }
 
-// might be a fakematch?
+/// might be a fakematch?
 void HSD_MtxScaledAdd(Mtx arg0, Mtx arg1, Mtx arg2, f32 arg3)
 {
     f32* arr0 = (f32*) &arg0[0][0];
@@ -461,9 +462,7 @@ void* HSD_VecAlloc(void)
 {
     void* vec = HSD_ObjAlloc(&HSD_Mtx_804C2310);
 
-    if (vec == NULL) {
-        __assert("mtx.c", 0x335, "vec");
-    }
+    HSD_ASSERT(0x335, vec);
 
     return vec;
 }
@@ -480,9 +479,7 @@ void* HSD_MtxAlloc(void)
     void* mtx;
 
     mtx = HSD_ObjAlloc(&HSD_Mtx_804C233C);
-    if (mtx == NULL) {
-        __assert("mtx.c", 0x354, "mtx");
-    }
+    HSD_ASSERT(0x354, mtx);
     return mtx;
 }
 

@@ -1,6 +1,6 @@
 #include "gm_1BF9.h"
 
-#include "un/un_3028.h"
+#include "if/textlib.h"
 
 #include <melee/gm/gm_unsplit.h>
 #include <melee/gm/types.h>
@@ -9,7 +9,6 @@
 #include <melee/lb/lblanguage.h>
 #include <melee/ty/toy.h>
 #include <melee/ty/tylist.h>
-#include <melee/un/un_2FC9.h>
 
 typedef struct {
     u32 x0;
@@ -20,7 +19,7 @@ typedef struct {
 static unk_struct_0_t gm_804D6940;
 static u32 gm_804D6948[2];
 
-MinorScene gm_803DFDD8_MinorScenes[] = {
+GameScene gm_803DFDD8_Scenes[] = {
     {
         0,
         1,
@@ -36,7 +35,7 @@ MinorScene gm_803DFDD8_MinorScenes[] = {
     },
 };
 
-void gm_801BF948(MinorScene* scene)
+void gm_801BF948(GameScene* scene)
 {
     unk_struct_0_t* temp_r3 = gm_801A427C(scene);
     temp_r3->x4 = 0;
@@ -57,7 +56,7 @@ enum {
     LANG_JP = 0,
 };
 
-void gm_801BF9A8(MinorScene* data)
+void gm_801BF9A8(GameScene* data)
 {
     struct sceneData* scene_data = gm_801A4284(data);
 
@@ -75,12 +74,12 @@ void gm_801BF9A8(MinorScene* data)
     // Set scene exit callback?
     gm_801A4330(lb_8001CE78);
 
-    // Enter major scene
+    // Enter mode
     // Gekko "boot to CSS" code changes scene_id to a hardcoded 2
     gm_801A42F8(scene_data->scene_id);
 }
 
-MinorScene gm_803DFE18_MinorScenes[] = {
+GameScene gm_803DFE18_Scenes[] = {
     {
         0,
         3,
@@ -96,7 +95,7 @@ MinorScene gm_803DFE18_MinorScenes[] = {
     },
 };
 
-void gm_801BFA3C(MinorScene* scene)
+void gm_801BFA3C(GameScene* scene)
 {
     unk_struct_0_t* temp_r3 = gm_801A427C(scene);
     temp_r3->x4 = 0;

@@ -14,6 +14,9 @@
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/it_3F14.h"
+#include "it/ithitbox.h"
+#include "it/itmaplib.h"
 #include "it/itcoll.h"
 #include "it/item.h"
 #include "it/items/itgshell.h"
@@ -39,7 +42,7 @@ typedef struct itGShell_Attrs {
 } itGShell_Attrs;
 STATIC_ASSERT(sizeof(itGShell_Attrs) == 64);
 
-ItemStateTable ItemStateTable_GShell[] = {
+ItemStateTable it_803F5BA8[] = {
     { -1, itGshell_UnkMotion0_Anim, itGshell_UnkMotion0_Phys,
       itGshell_UnkMotion0_Coll },
     { -1, itGshell_UnkMotion1_Anim, itGshell_UnkMotion1_Phys,
@@ -65,13 +68,16 @@ void it_8028B8D8(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     itGShell_Attrs* attrs = ip->xC4_article_data->x4_specialAttributes;
+    f32 temp;
     Vec v;
     HSD_JObj* jobj;
     PAD_STACK(4);
+
     if (ip->xDD4_itemVar.gshell.xDDC <= 0.0f) {
         jobj = GET_JOBJ(gobj);
         v = attrs->x34;
-        v.x *= -ip->facing_dir;
+        temp = -ip->facing_dir;
+        v.x *= temp;
         efAsync_Spawn(gobj, &GET_ITEM(gobj)->xBC0, 2, 1029, jobj, &v);
         ip->xDD4_itemVar.gshell.xDDC = attrs->x30;
     } else {
@@ -106,7 +112,7 @@ void it_8028BA2C(Item_GObj* gobj)
         if (!it_80277040(gobj)) {
             it_8028BE54(gobj);
         } else {
-            it_3F14_Logic14_EnteredAir(gobj);
+            itGShell_Logic14_EnteredAir(gobj);
         }
     } else {
         it_8028C3A8(gobj);
@@ -163,8 +169,9 @@ void it_8028BC2C(Item_GObj* gobj)
         ip->x40_vel.x = -ip->x40_vel.x * attrs->xC * HSD_Randf();
         ip->x40_vel.y = attrs->x10;
         if (ip->xDD4_itemVar.gshell.xDEC_b0) {
-            ip->xDD4_itemVar.gshell.xDE8 =
-                HSD_Randi(it_804D6D28->x48_byte & 0xF);
+            u8 rand_max = it_804D6D28->x48_byte;
+            rand_max &= 0xF;
+            ip->xDD4_itemVar.gshell.xDE8 = HSD_Randi(rand_max);
         } else {
             ip->xDD4_itemVar.gshell.xDEC_b0 = 1;
         }
@@ -196,7 +203,7 @@ void it_8028BC2C(Item_GObj* gobj)
     it_8027570C(gobj, 0);
 }
 
-void it_3F14_Logic14_Spawned(Item_GObj* gobj)
+void itGShell_Logic14_Spawned(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     itGShell_Attrs* attrs = ip->xC4_article_data->x4_specialAttributes;
@@ -292,7 +299,7 @@ bool itGshell_UnkMotion1_Coll(Item_GObj* gobj)
     return false;
 }
 
-void it_3F14_Logic14_PickedUp(Item_GObj* gobj)
+void itGShell_Logic14_PickedUp(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     it_80275474(gobj);
@@ -310,7 +317,7 @@ void itGshell_UnkMotion2_Phys(Item_GObj* gobj)
     return;
 }
 
-void it_3F14_Logic14_Thrown(Item_GObj* gobj)
+void itGShell_Logic14_Thrown(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     ip->xDD4_itemVar.gshell.xDE8 = 1;
@@ -349,7 +356,7 @@ bool itGshell_UnkMotion3_Coll(Item_GObj* gobj)
     return false;
 }
 
-void it_3F14_Logic14_Dropped(Item_GObj* gobj)
+void itGShell_Logic14_Dropped(Item_GObj* gobj)
 {
     Item_80268E5C(gobj, 4, 6);
 }
@@ -384,7 +391,7 @@ void it_8028C3A8(Item_GObj* gobj)
     it_8026B3A8(gobj);
     it_80275474(gobj);
     it_80275414(gobj);
-    it_80275158(gobj, it_804D6D28->x30);
+    it_80275158(gobj, it_804D6D28->x30_lifetime);
     ip->xD5C = 0;
     ip->xDD4_itemVar.gshell.xDD8 = attrs->x24;
     ip->xDD4_itemVar.gshell.xDDC = attrs->x30;
@@ -414,7 +421,6 @@ void it_8028C3A8(Item_GObj* gobj)
 bool itGshell_UnkMotion6_Anim(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
-    PAD_STACK(8);
     if (ip->xDD4_itemVar.gshell.xDD8 <= 0.0f) {
         if (!ip->xDCD_flag.b5) {
             it_80275444(gobj);
@@ -473,7 +479,7 @@ void it_8028C898(Item_GObj* gobj)
     it_8026B3A8(gobj);
     it_80275474(gobj);
     it_80275414(gobj);
-    it_80275158(gobj, it_804D6D28->x30);
+    it_80275158(gobj, it_804D6D28->x30_lifetime);
     ip->xD5C = 0;
     ip->xDD4_itemVar.gshell.xDD8 = attrs->x24;
     ip->xDD4_itemVar.gshell.xDDC = attrs->x30;
@@ -537,7 +543,7 @@ bool itGshell_UnkMotion8_Coll(Item_GObj* gobj)
     return false;
 }
 
-void it_3F14_Logic14_EnteredAir(Item_GObj* gobj)
+void itGShell_Logic14_EnteredAir(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     ip->xDC8_word.flags.x1F = 1;
@@ -573,13 +579,13 @@ bool itGshell_UnkMotion9_Coll(Item_GObj* gobj)
     return false;
 }
 
-bool it_3F14_Logic14_DmgDealt(Item_GObj* gobj)
+bool itGShell_Logic14_DmgDealt(Item_GObj* gobj)
 {
     it_80272940(gobj);
     return false;
 }
 
-bool it_3F14_Logic14_DmgReceived(Item_GObj* gobj)
+bool itGShell_Logic14_DmgReceived(Item_GObj* gobj)
 {
     PAD_STACK(8);
     it_80272940(gobj);
@@ -587,7 +593,7 @@ bool it_3F14_Logic14_DmgReceived(Item_GObj* gobj)
     return false;
 }
 
-bool it_3F14_Logic14_Reflected(Item_GObj* gobj)
+bool itGShell_Logic14_Reflected(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     it_80273030(gobj);
@@ -595,18 +601,18 @@ bool it_3F14_Logic14_Reflected(Item_GObj* gobj)
     return false;
 }
 
-bool it_3F14_Logic14_Clanked(Item_GObj* gobj)
+static inline void shellHit(HSD_GObj* gobj)
 {
-    itGShell_Attrs* attrs;
     Item* ip = GET_ITEM(gobj);
-    attrs = ip->xC4_article_data->x4_specialAttributes;
-    PAD_STACK(8);
+    itGShell_Attrs* attrs = ip->xC4_article_data->x4_specialAttributes;
     it_802756D0(gobj);
     it_80275444(gobj);
     ip->x40_vel.x = -ip->x40_vel.x * attrs->xC * HSD_Randf();
     ip->x40_vel.y = attrs->x10;
     if (ip->xDD4_itemVar.gshell.xDEC_b0) {
-        ip->xDD4_itemVar.gshell.xDE8 = HSD_Randi(it_804D6D28->x48_byte & 0xF);
+        u8 rand_max = it_804D6D28->x48_byte;
+        rand_max &= 0xF;
+        ip->xDD4_itemVar.gshell.xDE8 = HSD_Randi(rand_max);
     } else {
         ip->xDD4_itemVar.gshell.xDEC_b0 = 1;
     }
@@ -615,38 +621,27 @@ bool it_3F14_Logic14_Clanked(Item_GObj* gobj)
     it_80274C88(gobj);
     ip->xDD4_itemVar.gshell.xDEC_b3 = 1;
     ip->xDD4_itemVar.gshell.xDE4 = attrs->x2C;
+}
+
+bool itGShell_Logic14_Clanked(Item_GObj* gobj)
+{
+    Item* ip = GET_ITEM(gobj);
+    shellHit(gobj);
     return false;
 }
 
-bool it_3F14_Logic14_HitShield(Item_GObj* gobj)
+bool itGShell_Logic14_HitShield(Item_GObj* gobj)
 {
-    itGShell_Attrs* attrs;
     Item* ip = GET_ITEM(gobj);
-    PAD_STACK(8);
     if (ip->msid == 3 || ip->msid == 4) {
         itColl_BounceOffVictim(gobj);
     } else if (ip->msid - 5u <= 3) {
-        attrs = ip->xC4_article_data->x4_specialAttributes;
-        it_802756D0(gobj);
-        it_80275444(gobj);
-        ip->x40_vel.x = -ip->x40_vel.x * attrs->xC * HSD_Randf();
-        ip->x40_vel.y = attrs->x10;
-        if (ip->xDD4_itemVar.gshell.xDEC_b0) {
-            ip->xDD4_itemVar.gshell.xDE8 =
-                HSD_Randi(it_804D6D28->x48_byte & 0xF);
-        } else {
-            ip->xDD4_itemVar.gshell.xDEC_b0 = 1;
-        }
-        it_802762BC(ip);
-        Item_80268E5C(gobj, 1, ITEM_ANIM_UPDATE);
-        it_80274C88(gobj);
-        ip->xDD4_itemVar.gshell.xDEC_b3 = 1;
-        ip->xDD4_itemVar.gshell.xDE4 = attrs->x2C;
+        shellHit(gobj);
     }
     return false;
 }
 
-bool it_3F14_Logic14_ShieldBounced(Item_GObj* gobj)
+bool itGShell_Logic14_ShieldBounced(Item_GObj* gobj)
 {
     Item* ip = GET_ITEM(gobj);
     if (ip->msid == 3 || ip->msid == 4) {
@@ -664,7 +659,7 @@ bool it_8028CF68(Item_GObj* gobj)
     return false;
 }
 
-void it_3F14_Logic14_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
+void itGShell_Logic14_EvtUnk(Item_GObj* gobj, Item_GObj* ref_gobj)
 {
     it_8026B894(gobj, ref_gobj);
 }

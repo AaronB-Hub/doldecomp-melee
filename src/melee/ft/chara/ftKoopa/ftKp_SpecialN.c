@@ -1,27 +1,26 @@
 #include "ftKp_SpecialN.h"
 
-#include <melee/cm/camera.h>
-#include <melee/ft/ft_081B.h>
-#include <melee/ft/ftcoll.h>
-#include <melee/ft/ft_0877.h>
-#include <melee/ft/ft_0881.h>
-#include <melee/ft/ft_0892.h>
-#include <melee/ft/fighter.h>
-#include <melee/ft/ftcliffcommon.h>
-#include <melee/ft/ftcommon.h>
-#include <melee/ft/ftparts.h>
-#include <melee/ft/inlines.h>
-#include <melee/ef/efsync.h>
-#include <melee/ef/eflib.h>
-#include <melee/lb/lb_00B0.h>
-#include <melee/it/item.h>
-#include <melee/it/items/itkoopaflame.h>
-
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_FallSpecial.h"
 #include "ftKoopa/ftKp_Init.h"
 
 #include <trigf.h>
+#include <melee/cm/camera.h>
+#include <melee/ef/eflib.h>
+#include <melee/ef/efsync.h>
+#include <melee/ft/fighter.h>
+#include <melee/ft/ft_081B.h>
+#include <melee/ft/ft_0877.h>
+#include <melee/ft/ft_0881.h>
+#include <melee/ft/ft_0892.h>
+#include <melee/ft/ftcliffcommon.h>
+#include <melee/ft/ftcoll.h>
+#include <melee/ft/ftcommon.h>
+#include <melee/ft/ftparts.h>
+#include <melee/ft/inlines.h>
+#include <melee/it/item.h>
+#include <melee/it/items/itkoopaflame.h>
+#include <melee/lb/lb_00B0.h>
 
 enum_t ftKp_Init_803CF2A0[] = {
     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -64,9 +63,9 @@ void ftKp_SpecialLw_80134ACC(Fighter_GObj* gobj)
     lb_8000B1CC(fp->parts[48].joint, NULL, &v);
     v.x += fp->x34_scale.y * (da->x24 * fp->facing_dir);
     v.y += da->x28 * fp->x34_scale.y;
-    it_802ACBA0(gobj, &v, fp->facing_dir, fp->mv.kp.specials.x4,
-                ftKp_SpecialLw_80134ACC_inline(gobj, dirs), fp->fv.kp.x222C,
-                fp->fv.kp.x2230, 100);
+    itKoopaFlame_Spawn(gobj, &v, fp->facing_dir, fp->mv.kp.specials.x4,
+                       ftKp_SpecialLw_80134ACC_inline(gobj, dirs),
+                       fp->fv.kp.x222C, fp->fv.kp.x2230, 100);
     if (fp->mv.kp.specials.x14 == 0) {
         fp->mv.kp.unk1.x4 = Item_8026AE60();
         ft_80089824(gobj);

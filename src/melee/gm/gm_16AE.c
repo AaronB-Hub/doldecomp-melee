@@ -18,9 +18,11 @@
 #include <melee/gm/gmmultiman.h>
 #include <melee/gm/gmpause.h>
 #include <melee/gr/ground.h>
-#include <melee/gr/grstadium.h>
+#include <melee/gr/grpstadium.h>
 #include <melee/gr/stage.h>
 #include <melee/if/ifall.h>
+#include <melee/if/ifhazard.h>
+#include <melee/if/ifnametag.h>
 #include <melee/if/ifstatus.h>
 #include <melee/if/ifstock.h>
 #include <melee/if/iftime.h>
@@ -38,8 +40,7 @@
 #include <melee/pl/player.h>
 #include <melee/pl/plbonus.h>
 #include <melee/pl/plbonuslib.h>
-#include <melee/un/un_2FC9.h>
-#include <melee/vi/vi1202.h>
+#include <melee/sfx/crowdsfx.h>
 
 lbl_8046B6A0_t* gm_8016AE38(void)
 {
@@ -292,7 +293,7 @@ void fn_8016B388(int arg0, s16 arg1)
 
 bool gm_8016B3A0(void)
 {
-    if (gm_801A4310() == MJ_SUPER_SUDDEN_DEATH_VS) {
+    if (gm_801A4310() == GM_SUPER_SUDDEN_DEATH_VS) {
         return true;
     }
     return false;
@@ -301,9 +302,9 @@ bool gm_8016B3A0(void)
 bool gm_8016B3D8(void)
 {
     switch (gm_801A4310()) {
-    case MJ_CLASSIC:
-    case MJ_ADVENTURE:
-    case MJ_ALLSTAR:
+    case GM_CLASSIC:
+    case GM_ADVENTURE:
+    case GM_ALLSTAR:
         return true;
     default:
         return false;
@@ -313,19 +314,19 @@ bool gm_8016B3D8(void)
 bool gm_8016B41C(void)
 {
     switch (gm_801A4310()) {
-    case MJ_CLASSIC:
-    case MJ_ADVENTURE:
-    case MJ_ALLSTAR:
-    case MJ_TARGET_TEST:
-    case MJ_TRAINING:
-    case MJ_HOME_RUN_CONTEST:
-    case MJ_10MAN_VS:
-    case MJ_100MAN_VS:
-    case MJ_3MIN_VS:
-    case MJ_15MIN_VS:
-    case MJ_ENDLESS_VS:
-    case MJ_CRUEL_VS:
-    case MJ_EVENT:
+    case GM_CLASSIC:
+    case GM_ADVENTURE:
+    case GM_ALLSTAR:
+    case GM_TARGET_TEST:
+    case GM_TRAINING:
+    case GM_HOME_RUN_CONTEST:
+    case GM_10MAN_VS:
+    case GM_100MAN_VS:
+    case GM_3MIN_VS:
+    case GM_15MIN_VS:
+    case GM_ENDLESS_VS:
+    case GM_CRUEL_VS:
+    case GM_EVENT:
         return true;
     default:
         return false;
@@ -551,7 +552,7 @@ void fn_8016B918(void)
             continue;
         }
         temp_r3_2 = Player_GetPlayerId(i);
-        if (g_debugLevel >= 3) {
+        if (DbLevel >= 3) {
             temp_r3_3 = &HSD_PadCopyStatus[(u8) temp_r3_2];
             if ((temp_r3_3->trigger & 8) && (temp_r3_3->button & HSD_PAD_X)) {
                 var_r0_2 = true;
@@ -609,13 +610,13 @@ int fn_8016BC74(void)
     int temp_r3;
     PAD_STACK(0x18);
 
-    if (gm_8016B41C() || gm_801A4310() == MJ_CHALLENGER_APPROACH ||
-        (gm_801A4310() == MJ_VS && gm_801A42C4() == 0x81))
+    if (gm_8016B41C() || gm_801A4310() == GM_CHALLENGER_APPROACH ||
+        (gm_801A4310() == GM_VS && gm_801A42C4() == 0x81))
     {
         temp_r3 = Player_GetPlayerId(0);
         temp_r4 = &HSD_PadCopyStatus[(u8) temp_r3];
         if (temp_r4->err == 0) {
-            if (g_debugLevel >= 3) {
+            if (DbLevel >= 3) {
                 if ((temp_r4->trigger & 8) && (temp_r4->button & HSD_PAD_X)) {
                     var_r0_2 = 1;
                 } else {
@@ -632,7 +633,7 @@ int fn_8016BC74(void)
         for (var_r30 = 0; var_r30 < PAD_MAX_CONTROLLERS; var_r30++) {
             temp_r3_3 = &HSD_PadCopyStatus[(u8) var_r30];
             if (temp_r3_3->err == 0) {
-                if (g_debugLevel >= 3) {
+                if (DbLevel >= 3) {
                     if ((temp_r3_3->trigger & 8) &&
                         (temp_r3_3->button & HSD_PAD_X))
                     {
@@ -671,7 +672,7 @@ int gm_8016BE80(void)
     for (var_r30 = 0; var_r30 < PAD_MAX_CONTROLLERS; var_r30++) {
         temp_r3 = &HSD_PadCopyStatus[(u8) var_r30];
         if (temp_r3->err == 0) {
-            if (g_debugLevel >= 3) {
+            if (DbLevel >= 3) {
                 if ((temp_r3->trigger & 8) && (temp_r3->button & HSD_PAD_X)) {
                     var_r0 = 1;
                 } else {
@@ -893,13 +894,13 @@ void fn_8016C46C(int arg0)
 {
     if (lbl_8046B6A0.unk_9 != 0) {
         switch (gm_801A4310()) {
-        case MJ_CLASSIC:
+        case GM_CLASSIC:
             fn_8017EE40(arg0);
             return;
-        case MJ_ADVENTURE:
+        case GM_ADVENTURE:
             fn_8017E8A4(arg0);
             return;
-        case MJ_ALLSTAR:
+        case GM_ALLSTAR:
             fn_8018A364(arg0);
             break;
         }
@@ -981,7 +982,7 @@ int gm_8016C75C(HSD_GObj* arg0)
 
 void fn_8016C7D0(HSD_GObj* gobj)
 {
-    fn_80171DC4(gobj);
+    fn_80171DC4();
 }
 
 void fn_8016C7F0(void)
@@ -1014,14 +1015,14 @@ void fn_8016C7F0(void)
         gm_80167858(Player_GetPlayerId(0), Player_GetNametagSlotID(0), 0xD, 0);
         Camera_80030E44(4, NULL);
     }
-    if (gm_801A4310() == MJ_TARGET_TEST ||
-        (gm_801A4310() == MJ_CLASSIC && lbl_8046B6A0.x24C8.xE >= 0x21 &&
+    if (gm_801A4310() == GM_TARGET_TEST ||
+        (gm_801A4310() == GM_CLASSIC && lbl_8046B6A0.x24C8.xE >= 0x21 &&
          lbl_8046B6A0.x24C8.xE <= 0x3A))
     {
         temp_r29_2 = (u8*) gm_801B6320();
         temp_r30 = gm_8017EB30();
         var_r28 = 0;
-        if (gm_801A4310() == MJ_TARGET_TEST) {
+        if (gm_801A4310() == GM_TARGET_TEST) {
             var_r29_2 = gm_80164024(*temp_r29_2);
         } else {
             var_r29_2 = gm_80164024(temp_r30->x0.ckind);
@@ -1046,17 +1047,17 @@ void fn_8016C7F0(void)
             lbl_8046B6A0.unk_18 = 0x28;
         }
     }
-    if (gm_801A4310() == MJ_EVENT && lbl_8046B6A0.unk_10 == 0x9C41) {
+    if (gm_801A4310() == GM_EVENT && lbl_8046B6A0.unk_10 == 0x9C41) {
         gm_80167858(Player_GetPlayerId(0), Player_GetNametagSlotID(0), 0xD,
                     0x5A);
     }
     switch (gm_801A4310()) {
-    case MJ_10MAN_VS:
-    case MJ_100MAN_VS:
-    case MJ_3MIN_VS:
-    case MJ_15MIN_VS:
-    case MJ_ENDLESS_VS:
-    case MJ_CRUEL_VS:
+    case GM_10MAN_VS:
+    case GM_100MAN_VS:
+    case GM_3MIN_VS:
+    case GM_15MIN_VS:
+    case GM_ENDLESS_VS:
+    case GM_CRUEL_VS:
         fn_80182B5C();
     }
 }
@@ -1106,7 +1107,7 @@ void fn_8016CA68(lbl_8046B6A0_t* arg0, int arg1)
                 }
                 gm_801A0FEC(var_r31, var_r4);
             }
-            gm_801A4634(arg1);
+            gm_801A4634((long long) arg1);
             if (arg0->x24C8.x4_0) {
                 var_r0 = fn_8016CA68_inline(var_r31);
                 if (arg0->x24C8.x3C != NULL) {
@@ -1130,7 +1131,7 @@ static inline int fn_8016CBE8_inline(void)
     for (i = 0; i < PAD_MAX_CONTROLLERS; i++) {
         pad = &HSD_PadCopyStatus[(u8) i];
         if (pad->err == 0) {
-            if (g_debugLevel >= 3) {
+            if (DbLevel >= 3) {
                 if ((pad->trigger & 8) && (pad->button & HSD_PAD_X)) {
                     var_r0 = true;
                 } else {
@@ -1245,7 +1246,7 @@ void fn_8016CF4C(int arg0, int arg1)
 {
     gm_801A10FC(arg0);
     lbl_8046B6A0.match_result = arg1;
-    if (arg1 != 8 && g_debugLevel >= 3) {
+    if (arg1 != 8 && DbLevel >= 3) {
         gm_801A4674(1);
         if (lbl_8046B6A0.x24C8.xD > 1) {
             lbl_8046B6A0.unk_30 = lbl_8046B6A0.x24C8.xD - 1;
@@ -1270,7 +1271,7 @@ static inline void fn_8016CFE0_inline(void)
     lbl_8046B6A0_t* tmp;
     int i;
 
-    if (g_debugLevel >= 3 && gm_801A46B8(0) != 0 &&
+    if (DbLevel >= 3 && gm_801A46B8(0) != 0 &&
         (HSD_PadCopyStatus->button & 0x1160) == 0x1160)
     {
         fn_8016C7F0();
@@ -1301,7 +1302,7 @@ void fn_8016CFE0(void)
     fn_8016758C();
     if (gm_801A45E8(1) != 0) {
         var_r4 = fn_8016CBE8_inline();
-        if (g_debugLevel >= 3) {
+        if (DbLevel >= 3) {
             var_r29 = 0x160;
         } else {
             var_r29 = 0x1160;
@@ -1424,11 +1425,12 @@ static inline void fn_8016D634_inline(struct lbl_8046B6A0_24C_t* dst)
 void fn_8016D634(void)
 {
     lbl_8046B6A0_t* tmp = &lbl_8046B6A0;
-    struct lbl_8046B6A0_24C_t* temp_r6;
+    struct lbl_8046B6A0_24C_t* dst;
+    struct lbl_8046B6A0_24C_t* copied_dst;
 
     PAD_STACK(8);
 
-    if (++lbl_8046B6A0.unk_30 <= lbl_8046B6A0.x24C8.xD) {
+    if (lbl_8046B6A0.unk_30++ <= lbl_8046B6A0.x24C8.xD) {
         return;
     }
     if (gm_8016B3D8()) {
@@ -1443,22 +1445,23 @@ void fn_8016D634(void)
         gm_801A4674(4);
         gm_801A4634(5);
         lbl_8046B6A0.unk_9 = 1;
-        temp_r6 = &tmp->x24C;
+        dst = &tmp->x24C;
+        copied_dst = dst;
         if (lbl_8046B6A0.match_over == 0) {
-            *temp_r6 = tmp->x24C;
-            temp_r6->is_teams = lbl_8046B6A0.x24C8.is_teams;
-            temp_r6->x4 = tmp->match_result;
-            gm_80166378(temp_r6);
-            fn_8016C46C_dontinline((int) temp_r6);
+            *copied_dst = tmp->x24C;
+            copied_dst->is_teams = lbl_8046B6A0.x24C8.is_teams;
+            copied_dst->x4 = tmp->match_result;
+            gm_80166378(copied_dst);
+            fn_8016C46C_dontinline((int) copied_dst);
             if (tmp->match_result != 7 && tmp->match_result != 8) {
-                fn_8016C4F4(temp_r6);
+                fn_8016C4F4(copied_dst);
             }
             tmp->match_over = 1;
         } else {
-            *temp_r6 = tmp->x24C;
+            *copied_dst = tmp->x24C;
         }
         fn_80180630(tmp->x24C8.x18, 0, tmp->x24C8.x9, tmp->x24C8.x4_5,
-                    temp_r6);
+                    copied_dst);
         lbl_8046B6A0.unk_0 = 2;
     } else {
         lbl_8046B6A0.unk_0 = 3;
@@ -1682,6 +1685,16 @@ static float direction(float x)
     }
 }
 
+static inline void getSpawnPoint(int i, Vec3* v)
+{
+    lbl_8046B6A0_t* tmp = &lbl_8046B6A0;
+    if (tmp->FighterMatchInfo[i].spawn_point == -1) {
+        Stage_80224E64(i, v);
+    } else {
+        Stage_80224E64(tmp->FighterMatchInfo[i].spawn_point, v);
+    }
+}
+
 void fn_8016DEEC(void)
 {
     lbl_8046B6A0_t* tmp = &lbl_8046B6A0;
@@ -1699,12 +1712,7 @@ void fn_8016DEEC(void)
 
     for (i = 0; i < 6; i++) {
         if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
-            if (tmp->FighterMatchInfo[i].spawn_point == -1) {
-                Stage_80224E64(i, &spC);
-            } else {
-                int x = tmp2->FighterMatchInfo[i].spawn_point;
-                Stage_80224E64(x, &spC);
-            }
+            getSpawnPoint(i, &spC);
             sp18[i] = spC.x;
         }
     }
@@ -1802,7 +1810,6 @@ void fn_8016E124(void)
 void fn_8016E2BC(void)
 {
     lbl_8046B6A0_t* tmp = &lbl_8046B6A0;
-    u8 _[4];
     Vec3 sp24;
     Vec3 sp18;
     float var_f1_2;
@@ -1818,12 +1825,7 @@ void fn_8016E2BC(void)
         var_r0 = false;
     }
     if (var_r0) {
-        if (tmp->FighterMatchInfo[0].spawn_point == -1) {
-            Stage_80224E64(0, &sp24);
-        } else {
-            int x = tmp->FighterMatchInfo[0].spawn_point;
-            Stage_80224E64(x, &sp24);
-        }
+        getSpawnPoint(0, &sp24);
         if (Player_GetFacingDirection(0) == 0.0F) {
             if (Stage_80224DC8(tmp->x24C8.xE) != 0) {
                 Player_SetFacingDirection(0, 1.0F);
@@ -1846,12 +1848,7 @@ void fn_8016E2BC(void)
         fn_8016DEEC();
         for (i = 0; i < 6; i++) {
             if (Player_GetPlayerSlotType(i) != Gm_PKind_NA) {
-                if (tmp->FighterMatchInfo[i].spawn_point == -1) {
-                    Stage_80224E64(i, &sp18);
-                } else {
-                    Stage_80224E64(tmp->FighterMatchInfo[i].spawn_point,
-                                   &sp18);
-                }
+                getSpawnPoint(i, &sp18);
                 if (Player_GetFacingDirection(i) == 0.0F) {
                     if (Stage_80224DC8(tmp->x24C8.xE) != 0) {
                         Player_SetFacingDirection(i, 1.0F);
@@ -1923,9 +1920,9 @@ void fn_8016E730(StartMeleeData* arg0)
     fn_8016DCC0(arg0);
     lbRefract_800222A4();
     lb_8000FCDC();
-    efLib_8005B4B8();
-    efAsync_8006737C(0);
-    efAsync_8006737C(0x1F);
+    efLib_Init();
+    efAsync_LoadSync(0);
+    efAsync_LoadSync(0x1F);
     Player_80036DD8();
     ftCo_800C06C0();
     mpColl_80041C78();
@@ -1959,7 +1956,7 @@ void fn_8016E730(StartMeleeData* arg0)
     temp_r30 = gm_801A4BC8();
     fn_80171AD4();
     if (temp_r30 != NULL) {
-        HSD_GObjProc_8038FD54(temp_r30, fn_8016C7D0, 0x14);
+        HSD_GObj_SetupProc(temp_r30, fn_8016C7D0, 0x14);
     }
     if (!arg0->rules.x1_4) {
         Stage_80225074(fn_8016E5C0(arg0));
@@ -1989,15 +1986,15 @@ struct EndMeleeData {
 static inline bool gm_8016E9C8_inline(void)
 {
     switch (gm_801A4310()) {
-    case MJ_SUPER_SUDDEN_DEATH_VS:
-    case MJ_INVISIBLE_VS:
-    case MJ_SLOMO_VS:
-    case MJ_LIGHTNING_VS:
-    case MJ_TINY_VS:
-    case MJ_GIANT_VS:
-    case MJ_STAMINA_VS:
-    case MJ_FIXED_CAMERA_VS:
-    case MJ_SINGLE_BUTTON_VS:
+    case GM_SUPER_SUDDEN_DEATH_VS:
+    case GM_INVISIBLE_VS:
+    case GM_SLOMO_VS:
+    case GM_LIGHTNING_VS:
+    case GM_TINY_VS:
+    case GM_GIANT_VS:
+    case GM_STAMINA_VS:
+    case GM_FIXED_CAMERA_VS:
+    case GM_SINGLE_BUTTON_VS:
         return true;
     default:
         return false;
@@ -2031,7 +2028,7 @@ void gm_8016E9C8(void* arg0_raw)
     arg0->x4 = lbl_8046B6A0.timer_seconds;
     arg0->x8 = Ground_801C5ABC();
 
-    if (gm_8016B3D8() || gm_8016E9C8_inline() || gm_801A4310() == MJ_VS) {
+    if (gm_8016B3D8() || gm_8016E9C8_inline() || gm_801A4310() == GM_VS) {
         if (lbl_8046B6A0.match_result != 7 && lbl_8046B6A0.match_result != 8) {
             for (i = 0; i < 6; i++) {
                 if (Player_GetPlayerSlotType(i) == Gm_PKind_Human) {
@@ -2079,8 +2076,8 @@ void gm_8016EC28_OnEnter(void* arg0)
 float gm_8016ECE8(void)
 {
     float var_f29;
-    int count;
     int i;
+    int count;
 
     count = 0;
     var_f29 = 0.0F;
@@ -2103,10 +2100,9 @@ bool gm_8016EDDC(int arg0, PlayerInitData* arg1)
     lbl_8046B6A0_t* tmp = &lbl_8046B6A0;
     Vec3 sp18;
     float var_f1;
-    u8 temp_r30;
     u8 temp_r29;
+    u8 temp_r30;
     bool is_teams;
-    s8 temp_r3;
     PAD_STACK(4);
 
     if (lbl_8046B6A0.is_singleplayer == 0 &&
@@ -2116,12 +2112,7 @@ bool gm_8016EDDC(int arg0, PlayerInitData* arg1)
         Player_80036D24(arg0);
         fn_8016D8AC(arg0, arg1);
 
-        temp_r3 = tmp->FighterMatchInfo[arg0].spawn_point;
-        if (temp_r3 == -1) {
-            Stage_80224E64(arg0, &sp18);
-        } else {
-            Stage_80224E64(temp_r3, &sp18);
-        }
+        getSpawnPoint(arg0, &sp18);
 
         if (Player_GetFacingDirection(arg0) == 0.0F) {
             if (Stage_80224DC8(lbl_8046B6A0.x24C8.xE) != 0) {
@@ -2210,7 +2201,7 @@ void fn_8016F140(int arg0)
     gmMainLib_8015DAB4(arg0);
 }
 
-void fn_8016F160(int arg0, int arg1)
+int fn_8016F160(int arg0, int arg1)
 {
-    pl_80039418(arg0, arg1);
+    return pl_80039418(arg0, arg1);
 }

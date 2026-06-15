@@ -13,6 +13,12 @@
 #include "ft/ft_0C31.h"
 #include "ft/ft_0C88.h"
 #include "ft/ftanim.h"
+#include "ft/ftCo_800C7070.h"
+#include "ft/ftCo_800C70D0.h"
+#include "ft/ftCo_800C7178.h"
+#include "ft/ftCo_800C7220.h"
+#include "ft/ftCo_800C739C.h"
+#include "ft/ftCo_800C7434.h"
 #include "ft/ftcoll.h"
 #include "ft/ftdata.h"
 #include "ft/ftdrawcommon.h"
@@ -68,7 +74,7 @@ Fighter_GObj* ftDemo_CreateFighter(plAllocInfo2* alloc_info)
         fp->x20_actionStateList = ftData_UnkMotionStates0[fp->kind];
         fp->x24 = fp->ft_data->x14;
         fp->x28 = fp->ft_data->x18;
-        efAsync_8006737C(ftData_UnkBytePerCharacter[fp->kind]);
+        efAsync_LoadSync(ftData_UnkBytePerCharacter[fp->kind]);
         if (!alloc_info->b0) {
             ftData_80085820(fp->kind, fp->x619_costume_id);
         } else {
@@ -112,11 +118,11 @@ Fighter_GObj* ftDemo_CreateFighter(plAllocInfo2* alloc_info)
         fp->x890_cameraBox = Camera_80029020();
         lbShadow_8000ED54(&fp->x20A4, gobj->hsd_obj);
     }
-    HSD_GObjProc_8038FD54(gobj, Fighter_8006A360, 1);
-    HSD_GObjProc_8038FD54(gobj, Fighter_procUpdate, 4);
-    HSD_GObjProc_8038FD54(gobj, Fighter_procMap, 5);
-    HSD_GObjProc_8038FD54(gobj, Fighter_8006C80C, 9);
-    HSD_GObjProc_8038FD54(gobj, Fighter_8006D9AC, 16);
+    HSD_GObj_SetupProc(gobj, Fighter_8006A360, 1);
+    HSD_GObj_SetupProc(gobj, Fighter_procUpdate, 4);
+    HSD_GObj_SetupProc(gobj, Fighter_procMap, 5);
+    HSD_GObj_SetupProc(gobj, Fighter_8006C80C, 9);
+    HSD_GObj_SetupProc(gobj, Fighter_8006D9AC, 16);
     Fighter_UnkProcessDeath_80068354(gobj);
     if (on_create_fighter[alloc_info->unk8] != NULL) {
         on_create_fighter[alloc_info->unk8](gobj);
@@ -152,8 +158,7 @@ char* ftDemo_GetMotionFileString(int cb_idx, int cb_arg)
     if (ftData_803C24EC[cb_idx] != NULL) {
         return ftData_803C24EC[cb_idx](cb_arg);
     } else {
-        OSReport("no demo vi anim! %d\n", cb_arg);
-        __assert("ftdemo.c", 296, "0");
+        HSD_ASSERTREPORT(296, 0, "no demo vi anim! %d\n", cb_arg);
     }
 }
 
@@ -161,5 +166,5 @@ void ftDemo_SetFacingDirection(Fighter_GObj* gobj, float facing_dir)
 {
     Fighter* fp = GET_FIGHTER(gobj);
     fp->facing_dir = facing_dir;
-    ftParts_80075AF0(fp, 0, M_PI_2 * fp->facing_dir);
+    ftPartSetRotY(fp, 0, M_PI_2 * fp->facing_dir);
 }

@@ -15,7 +15,7 @@
 /* 20F4E4 */ void grOldKongo_8020F4E4(void);
 /* 20F4E8 */ void grOldKongo_8020F4E8(void);
 /* 20F524 */ bool grOldKongo_8020F524(void);
-/* 20F52C */ UNK_RET grOldKongo_8020F52C(UNK_PARAMS);
+/* 20F52C */ HSD_GObj* grOldKongo_8020F52C(int);
 /* 20F618 */ void grOldKongo_8020F618(Ground_GObj*);
 /* 20F644 */ bool grOldKongo_8020F644(Ground_GObj*);
 /* 20F64C */ void grOldKongo_8020F64C(Ground_GObj*);
@@ -32,10 +32,10 @@
 /* 2100F4 */ bool grOldKongo_802100F4(Ground_GObj*);
 /* 2100FC */ void grOldKongo_802100FC(Ground_GObj*);
 /* 210450 */ void grOldKongo_80210450(Ground_GObj*);
-/* 210454 */ UNK_RET fn_80210454(UNK_PARAMS);
+/* 210454 */ s32 grOldKongo_80210454(HSD_GObj*, HSD_GObj*);
 /* 2105AC */ void grOldKongo_802105AC(Ground_GObj*);
 /* 2105C8 */ void grOldKongo_802105C8(HSD_GObj*);
-/* 210650 */ UNK_RET grOldKongo_80210650(UNK_PARAMS);
+/* 210650 */ f32 grOldKongo_80210650(void);
 /* 210780 */ DynamicsDesc* grOldKongo_80210780(enum_t);
 /* 210788 */ bool grOldKongo_80210788(Vec3*, int, HSD_JObj*);
 

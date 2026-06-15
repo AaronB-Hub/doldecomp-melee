@@ -4,6 +4,7 @@
 #include "gr/grdisplay.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
+#include "gr/inlines.h"
 #include "gr/types.h"
 
 #include "lb/forward.h"
@@ -61,7 +62,7 @@ static StageCallbacks grTNs_803E9030[] = {
 };
 
 StageData grTNs_803E908C = {
-    0x00000036,
+    TNESS,
     grTNs_803E9030,
     "/GrTNs.dat",
     grTNess_802225D4,
@@ -99,7 +100,7 @@ static void grTness_UnkStage0_OnLoad(void)
 
 static void grTness_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(false);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 static bool grTNess_8022266C(void)
@@ -110,26 +111,16 @@ static bool grTNess_8022266C(void)
 static HSD_GObj* grTNess_80222674(int id)
 {
     HSD_GObj* gobj;
-    Ground* gp;
-    StageCallbacks* cb = &grTNs_803E9030[id];
-    gobj = Ground_801C14D0(id);
+    StageCallbacks* callbacks = &grTNs_803E9030[id];
+
+    gobj = Ground_GetStageGObj(id);
+
     if (gobj != NULL) {
-        gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (cb->callback3 != 0U) {
-            gp->x1C_callback = cb->callback3;
-        }
-        if (cb->callback0 != 0U) {
-            cb->callback0(gobj);
-        }
-        if (cb->callback2 != 0U) {
-            HSD_GObjProc_8038FD54(gobj, cb->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grtness.c", 0xC3, id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 0xC3, id);
     }
+
     return gobj;
 }
 

@@ -14,6 +14,13 @@
 #include "gr/stage.h"
 #include "it/inlines.h"
 #include "it/it_2725.h"
+#include "it/it_3F14.h"
+#include "it/ithitbox.h"
+#include "it/it_279C.h"
+#include "it/itanimlist.h"
+#include "it/iteffect.h"
+#include "it/itmaplib.h"
+#include "it/itmaterial.h"
 #include "it/itcoll.h"
 #include "it/types.h"
 
@@ -100,7 +107,7 @@ static HSD_ObjAllocData item_dynamic_bones_alloc_data;
 
 HSD_ObjAllocData item_link_alloc_data;
 HSD_ObjAllocUnk Item_804A0C64;
-HSD_ObjAllocUnk2 Item_804A0CCC;
+Item_FtTrack Item_804A0CCC;
 S32Vec3 Item_804A0E24;
 
 /// Init item struct?
@@ -140,7 +147,7 @@ void Item_80266FCC(void)
     Item_804A0C64.x64 = it_804D6D28->x148;
 
     Item_804A0CCC.x154.b0 = true;
-    Item_804A0CCC.x150 = 1;
+    Item_804A0CCC.x150_count = 1;
 
     Item_804A0E24.x = -1;
     Item_804A0E24.y = -1;
@@ -409,7 +416,8 @@ static void Item_802676F4(HSD_GObj* gobj)
         Item_804A0C64.x8++;
         break;
     case 2:
-        it_80274EE8(Item_804A0C64.x10++);
+        Item_804A0C64.x10++;
+        it_80274EE8();
         break;
     case 3:
         Item_804A0C64.x58++;
@@ -549,8 +557,8 @@ void Item_80267978(HSD_GObj* gobj)
         item_data->xC4_article_data = it_804A0F60[idx];
         item_data->xB8_itemLogicTable = &it_803F4D20[idx];
         if (item_data->xC4_article_data == NULL) {
-            OSReport("not found zako model data! check ground dat file!\n");
-            __assert("item.c", 686, "0");
+            HSD_ASSERTREPORT(
+                686, 0, "not found zako model data! check ground dat file!\n");
         }
     }
     item_data->xBC_itemStateContainer = item_data->xB8_itemLogicTable->states;
@@ -602,7 +610,7 @@ static void Item_80267AA8(HSD_GObj* gobj, SpawnItem* spawnItem)
     item_data->xCB8_outDamageDirection = 0.0f;
     item_data->xC68 = 0.0f;
     item_data->xCD0 = 0.0f;
-    it_80275158(gobj, it_804D6D28->x30);
+    it_80275158(gobj, it_804D6D28->x30_lifetime);
     item_data->xDD0_flag.b3 = false;
     item_data->spin_spd = item_data->xCC_item_attr->xC_spin_speed;
     item_data->xDC8_word.flags.x19 = item_data->xCC_item_attr->x1_3;
@@ -696,10 +704,10 @@ static void Item_80267AA8(HSD_GObj* gobj, SpawnItem* spawnItem)
     }
 
     item_data->x5C8 = 0;
-    item_data->xBC7 = 0;
-    item_data->xBC6 = 0;
-    item_data->xBC5 = 0;
-    item_data->xBC4 = 0;
+    item_data->xBC4.a = 0;
+    item_data->xBC4.b = 0;
+    item_data->xBC4.g = 0;
+    item_data->xBC4.r = 0;
     item_data->x5C9 = 255;
 
     it_80279B64(item_data);
@@ -744,7 +752,6 @@ void Item_802680CC(HSD_GObj* gobj)
 }
 
 extern HSD_DObj* HSD_JObjGetDObj(HSD_JObj*);
-extern void* it_803F1F90[];
 
 static void Item_8026814C(HSD_GObj* gobj)
 {
@@ -895,10 +902,6 @@ static void Item_80268560(HSD_GObj* gobj)
 }
 
 extern void ftLib_8008702C(s32);
-extern struct sdata_ItemGXLink it_803F1418[];
-extern struct sdata_ItemGXLink it_803F2310[];
-extern struct sdata_ItemGXLink it_803F2F28[];
-extern struct sdata_ItemGXLink it_803F4CA8[];
 
 static void foobar(HSD_GObj* gobj)
 {
@@ -996,16 +999,16 @@ static HSD_GObj* Item_8026862C(SpawnItem* spawnItem)
         Item_8026849C(gobj);
         it_8027163C(gobj);
         Item_80268560(gobj);
-        HSD_GObjProc_8038FD54(gobj, Item_802693E4, 0);
-        HSD_GObjProc_8038FD54(gobj, Item_80269528, 1);
-        HSD_GObjProc_8038FD54(gobj, Item_802697D4, 4);
-        HSD_GObjProc_8038FD54(gobj, Item_80269978, 5);
-        HSD_GObjProc_8038FD54(gobj, Item_80269A9C, 9);
-        HSD_GObjProc_8038FD54(gobj, Item_80269B60, 11);
-        HSD_GObjProc_8038FD54(gobj, Item_80269BE4, 12);
-        HSD_GObjProc_8038FD54(gobj, Item_80269C5C, 13);
-        HSD_GObjProc_8038FD54(gobj, Item_8026A294, 14);
-        HSD_GObjProc_8038FD54(gobj, Item_8026A788, 16);
+        HSD_GObj_SetupProc(gobj, Item_802693E4, 0);
+        HSD_GObj_SetupProc(gobj, Item_80269528, 1);
+        HSD_GObj_SetupProc(gobj, Item_802697D4, 4);
+        HSD_GObj_SetupProc(gobj, Item_80269978, 5);
+        HSD_GObj_SetupProc(gobj, Item_80269A9C, 9);
+        HSD_GObj_SetupProc(gobj, Item_80269B60, 11);
+        HSD_GObj_SetupProc(gobj, Item_80269BE4, 12);
+        HSD_GObj_SetupProc(gobj, Item_80269C5C, 13);
+        HSD_GObj_SetupProc(gobj, Item_8026A294, 14);
+        HSD_GObj_SetupProc(gobj, Item_8026A788, 16);
         Item_80267130(gobj, spawnItem);
         Item_8026A810(gobj);
         foobar(gobj);
@@ -1020,7 +1023,7 @@ static HSD_GObj* Item_8026862C(SpawnItem* spawnItem)
 }
 
 /// Item spawn prefunction - spawn airborne
-HSD_GObj* Item_80268B18(SpawnItem* spawnItem)
+Item_GObj* Item_80268B18(SpawnItem* spawnItem)
 {
     spawnItem->x48_ground_or_air = GA_Air;
     spawnItem->x10 = 0;
@@ -1161,9 +1164,7 @@ void Item_80268E40(Item* item_data, struct ItemStateDesc* itemStateDesc)
     item_data->x524_cmd.timer = 0.0f;
 }
 
-extern struct Fighter_804D653C_t* it_804D6D04;
-
-// Change item state
+/// Change item state
 void Item_80268E5C(HSD_GObj* gobj, enum_t msid, Item_StateChangeFlags flags)
 {
     Vec3 sp4C;
@@ -1191,7 +1192,7 @@ void Item_80268E5C(HSD_GObj* gobj, enum_t msid, Item_StateChangeFlags flags)
     item_data->msid = msid;
     item_data->xDC8_word.flags.x14 = 0;
     HSD_JObjSetTranslate(gobj->hsd_obj, &item_data->pos);
-    efAsync_80067624(gobj, &item_data->xBC0);
+    efAsync_QueueFlush(gobj, &item_data->xBC0);
 
     if (item_data->xDC8_word.flags.x2 == 1) {
         it_8026BDCC(gobj);
@@ -1460,11 +1461,11 @@ void Item_80269978(HSD_GObj* gobj)
     }
 }
 
-// this function is where the item accessory callback is called if it exists
+/// this function is where the item accessory callback is called if it exists
 static void Item_80269A9C(HSD_GObj* gobj)
 {
     Item* item_data = (Item*) HSD_GObjGetUserData(gobj);
-    efAsync_80067624(gobj, &item_data->xBC0);
+    efAsync_QueueFlush(gobj, &item_data->xBC0);
     if (item_data->xDC8_word.flags.x9 == 0) {
         if (item_data->on_accessory != NULL) {
             item_data->on_accessory(gobj);
@@ -1993,8 +1994,7 @@ void Item_8026A8EC(Item_GObj* gobj)
     Item* ip = (Item*) HSD_GObjGetUserData(gobj);
 
     if (!it_80272D1C(gobj) || ip == NULL) {
-        OSReport("===== Not Found Item_Struct!! =====\n");
-        __assert("item.c", 2405, "0");
+        HSD_ASSERTREPORT(2405, 0, "===== Not Found Item_Struct!! =====\n");
     }
 
     it_802725D4(gobj);
@@ -2025,11 +2025,11 @@ void Item_8026A8EC(Item_GObj* gobj)
     }
 
     Item_8026B0B4(gobj);
-    efAsync_80067688((struct ef_UnkStruct3*) &ip->xBC0);
+    efAsync_QueueClear((struct EF_QueuedEffect*) &ip->xBC0);
     HSD_GObjPLink_80390228(gobj);
 }
 
-// Pick up item
+/// Pick up item
 void Item_8026AB54(Item_GObj* gobj, HSD_GObj* owner_gobj, Fighter_Part part)
 {
     Item* item_data = (Item*) HSD_GObjGetUserData(gobj);

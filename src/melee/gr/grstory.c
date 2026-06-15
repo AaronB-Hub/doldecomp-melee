@@ -2,6 +2,7 @@
 
 #include <platform.h>
 
+#include <dolphin/os/OSError.h>
 #include <sysdolphin/baselib/gobjgxlink.h>
 #include <sysdolphin/baselib/gobjproc.h>
 #include <sysdolphin/baselib/random.h>
@@ -43,7 +44,7 @@ static struct {
 }* shyguy_vars;
 
 StageData grSt_803E274C = {
-    (1 << 1) | (1 << 3),
+    STORY,
     grSt_803E26F0,
     "/GrSt.dat",
     grStory_801E3030,
@@ -77,7 +78,7 @@ void grStory_UnkStage0_OnLoad(void) {}
 
 void grStory_UnkStage0_OnStart(void)
 {
-    grZakoGenerator_801CAE04(false);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grStory_801E30D0(void)
@@ -87,30 +88,15 @@ bool grStory_801E30D0(void)
 
 Ground_GObj* grStory_801E30D8(int gobj_id)
 {
-    Ground_GObj* gobj;
+    HSD_GObj* gobj;
     StageCallbacks* callbacks = &grSt_803E26F0[gobj_id];
 
-    gobj = Ground_801C14D0(gobj_id);
+    gobj = Ground_GetStageGObj(gobj_id);
 
     if (gobj != NULL) {
-        Ground* gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        // 0x80
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-        // 0x94
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grstory.c", 220,
-                 gobj_id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 220, gobj_id);
     }
 
     return gobj;
@@ -224,8 +210,8 @@ void grStory_801E33E0(Ground_GObj* gobj)
 
 void grStory_801E3414(Ground_GObj* gobj) {}
 
-// floating point random number centered at 0
-// with an amplitude of 1
+/// floating point random number centered at 0
+/// with an amplitude of 1
 inline f32 frand_amp1(void)
 {
     return 2.0F * (HSD_Randf() - 0.5F);

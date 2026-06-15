@@ -7,9 +7,10 @@
 #include <melee/db/db.h>
 #include <melee/it/inlines.h>
 #include <melee/it/it_26B1.h>
-#include <melee/it/it_2725.h>
+#include <melee/it/itzako.h>
 #include <melee/it/item.h>
 #include <melee/it/types.h>
+#include "it/itzako.h"
 
 ItemStateTable it_803F7938[] = {
     { 0, itGamewatchbreath_UnkMotion1_Anim, NULL, NULL },
@@ -45,7 +46,7 @@ HSD_GObj* it_802C720C(HSD_GObj* parent, Vec3* pos, Fighter_Part part,
     return NULL;
 }
 
-void it_2725_Logic76_Destroyed(Item_GObj* item_gobj)
+void itGameWatchBreath_Logic76_Destroyed(Item_GObj* item_gobj)
 {
     Item* item = GET_ITEM(item_gobj);
     if (item->owner != NULL) {
@@ -76,7 +77,7 @@ void it_802C73AC(Item_GObj* item_gobj)
     it_8026B73C(item_gobj);
 }
 
-void it_2725_Logic76_PickedUp(Item_GObj* item_gobj)
+void itGameWatchBreath_Logic76_PickedUp(Item_GObj* item_gobj)
 {
     Item* temp_r3;
 
@@ -115,7 +116,8 @@ bool itGamewatchbreath_UnkMotion1_Anim(Item_GObj* item_gobj)
     return false;
 }
 
-void it_2725_Logic76_EvtUnk(Item_GObj* item_gobj, Item_GObj* ref_gobj)
+void itGameWatchBreath_Logic76_EvtUnk(Item_GObj* item_gobj,
+                                      Item_GObj* ref_gobj)
 {
     it_8026B894(item_gobj, ref_gobj);
 }

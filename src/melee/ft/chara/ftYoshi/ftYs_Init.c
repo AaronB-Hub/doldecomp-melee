@@ -398,8 +398,7 @@ void ftYs_Init_8012B6E8(Fighter* fp, struct S_UNK_YOSHI1* unk_struct_arg)
             attr_r26->xC = HSD_AObjGetEndFrame(aobj_r24);
         } else {
             if (attr_r26->xC != HSD_AObjGetEndFrame(aobj_r24)) {
-                OSReport("yoshi matanim frame not same\n");
-                __assert(__FILE__, 97, "0");
+                HSD_ASSERTREPORT(97, 0, "yoshi matanim frame not same\n");
             }
         }
     }
@@ -445,16 +444,16 @@ void ftYs_Init_8012B8A4(HSD_GObj* gobj)
     float tempf =
         da->xC *
         (1.0f - (fp->shield_health / p_ftCommonData->x260_startShieldHealth));
-    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5B8, tempf);
-    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5BC, tempf);
+    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5AC.xC[0], tempf);
+    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5AC.xC[1], tempf);
 }
 
 void ftYs_Init_8012B918(HSD_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
 
-    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5B8, 0.0f);
-    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5BC, 0.0f);
+    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5AC.xC[0], 0.0F);
+    ftYs_Init_8012B804(fp, (struct S_UNK_YOSHI1*) fp->x5AC.xC[1], 0.0F);
 }
 
 void ftYs_Init_OnDeath(HSD_GObj* gobj)
@@ -464,7 +463,7 @@ void ftYs_Init_OnDeath(HSD_GObj* gobj)
     fp->fv.ys.x2238 = 0;
 }
 
-// https://decomp.me/scratch/5TPxg
+/// https://decomp.me/scratch/5TPxg
 void ftYs_Init_OnLoad(HSD_GObj* gobj)
 {
     void** item_list;
@@ -476,15 +475,14 @@ void ftYs_Init_OnLoad(HSD_GObj* gobj)
     Fighter* fp;
 
     fp = GET_FIGHTER(gobj);
-    temp = temp_r27 = (struct S_UNK_YOSHI1*) fp->x5B8;
+    temp = temp_r27 = (struct S_UNK_YOSHI1*) fp->x5AC.xC[0];
     ft = fp->ft_data;
-    temp_r28 = (struct S_UNK_YOSHI1*) fp->x5BC;
+    temp_r28 = (struct S_UNK_YOSHI1*) fp->x5AC.xC[1];
     item_list = ft->x48_items;
     other_attr = ft->ext_attr;
 
     if (!temp) {
-        OSReport("yoshi parts_model NULL!!\n");
-        __assert(__FILE__, 113, "0");
+        HSD_ASSERTREPORT(113, 0, "yoshi parts_model NULL!!\n");
     }
 
     other_attr->xC = 0.0f;

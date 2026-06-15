@@ -8,14 +8,12 @@
 
 #include "db/db.h"
 #include "gm/gmscdata.h"
+#include "if/ifcoget.h"
 #include "lb/lb_00F9.h"
 #include "lb/lb_0192.h"
 #include "lb/lbaudio_ax.h"
 #include "lb/lbcardgame.h"
-#include "lb/lbcardnew.h"
-#include "lb/lbdvd.h"
 #include "lb/lbheap.h"
-#include "un/un_2FC9.h"
 
 #include <dolphin/os/OSThread.h>
 #include <baselib/controller.h>
@@ -176,19 +174,21 @@ void gm_801A4B74(void)
     gm_80479D58.unk_C = 2;
 }
 
-void gm_801A4B88(struct MinorSceneInfo* info)
+void gm_801A4B88(struct GameSceneInfo* info)
 {
     gm_804D6720 = info;
 }
 
+/// @brief returns a pointer to the current scenes enter data
 void* gm_801A4B90(void)
 {
-    return gm_804D6720->unk_struct_0;
+    return gm_804D6720->load_data;
 }
 
+/// @brief returns a pointer to the current scenes exit data
 void* gm_801A4B9C(void)
 {
-    return gm_804D6720->unk_struct_1;
+    return gm_804D6720->leave_data;
 }
 
 u32 gm_801A4BA8(void)
@@ -228,7 +228,7 @@ void gm_801A4BD4(void)
     un_802FF78C();
     gm_804D672C = GObj_Create(14, 0, 0);
     if (gm_804D672C != NULL) {
-        HSD_GObjProc_8038FD54(gm_804D672C, fn_801A4BD0, 0);
+        HSD_GObj_SetupProc(gm_804D672C, fn_801A4BD0, 0);
     }
     gm_804D6728 = NULL;
     gm_804D6724 = NULL;
@@ -237,9 +237,9 @@ void gm_801A4BD4(void)
     lb_80014534();
 }
 
-MinorSceneHandler* gm_801A4CE0(u8 id)
+GameSceneHandler* gm_801A4CE0(u8 id)
 {
-    MinorSceneHandler* cur;
+    GameSceneHandler* cur;
     for (cur = gm_801A50A0(); cur->class_id != 0x2D; cur++) {
         if (cur->class_id == id) {
             return cur;
@@ -258,7 +258,7 @@ inline u64 maybe_gm_801A48A4(u8 i)
     }
 }
 
-void gm_801A4D34(void (*arg0)(void), MinorSceneInfo* arg1)
+void gm_801A4D34(void (*arg0)(void), GameSceneInfo* arg1)
 {
     int pad_queue_count;
     int i;
@@ -292,7 +292,7 @@ void gm_801A4D34(void (*arg0)(void), MinorSceneInfo* arg1)
         for (i = 0; i < pad_queue_count; i++) {
             HSD_PerfSetStartTime();
             lb_800198E0();
-            if (g_debugLevel >= 3) {
+            if (DbLevel >= 3) {
                 gm_801A4970(temp_r25->unk_10.x4);
             }
             if (gm_801A46B8(0) || !gm_801A45E8(0)) {
@@ -327,7 +327,7 @@ void gm_801A4D34(void (*arg0)(void), MinorSceneInfo* arg1)
                 temp_r25->unk_10.unk_28 |=
                     ~gm_803DA8C8[temp_r25->unk_10.unk_34];
             }
-            if (g_debugLevel >= 3) {
+            if (DbLevel >= 3) {
                 db_CheckScreenshot();
             }
             lbAudioAx_80027DF8();
@@ -344,7 +344,7 @@ void gm_801A4D34(void (*arg0)(void), MinorSceneInfo* arg1)
                 }
             }
             HSD_PerfSetCPUTime();
-            if (g_debugLevel >= 3) {
+            if (DbLevel >= 3) {
                 OSCheckActiveThreads();
             }
             gmMainLib_8046B0F0.xC = false;

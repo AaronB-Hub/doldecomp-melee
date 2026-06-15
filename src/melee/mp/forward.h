@@ -7,17 +7,18 @@
 #include "gr/forward.h"
 #include "lb/forward.h"
 
-typedef struct mpIsland_PaletteEntry mpIsland_PaletteEntry;
-typedef struct mpIsland_Palette mpIsland_Palette;
-typedef struct mp_UnkStruct0 mp_UnkStruct0;
-typedef struct MapLine MapLine;
-typedef struct CollLine CollLine;
-typedef struct mp_UnkStruct3 mp_UnkStruct3;
-typedef struct mpisland mpisland;
-typedef struct CollVtx CollVtx;
-typedef struct MapJoint MapJoint;
 typedef struct CollJoint CollJoint;
+typedef struct CollLine CollLine;
+typedef struct CollVtx CollVtx;
 typedef struct MapCollData MapCollData;
+typedef struct MapJoint MapJoint;
+typedef struct MapLine MapLine;
+typedef struct mp_UnkStruct0 mp_UnkStruct0;
+typedef struct mp_UnkStruct3 mp_UnkStruct3;
+typedef struct mpCollisionBox mpCollisionBox;
+typedef struct mpisland mpisland;
+typedef struct mpIsland_Palette mpIsland_Palette;
+typedef struct mpIsland_PaletteEntry mpIsland_PaletteEntry;
 
 typedef enum mp_Terrain {
     mp_Terrain_Basic,
@@ -48,8 +49,9 @@ typedef enum mpLib_GroundEnum {
     mpLib_GroundEnum_Unk2,
 } mpLib_GroundEnum;
 
-typedef void (*mpLib_Callback)(Ground*, s32, CollData*, s32, mpLib_GroundEnum,
-                               f32);
+typedef void (*mpLib_Callback)(
+    Ground*, s32, CollData*, s32, mpLib_GroundEnum,
+    f32); /// @TODO Fix Ground* to be a void* as it can be a GObj or a Ground*
 typedef bool (*mpColl_Callback)(CollData*, u32);
 
 typedef enum CollLineKind {
@@ -59,7 +61,7 @@ typedef enum CollLineKind {
     CollLine_LeftWall = 1 << 3,
 } CollLineKind;
 
-#define LINE_FLAG_KIND (0b1111)
+#define LINE_FLAG_KIND (0xF)
 #define LINE_FLAG_EMPTY (1 << 7)
 #define LINE_FLAG_PLATFORM (1 << 8)
 #define LINE_FLAG_LEDGE (1 << 9)

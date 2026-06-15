@@ -22,7 +22,6 @@
 #include "ft/forward.h"
 
 #include "ft/ft_081B.h"
-#include "ftCommon/ftCo_Attack100.h"
 #include "ft/ftanim.h"
 #include "ft/ftcoll.h"
 #include "ft/ftcommon.h"
@@ -32,9 +31,13 @@
 
 #include "ftCommon/forward.h"
 
+#include "ftCommon/ftCo_Attack100.h"
 #include "ftCommon/ftCo_Fall.h"
 #include "ftCommon/ftCo_JumpAerial.h"
 #include "ftCommon/types.h"
+
+#include "gr/forward.h"
+
 #include "gr/ground.h"
 
 #include "lb/forward.h"
@@ -50,6 +53,13 @@
 #include <dolphin/mtx.h>
 #include <baselib/gobj.h>
 #include <baselib/jobj.h>
+
+#pragma force_active on
+const double ftCo_804D8C28 = 4503599627370496.0;
+const double ftCo_804D8C30 = 4503601774854144.0;
+const float ftCo_804D8C38 = 0.0F;
+const float ftCo_804D8C3C = 1.0F;
+#pragma force_active reset
 
 void ftCo_800C0874(Fighter_GObj* gobj, UNK_T arg1, ftCommon_BuryType arg2)
 {
@@ -99,8 +109,8 @@ void ftCo_800C09B4(Fighter_GObj* gobj)
     case KONGO:
         fp->bury_timer_2 = 0;
         return;
-    case STAGEKIND_UNK39:
-    case STAGEKIND_UNK32:
+    case SHRINEROUTE:
+    case PUSHON:
     case ZEBES:
         fp->bury_timer_2 = 0;
         return;
@@ -143,8 +153,8 @@ void ftCo_800C0A98(Fighter_GObj* gobj)
             return;
         }
         break;
-    case STAGEKIND_UNK39:
-    case STAGEKIND_UNK32:
+    case SHRINEROUTE:
+    case PUSHON:
     case ZEBES:
         if (fp->bury_timer_2 != 0) {
             --fp->bury_timer_2;
@@ -218,7 +228,6 @@ bool ftCo_800C0CB8(Fighter_GObj* gobj)
 
 void ftCo_800C0D0C(Fighter_GObj* gobj)
 {
-    u8 _[8] = { 0 };
     Vec3 joint_pos;
     Vec3 hip_pos;
     Fighter* fp = GET_FIGHTER(gobj);
@@ -253,7 +262,7 @@ void ftCo_800C0D0C(Fighter_GObj* gobj)
         float y = hip_pos.y - joint_pos.y;
         fp->mv.co.bury.x1C = y / p_ftCommonData->x5F4;
         fp->mv.co.bury.translate = fp->cur_pos;
-        efSync_Spawn(1095, gobj, &fp->cur_pos, &fp->x34_scale.y, y);
+        efSync_Spawn(1095, gobj, &fp->cur_pos, &fp->x34_scale.y);
     }
     fp->x2219_b0 = true;
 }
@@ -275,6 +284,11 @@ void ftCo_Bury_Anim(Fighter_GObj* gobj)
 
 void ftCo_Bury_IASA(Fighter_GObj* gobj) {}
 
+static inline Vec3* ftCo_Bury_GetTranslate(Fighter* fp)
+{
+    return &fp->mv.co.bury.translate;
+}
+
 void ftCo_800C0FCC(HSD_GObj* arg0, Fighter_GObj* arg1)
 {
     Fighter* fp = GET_FIGHTER(arg1);
@@ -287,7 +301,7 @@ void ftCo_800C0FCC(HSD_GObj* arg0, Fighter_GObj* arg1)
         if (mpGetSpeed(fp->coll_data.floor.index, &fp->mv.co.bury.translate,
                        &offset))
         {
-            PSVECAdd(&fp->mv.co.bury.translate, &offset,
+            PSVECAdd(ftCo_Bury_GetTranslate(fp), &offset,
                      &fp->mv.co.bury.translate);
             HSD_JObjSetTranslate(jobj, &fp->mv.co.bury.translate);
         }

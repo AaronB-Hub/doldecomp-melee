@@ -7,6 +7,7 @@
 #include "gr/grfigure1.h"
 #include "gr/ground.h"
 #include "gr/grzakogenerator.h"
+#include "gr/inlines.h"
 #include "gr/types.h"
 
 #include "lb/forward.h"
@@ -20,8 +21,8 @@
 #include <baselib/gobjproc.h>
 
 /* 20E274 */ static void grFigure2_8020E274(void);
-/* 20E2E4 */ static void grFigure2_UnkStage0_OnLoad(void);
-/* 20E2E8 */ static void grFigure2_UnkStage0_OnStart(void);
+/* 20E2E4 */ static void grFigure2_OnLoad(void);
+/* 20E2E8 */ static void grFigure2_OnStart(void);
 /* 20E30C */ static bool grFigure2_8020E30C(void);
 /* 20E314 */ static HSD_GObj* grFigure2_8020E314(int gobj_id);
 /* 20E3FC */ static void grFigure2_8020E3FC(Ground_GObj* gobj);
@@ -50,13 +51,13 @@ static StageCallbacks grEF2_803E6328[3] = {
 };
 
 StageData grEF2_803E6370 = {
-    0x00000045,
+    FIGURE2,
     grEF2_803E6328,
     "/GrEF2.dat",
     grFigure2_8020E274,
     grFigure1_8020E270,
-    grFigure2_UnkStage0_OnLoad,
-    grFigure2_UnkStage0_OnStart,
+    grFigure2_OnLoad,
+    grFigure2_OnStart,
     grFigure2_8020E30C,
     grFigure2_8020E4F4,
     grFigure2_8020E4FC,
@@ -80,11 +81,11 @@ static void grFigure2_8020E274(void)
     Ground_801C39C0();
     Ground_801C3BB4();
 }
-static void grFigure2_UnkStage0_OnLoad(void) {}
+static void grFigure2_OnLoad(void) {}
 
-static void grFigure2_UnkStage0_OnStart(void)
+static void grFigure2_OnStart(void)
 {
-    grZakoGenerator_801CAE04(false);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 static bool grFigure2_8020E30C(void)
@@ -97,26 +98,14 @@ static HSD_GObj* grFigure2_8020E314(int gobj_id)
     HSD_GObj* gobj;
     StageCallbacks* callbacks = &grEF2_803E6328[gobj_id];
 
-    gobj = Ground_801C14D0(gobj_id);
+    gobj = Ground_GetStageGObj(gobj_id);
 
     if (gobj != NULL) {
-        Ground* gp = gobj->user_data;
-        gp->x8_callback = NULL;
-        gp->xC_callback = NULL;
-        GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 3, 0);
-        if (callbacks->callback3 != NULL) {
-            gp->x1C_callback = callbacks->callback3;
-        }
-        if (callbacks->callback0 != NULL) {
-            callbacks->callback0(gobj);
-        }
-        if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
-        }
+        Ground_SetupStageCallbacks(gobj, callbacks);
     } else {
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grfigure2.c", 196,
-                 gobj_id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 196, gobj_id);
     }
+
     return gobj;
 }
 static void grFigure2_8020E3FC(Ground_GObj* gobj)

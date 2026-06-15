@@ -21,8 +21,9 @@
 #include "ftCommon/forward.h"
 #include "ftPopo/forward.h"
 
-#include "ftPopo/ftPp_1211.h"
 #include "ftPopo/ftPp_Init.h"
+#include "ftPopo/ftPp_SpecialHi.h"
+#include "ftPopo/ftPp_SpecialLw.h"
 #include "ftPopo/ftPp_SpecialN.h"
 #include "ftPopo/ftPp_SpecialS.h"
 #include "ftPopo/types.h"
@@ -465,6 +466,7 @@ bool ftNn_Init_801230D0(Fighter_GObj* nana_gobj)
     Fighter_GObj* popo_gobj = Player_GetEntityAtIndex(nana_fp->player_id, 0);
     Vec popo_vec;
     Vec nana_vec;
+    PAD_STACK(16);
     if (popo_gobj != NULL) {
         Fighter* popo_fp = GET_FIGHTER(popo_gobj);
         if (popo_fp->motion_id < 347 || popo_fp->motion_id > 352) {
@@ -472,7 +474,7 @@ bool ftNn_Init_801230D0(Fighter_GObj* nana_gobj)
         }
         if (nana_fp->facing_dir != popo_fp->facing_dir) {
             nana_fp->facing_dir = popo_fp->facing_dir;
-            ftParts_80075AF0(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+            ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
         }
         lb_8000B1CC(popo_fp->parts[FtPart_R4thNb].joint, NULL, &popo_vec);
         lb_8000B1CC(nana_fp->parts[FtPart_XRotN].joint, NULL, &nana_vec);
@@ -649,7 +651,7 @@ void ftPp_SpecialHi_4_Coll(Fighter_GObj* gobj)
         if (fp->self_vel.x > 0.0f) {
             fp->self_vel.x *= -1 * attrs->x14C;
             fp->facing_dir *= -1;
-            ftParts_80075AF0(fp, 0, M_PI_2 * fp->facing_dir);
+            ftPartSetRotY(fp, 0, M_PI_2 * fp->facing_dir);
             return;
         }
     }
@@ -657,7 +659,7 @@ void ftPp_SpecialHi_4_Coll(Fighter_GObj* gobj)
         if (fp->self_vel.x < 0.0f) {
             fp->self_vel.x *= -1 * attrs->x14C;
             fp->facing_dir *= -1;
-            ftParts_80075AF0(fp, 0, M_PI_2 * fp->facing_dir);
+            ftPartSetRotY(fp, 0, M_PI_2 * fp->facing_dir);
             return;
         }
     }
@@ -706,7 +708,7 @@ void ftNn_Init_801237F8(Fighter_GObj* nana_gobj)
 void ftNn_Init_801238E4(Fighter_GObj* gobj)
 {
     Fighter* fp = GET_FIGHTER(gobj);
-    ftParts_8007592C(fp, 0, 0.0f);
+    ftPartSetRotX(fp, 0, 0.0F);
     Fighter_UnkSetFlag_8006CFBC(gobj);
     if (fp->x1A5C != NULL) {
         Fighter* fp2 = GET_FIGHTER(fp->x1A5C);
@@ -718,11 +720,14 @@ void ftNn_Init_801238E4(Fighter_GObj* gobj)
 
 bool ftNn_Init_80123954(Fighter_GObj* nana_gobj, GroundOrAir pp_ga)
 {
+    Fighter* nana_fp;
     bool ret;
     if (nana_gobj != NULL) {
-        Fighter* nana_fp = GET_FIGHTER(nana_gobj);
-        Fighter* popo_fp =
-            GET_FIGHTER(Player_GetEntityAtIndex(nana_fp->player_id, 0));
+        Fighter* popo_fp;
+        ftIceClimberAttributes* attrs;
+        nana_fp = GET_FIGHTER(nana_gobj);
+        popo_fp = GET_FIGHTER(Player_GetEntityAtIndex(nana_fp->player_id, 0));
+        attrs = nana_fp->dat_attrs;
         switch (nana_fp->x2070.x2071_b0_3) {
         case 1:
         case 2:
@@ -737,22 +742,26 @@ bool ftNn_Init_80123954(Fighter_GObj* nana_gobj, GroundOrAir pp_ga)
         case 11:
         case 12:
         case 13:
-        case 14:
             nana_fp->x1A5C = NULL;
             ret = true;
             break;
-        case 0:
         default: {
-            ftIceClimberAttributes* attrs = nana_fp->dat_attrs;
             float dd = attrs->xD0;
             float dx = nana_fp->cur_pos.x - popo_fp->cur_pos.x;
             float dy = nana_fp->cur_pos.y - popo_fp->cur_pos.y;
-            if (dx * dx + dy * dy < popo_fp->x34_scale.y * dd * dd) {
+            float dxsq = dx * dx;
+            float dysq = dy * dy;
+            if (dxsq + dysq < (s32) (popo_fp->x34_scale.y * (dd * dd))) {
                 ret = false;
                 if (pp_ga == GA_Air) {
                     if (pp_ga != nana_fp->ground_or_air) {
-                        ft_800849EC(nana_fp, popo_fp);
-                        ftCommon_8007D7FC(popo_fp);
+                        ftCommon_8007D5D4(nana_fp);
+                    }
+                    ftNn_Init_80123BF0(nana_gobj);
+                } else {
+                    if (pp_ga != nana_fp->ground_or_air) {
+                        ft_800849EC(popo_fp, nana_fp);
+                        ftCommon_8007D7FC(nana_fp);
                     }
                     ftNn_Init_80123B3C(nana_gobj);
                 }
@@ -761,7 +770,7 @@ bool ftNn_Init_80123954(Fighter_GObj* nana_gobj, GroundOrAir pp_ga)
                 nana_fp->self_vel = popo_fp->self_vel;
                 nana_fp->gr_vel = popo_fp->gr_vel;
                 nana_fp->facing_dir = popo_fp->facing_dir;
-                ftParts_80075AF0(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+                ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
                 nana_fp->x1A5C =
                     Player_GetEntityAtIndex(nana_fp->player_id, 0);
             } else {
@@ -890,7 +899,7 @@ void ftPp_SpecialS_0_Phys(Fighter_GObj* nana_gobj)
     nana_fp->gr_vel = popo_fp->gr_vel;
     nana_fp->xE4_ground_accel_1 = popo_fp->xE4_ground_accel_1;
     nana_fp->facing_dir = popo_fp->facing_dir;
-    ftParts_80075AF0(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+    ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
 }
 
 void ftPp_SpecialS_1_Phys(Fighter_GObj* nana_gobj)
@@ -904,7 +913,7 @@ void ftPp_SpecialS_1_Phys(Fighter_GObj* nana_gobj)
     nana_fp->gr_vel = popo_fp->gr_vel;
     nana_fp->xE4_ground_accel_1 = popo_fp->xE4_ground_accel_1;
     nana_fp->facing_dir = popo_fp->facing_dir;
-    ftParts_80075AF0(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
+    ftPartSetRotY(nana_fp, 0, M_PI_2 * nana_fp->facing_dir);
 }
 
 static inline void ftPp_SpecialS_0_Coll_inline(Fighter_GObj* nana_gobj)
@@ -913,7 +922,7 @@ static inline void ftPp_SpecialS_0_Coll_inline(Fighter_GObj* nana_gobj)
     Fighter_GObj* popo_gobj = Player_GetEntityAtIndex(nana_fp->player_id, 0);
     Fighter* popo_fp = GET_FIGHTER(popo_gobj);
 
-    ftParts_8007592C(nana_fp, 0, ftParts_80075E78(popo_fp, 0));
+    ftPartSetRotX(nana_fp, 0, ftPartGetRotX(popo_fp, 0));
 }
 
 static inline void ftPp_SpecialS_0_Coll_inline2(Fighter_GObj* nana_gobj)
@@ -930,7 +939,10 @@ static inline void ftPp_SpecialS_0_Coll_inline3(Fighter_GObj* gobj)
     Fighter* fp = GET_FIGHTER(gobj);
     fp->cmd_vars[0] = fp->cmd_vars[1] = fp->cmd_vars[2] = fp->cmd_vars[3] = 0;
     ftNn_Init_80123B3C_inline(gobj);
-    ftCommon_8007D5D4(fp);
+    {
+        Fighter* fp2 = fp;
+        ftCommon_8007D5D4(fp2);
+    }
     Fighter_ChangeMotionState(gobj, 360, 0x0C4C528A, fp->cur_anim_frame, 1.0f,
                               0.0f, NULL);
     ftNn_Init_80123B3C_inline(gobj);
@@ -938,6 +950,7 @@ static inline void ftPp_SpecialS_0_Coll_inline3(Fighter_GObj* gobj)
 
 void ftPp_SpecialS_0_Coll(Fighter_GObj* nana_gobj)
 {
+    u8 _[16];
     Fighter* nana_fp = GET_FIGHTER(nana_gobj);
     Fighter_GObj* popo_gobj = Player_GetEntityAtIndex(nana_fp->player_id, 0);
     Fighter* popo_fp = GET_FIGHTER(popo_gobj);
@@ -981,6 +994,7 @@ static inline void ftPp_SpecialS_1_Coll_inline3(Fighter_GObj* gobj)
 
 void ftPp_SpecialS_1_Coll(Fighter_GObj* nana_gobj)
 {
+    u8 _[16];
     Fighter* nana_fp = GET_FIGHTER(nana_gobj);
     Fighter_GObj* popo_gobj = Player_GetEntityAtIndex(nana_fp->player_id, 0);
     Fighter* popo_fp = GET_FIGHTER(popo_gobj);

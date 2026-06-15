@@ -5,6 +5,8 @@
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/itzako.h"
+#include "it/itmaplib.h"
 #include "it/items/itfoods.h"
 #include "it/items/itfreeze.h"
 #include "it/items/types.h"
@@ -71,7 +73,7 @@ void it_802D8688(Item_GObj* gobj)
     if (ip->xDD4_itemVar.heiho.x54 != NULL) {
         it_8028F968(ip->xDD4_itemVar.heiho.x54);
         it_8028F9D8(ip->xDD4_itemVar.heiho.x54, &ip->pos, 1.0F);
-        it_3F14_Logic18_PickedUp(ip->xDD4_itemVar.heiho.x54);
+        itFoods_Logic18_PickedUp(ip->xDD4_itemVar.heiho.x54);
     }
     ip->xDD4_itemVar.heiho.x2C = 0;
     ip->xDD4_itemVar.heiho.x22 = 0;

@@ -4,6 +4,8 @@
 #include "it/it_266F.h"
 #include "it/it_26B1.h"
 #include "it/it_2725.h"
+#include "it/it_3F14.h"
+#include "it/itmaplib.h"
 #include "it/item.h"
 
 ItemStateTable it_803F6110[] = {
@@ -19,7 +21,7 @@ HSD_AnimJoint* it_80293660(int idx)
     return attrs[idx + 2].joint;
 }
 
-void it_3F14_Logic26_Spawned(Item_GObj* gobj)
+void itKinoko_Logic26_Spawned(Item_GObj* gobj)
 {
     Item* it;
 
@@ -144,12 +146,12 @@ bool itKinoko_UnkMotion1_Coll(Item_GObj* gobj)
     return false;
 }
 
-bool it_3F14_Logic26_DmgDealt(Item_GObj* gobj)
+bool itKinoko_Logic26_DmgDealt(Item_GObj* gobj)
 {
     return true;
 }
 
-void it_3F14_Logic26_EvtUnk(Item_GObj* gobj, HSD_GObj* gobj_2)
+void itKinoko_Logic26_EvtUnk(Item_GObj* gobj, HSD_GObj* gobj_2)
 {
     it_8026B894(gobj, gobj_2);
 }

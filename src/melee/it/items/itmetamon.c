@@ -7,6 +7,8 @@
 #include <melee/it/it_266F.h>
 #include <melee/it/it_26B1.h>
 #include <melee/it/it_2725.h>
+#include <melee/it/it_279C.h>
+#include <melee/it/itmaplib.h>
 #include <melee/it/item.h>
 
 static Item_GObj* it_804D6D50;
@@ -48,7 +50,7 @@ void it_802D3008(Item_GObj* item_gobj)
 
 void it_802D306C(Item_GObj* item_gobj) {}
 
-void it_2725_Logic19_EvtUnk(Item_GObj* item_gobj, Item_GObj* gobj)
+void itMetamon_Logic19_EvtUnk(Item_GObj* item_gobj, Item_GObj* gobj)
 {
     it_8026B894(item_gobj, gobj);
 }

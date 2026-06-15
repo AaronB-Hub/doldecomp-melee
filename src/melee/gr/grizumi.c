@@ -39,7 +39,7 @@
 #include <baselib/tobj.h>
 #include <baselib/wobj.h> // IWYU pragma: keep
 
-// context stuff
+/// context stuff
 typedef struct FountainParams {
     float x0;
     int x4;
@@ -157,13 +157,13 @@ StageCallbacks grIz_803E0D74[] = {
     },
 };
 StageData grIz_803E0E5C = {
-    0xC,
+    IZUMI,
     grIz_803E0D74,
     "/GrIz.dat",
     grIzumi_801CBB88,
     grIzumi_801CBB84,
-    grIzumi_UnkStage0_OnLoad,
-    grIzumi_UnkStage0_OnStart,
+    grIzumi_OnLoad,
+    grIzumi_OnStart,
     grIzumi_801CBCE0,
     grIzumi_801CD278,
     grIzumi_801CD280,
@@ -172,13 +172,11 @@ StageData grIz_803E0E5C = {
     3,
 };
 
-// functions start here
 void grIzumi_801CBB84(bool x)
 {
     return;
 }
 
-// https://decomp.me/scratch/94sPw
 void grIzumi_801CBB88(void)
 {
     HSD_GObj* r3;
@@ -194,8 +192,7 @@ void grIzumi_801CBB88(void)
     Ground_801C3BB4();
 }
 
-// https://decomp.me/scratch/4u5TX
-void grIzumi_UnkStage0_OnLoad(void)
+void grIzumi_OnLoad(void)
 {
     HSD_GObj* gobj;
     HSD_LObj* lobj;
@@ -206,7 +203,7 @@ void grIzumi_UnkStage0_OnLoad(void)
             lobj = GET_LOBJ(gobj);
             while (lobj != NULL) {
                 HSD_ForeachAnim(lobj, LOBJ_TYPE, ALL_TYPE_MASK,
-                                HSD_AObjSetFlags, AOBJ_ARG_AU, 0x20000000);
+                                HSD_AObjSetFlags, AOBJ_ARG_AU, AOBJ_LOOP);
                 lobj = HSD_LObjGetNext(lobj);
             }
             return;
@@ -215,10 +212,9 @@ void grIzumi_UnkStage0_OnLoad(void)
     }
 }
 
-// https://decomp.me/scratch/9AxrD
-void grIzumi_UnkStage0_OnStart(void)
+void grIzumi_OnStart(void)
 {
-    grZakoGenerator_801CAE04(0);
+    grZakoGenerator_801CAE04(NULL);
 }
 
 bool grIzumi_801CBCE0(void)
@@ -226,13 +222,12 @@ bool grIzumi_801CBCE0(void)
     return false;
 }
 
-// https://decomp.me/scratch/FVXdq
 HSD_GObj* grIzumi_801CBCE8(int gobj_id)
 {
     HSD_GObj* gobj;
     StageCallbacks* callbacks = &grIz_803E0D74[gobj_id];
 
-    gobj = Ground_801C14D0(gobj_id);
+    gobj = Ground_GetStageGObj(gobj_id);
 
     if (gobj != NULL) {
         Ground* gp = gobj->user_data;
@@ -249,22 +244,16 @@ HSD_GObj* grIzumi_801CBCE8(int gobj_id)
         }
 
         if (callbacks->callback2 != NULL) {
-            HSD_GObjProc_8038FD54(gobj, callbacks->callback2, 4);
+            HSD_GObj_SetupProc(gobj, callbacks->callback2, 4);
         }
 
     } else {
-        // clang-format off
-//#line 241 "grizumi.c"
-//        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, __LINE__, gobj_id);
-        // clang-format on
-        OSReport("%s:%d: couldn t get gobj(id=%d)\n", "grizumi.c", 241,
-                 gobj_id);
+        OSReport("%s:%d: couldn t get gobj(id=%d)\n", __FILE__, 241, gobj_id);
     }
 
     return gobj;
 }
 
-// https://decomp.me/scratch/BcUJr
 void grIzumi_801CBDD4(Ground_GObj* gobj)
 {
     grAnime_801C8138(gobj, GET_GROUND(gobj)->map_id, 0);
@@ -307,7 +296,6 @@ void grIzumi_801CBE60(Ground_GObj* gobj)
     return;
 }
 
-// https://decomp.me/scratch/VuF6U
 void grIzumi_801CBE64(Ground_GObj* gobj)
 {
     HSD_TObj* tobj;
@@ -327,12 +315,7 @@ void grIzumi_801CBE64(Ground_GObj* gobj)
         tobj->wrap_t = 0;
         tobj->flags = (tobj->flags & ~0x1FF) | 0x103;
     } else {
-        // clang-format off
-// this breaks the line numbers in compile errors >:(
-//#line 387 "grizumi.c"
-//        OSReport("%s:%d:Warning: not found tobj !\n", __FILE__, __LINE__);
-        // clang-format on
-        OSReport("%s:%d:Warning: not found tobj !\n", "grizumi.c", 387);
+        OSReport("%s:%d:Warning: not found tobj !\n", __FILE__, 387);
     }
     gp->gv.izumi.xC4 = tobj;
     gobj->render_cb = grIzumi_801CD220;
@@ -397,12 +380,12 @@ void grIzumi_801CC0D4(Ground_GObj* gobj)
             if (vec.y < 0.0f) {
                 u32 flags = HSD_JObjGetFlags(gp2->gv.izumi2.xC4);
                 if ((flags & 0x10) == 0) {
-                    HSD_JObjSetFlagsAll(gp2->gv.izumi2.xC4, 0x10);
+                    HSD_JObjSetFlagsAll(gp2->gv.izumi2.xC4, JOBJ_HIDDEN);
                 }
             } else {
                 u32 flags = HSD_JObjGetFlags(gp2->gv.izumi2.xC4);
                 if ((flags & 0x10) != 0) {
-                    HSD_JObjClearFlagsAll(gp2->gv.izumi2.xC4, 0x10);
+                    HSD_JObjClearFlagsAll(gp2->gv.izumi2.xC4, JOBJ_HIDDEN);
                 }
             }
         }
@@ -412,12 +395,12 @@ void grIzumi_801CC0D4(Ground_GObj* gobj)
             if (vec.y < 0.0f) {
                 u32 flags = HSD_JObjGetFlags(gp2->gv.izumi2.xC8);
                 if ((flags & 0x10) == 0) {
-                    HSD_JObjSetFlagsAll(gp2->gv.izumi2.xC8, 0x10);
+                    HSD_JObjSetFlagsAll(gp2->gv.izumi2.xC8, JOBJ_HIDDEN);
                 }
             } else {
                 u32 flags = HSD_JObjGetFlags(gp2->gv.izumi2.xC8);
                 if ((flags & 0x10) != 0) {
-                    HSD_JObjClearFlagsAll(gp2->gv.izumi2.xC8, 0x10);
+                    HSD_JObjClearFlagsAll(gp2->gv.izumi2.xC8, JOBJ_HIDDEN);
                 }
             }
         }
@@ -442,17 +425,6 @@ bool grIzumi_801CC350(Ground_GObj* gobj)
     return false;
 }
 
-static inline int rand_inline(int a, int b)
-{
-    if (a > b) {
-        return b + (a - b != 0 ? HSD_Randi(a - b) : 0);
-    } else if (a < b) {
-        return a + (b - a != 0 ? HSD_Randi(b - a) : 0);
-    } else {
-        return a;
-    }
-}
-
 void grIzumi_801CC358(Ground_GObj* gobj)
 {
     bool r29 = false;
@@ -462,8 +434,7 @@ void grIzumi_801CC358(Ground_GObj* gobj)
     case 0: {
         // 54
         gp->gv.izumi3.xC4 = 1;
-        gp->gv.izumi3.xC6 =
-            rand_inline(grIz_804D6968->x3C, grIz_804D6968->x38);
+        gp->gv.izumi3.xC6 = rand_range(grIz_804D6968->x3C, grIz_804D6968->x38);
         r29 = true;
         break;
     }
@@ -510,7 +481,7 @@ void grIzumi_801CC358(Ground_GObj* gobj)
                 }
             } else {
                 gp->gv.izumi3.xC6 =
-                    rand_inline(grIz_804D6968->x3C, grIz_804D6968->x38);
+                    rand_range(grIz_804D6968->x3C, grIz_804D6968->x38);
             }
         }
         break;
@@ -547,11 +518,9 @@ void grIzumi_801CC358(Ground_GObj* gobj)
         // 368
         float f;
         gp->gv.izumi3.xC4 = 4;
-        gp->gv.izumi3.xC6 =
-            rand_inline(grIz_804D6968->x50, grIz_804D6968->x4C);
-        HSD_JObjSetFlagsAll(jobj, 0x10);
-        HSD_JObjRemoveAnimAll(jobj);
-        // TODO: float load order (41c)
+        gp->gv.izumi3.xC6 = rand_range(grIz_804D6968->x50, grIz_804D6968->x4C);
+        HSD_JObjSetFlagsAll(jobj, JOBJ_HIDDEN);
+        HSD_JObjRemoveAnimAll(jobj); ///< @todo float load order (41c)
         f = HSD_JObjGetTranslationY(jobj);
         f += -1.0;
         HSD_JObjSetTranslateY(gp->gv.izumi3.xCC, f);
@@ -562,7 +531,7 @@ void grIzumi_801CC358(Ground_GObj* gobj)
         if (gp->gv.izumi3.xC6-- < 0) {
             gp->gv.izumi3.xC4 = 2;
             gp->gv.izumi3.xD4 = gp->gv.izumi3.xDC;
-            HSD_JObjClearFlagsAll(jobj, 0x10);
+            HSD_JObjClearFlagsAll(jobj, JOBJ_HIDDEN);
             grAnime_801C7FF8(gobj, 0, 7, 0, 0.0f, 1.0f);
             r29 = true;
         }
@@ -621,9 +590,9 @@ void grIzumi_801CCA64(Ground_GObj* gobj)
     HSD_GObjGXLink_8039084C(gobj);
     GObj_SetupGXLink(gobj, grDisplay_801C5DB0, 2, 0);
     gp->gv.izumi2.xC4 = Ground_801C3FA4(gobj, 2);
-    HSD_JObjSetFlagsAll(gp->gv.izumi2.xC4, 0x10);
+    HSD_JObjSetFlagsAll(gp->gv.izumi2.xC4, JOBJ_HIDDEN);
     gp->gv.izumi2.xC8 = Ground_801C3FA4(gobj, 3);
-    HSD_JObjSetFlagsAll(gp->gv.izumi2.xC8, 0x10);
+    HSD_JObjSetFlagsAll(gp->gv.izumi2.xC8, JOBJ_HIDDEN);
 }
 
 bool grIzumi_801CCB08(Ground_GObj* gobj)
@@ -703,7 +672,7 @@ HSD_GObj* grIzumi_801CCBDC(float height, Vec3* a, int b, HSD_JObj* jobj)
         }
     }
 
-    OSReport("%s:%d:oioi...\n", "grizumi.c", 892);
+    OSReport("%s:%d:oioi...\n", __FILE__, 892);
     while (true) {
     }
 
@@ -758,7 +727,7 @@ HSD_GObj* grIzumi_801CCD98(void)
     } else {
         OSReport("not found mirror image desc! "
                  "(GrdIzumi_cd_wt_GrdIzumiDummy1_1_image_desc)\n");
-        __assert("grizumi.c", 968, "0");
+        HSD_ASSERT(968, 0);
     }
     return gobj;
 }

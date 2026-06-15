@@ -3,14 +3,15 @@
 
 #include <placeholder.h>
 
+#include "ft/forward.h"
+#include "vi/forward.h"
 #include <baselib/forward.h>
 
-/* 31D030 */ UNK_RET un_8031D030(UNK_PARAMS);
-/* 31D168 */ UNK_RET fn_8031D168(UNK_PARAMS);
-/* 31D18C */ static void vi0401_8031D18C(HSD_GObj*);
-/* 31D1B0 */ static void vi0401_8031D1B0(HSD_GObj*, int);
-/* 31D23C */ static void vi0401_8031D23C(HSD_GObj*);
-/* 31D288 */ void un_8031D288_OnEnter(UNK_T);
+/* 31D020 */ void vi0401_8031D020(int, int);
+/* 31D030 */ void un_8031D030(CharacterKind, int);
+/* 31D288 */ void un_8031D288_OnEnter(void*);
 /* 31D698 */ void un_8031D698_OnFrame(void);
+/* 4D6F3C */ extern u8 un_804D6F3C[8];
+/* 4D6F60 */ extern u8 un_804D6F60[8];
 
 #endif

@@ -167,7 +167,7 @@ void ftCo_80099564(Fighter_GObj* gobj)
     ftCo_Escape_Anim(gobj);
 }
 
-/// todo Shared code with #ftCo_Escape_Anim.
+/// @todo Shared code with #ftCo_Escape_Anim.
 void ftCo_80099644(Fighter_GObj* gobj)
 {
     Fighter* fp = gobj->user_data;
@@ -268,7 +268,7 @@ void ftCo_80099954(Fighter_GObj* gobj)
 {
     u8 _[8] = { 0 };
     Fighter* fp = gobj->user_data;
-    if (fp->x5F4_arr[0].x1 == 1) {
+    if (fp->x5F4_arr[0].idx == 1) {
         ftYs_Init_8012BE3C(gobj);
     }
     ftCo_800998EC(gobj);

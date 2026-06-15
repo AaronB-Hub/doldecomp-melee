@@ -11,11 +11,11 @@ typedef struct CameraBoxFlags CameraBoxFlags;
 typedef struct DynamicBoneTable DynamicBoneTable;
 typedef struct flag32 flag32;
 typedef struct HSD_ObjAllocUnk HSD_ObjAllocUnk;
-typedef struct HSD_ObjAllocUnk2 HSD_ObjAllocUnk2;
-typedef struct HSD_ObjAllocUnk4 HSD_ObjAllocUnk4;
+typedef struct Item_FtTrack Item_FtTrack;
+typedef struct RandomItemSpawner RandomItemSpawner;
 typedef struct HSD_ObjAllocUnk5 HSD_ObjAllocUnk5;
-typedef struct HSD_ObjAllocUnk6 HSD_ObjAllocUnk6;
-typedef struct it_2F28_DatAttrs it_2F28_DatAttrs;
+typedef struct ItemPickTable ItemPickTable;
+typedef struct itUnk2_DatAttrs itUnk2_DatAttrs;
 typedef struct Item Item;
 typedef struct Item_DynamicBones Item_DynamicBones;
 typedef struct ItemAttr ItemAttr;
@@ -76,7 +76,7 @@ typedef enum Item_UnkKinds {
     ITEM_UNK_7
 } Item_UnkKinds;
 
-// Combine with Item_UnkKinds?
+/// Combine with Item_UnkKinds?
 typedef enum Item_HoldKinds {
     ITEM_HOLD_0,  // Common items, besides It_Kind_Foods
     ITEM_HOLD_1,  // Item-related items
@@ -98,10 +98,10 @@ typedef enum Item_HoldKinds {
     // More?
 } Item_HoldKinds;
 
-// Based on "ID Lists" from the SSBM datasheet, in-game references, and further
-// research by VetriTheRetri
-// https://docs.google.com/spreadsheets/d/1JX2w-r2fuvWuNgGb6D3Cs4wHQKLFegZe2jhbBuIhCG8
-// Development JP name strings are listed starting at data address 0x803EA7A8
+/// Based on "ID Lists" from the SSBM datasheet, in-game references, and
+/// further research by VetriTheRetri
+/// https://docs.google.com/spreadsheets/d/1JX2w-r2fuvWuNgGb6D3Cs4wHQKLFegZe2jhbBuIhCG8
+/// Development JP name strings are listed starting at data address 0x803EA7A8
 
 #define It_Common_Start It_Kind_Capsule
 #define It_Common_End It_Kind_L_Gun_Ray
