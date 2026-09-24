@@ -16,17 +16,17 @@
 #include <melee/gm/types.h>
 #include <melee/lb/types.h>
 
-typedef struct {
-    bool x0;
-    bool x4;
+typedef struct itCapsule_ItemVars {
+    /* ip+DD4 */ bool x0;
+    /* ip+DD8 */ bool x4;
 } itCapsule_ItemVars;
 
-typedef struct {
-    bool x0; // [true]
-    s32 x4;  // [8]
+typedef struct ItCapsuleAttr {
+    /*  +0  */ bool x0; // [true]
+    /*  +4  */ s32 x4;  // [8]
 } ItCapsuleAttr;
 
-typedef struct {
+typedef struct itStar_ItemVars {
     /* ip+DD4 */ float dir;
     /* ip+DD8 */ float x4;
     /* ip+DDC */ float x8;
@@ -35,7 +35,7 @@ typedef struct {
     /* ip+DE8 */ float yvel;
 } itStar_ItemVars;
 
-struct itSword_ItemVars {
+typedef struct itSword_ItemVars {
     /* ip+DD4 */ int x0;
     /* ip+DD8 */ int x4;
     /* ip+DDC */ int x8;
@@ -59,7 +59,7 @@ struct itSword_ItemVars {
     /* ip+E24 */ float x50;
     /* ip+E28 */ int x54;
     /* ip+E2C */ float x58;
-};
+} itSword_ItemVars;
 
 typedef struct itBatAttributes {
     int x0;

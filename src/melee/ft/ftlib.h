@@ -100,7 +100,7 @@
 /* 087460 */ u32 ftLib_80087460(HSD_GObj*);
 /* 08746C */ s32 ftLib_8008746C(HSD_GObj*);
 /* 0874BC */ s32 ftLib_800874BC(HSD_GObj*);
-/* 0874CC */ void ftLib_800874CC(HSD_GObj*, void*, s32);
+/* 0874CC */ void ftLib_800874CC(HSD_GObj*, ItemKind[], s32);
 /* 087508 */ void ftLib_80087508(s8, u8);
 /// /* 087508 */ void ftLib_80087508(FighterKind, u8);
 /* 087574 */ void ftLib_80087574(s8);

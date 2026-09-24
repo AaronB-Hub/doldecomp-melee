@@ -11,12 +11,13 @@
 /* 4D6B3C */ static int db_ShowItemCollisionBubbles;
 
 static struct {
+    /// TODO: Make this an enum?
     unsigned int DisplayStatus; // 0=uninitialized, 1=visible, 2=hidden
     unsigned int DisplayFadeTimer;
     int ItemSpawnsEnabled;
     int Player;
     int CurrentlySelectedItem;
-    int CurrentlySelectedPokemon;
+    PokemonKind CurrentlySelectedPokemon;
     ItemKind LastSelectedItem;
     int LastSelectedPokemon;
     u32 ShowEnemyStompRange : 1;
@@ -24,8 +25,9 @@ static struct {
     u32 ShowCoinPickupRange : 1;
 } db_ItemAndPokemonMenu;
 
-/* 3EA94C */ static char* db_ItemNames[] = {
-    // clang-format off
+/* 3EA94C */ static char*
+    db_ItemNames[It_Kind_Common_End - It_Kind_Common_Start] = {
+        // clang-format off
     "Capsule ",
     "Box     ",
     "Taru    ",
@@ -61,24 +63,30 @@ static struct {
     "MetalB  ",
     "Spycloak",
     "M Ball  ",
-    // clang-format on
-};
+        // clang-format on
+    };
 
-/* 3EAA50 */ static char* db_PokemonNames[] = {
-    "Random",      "Tosakinto", "Chicorita", "Kabigon",    "Kamex",
-    "Matadogas",   "Lizardon",  "Fire",      "Thunder",    "Freezer",
-    "Sonans",      "Hassam",    "Unknown",   "Entei",      "Raikou",
-    "Suikun",      "Kireihana", "Marumine",  "Lugia",      "Houou",
-    "Metamon",     "Pippi",     "Togepy",    "Mew",        "Cerebi",
-    "Hitodeman",   "Lucky",     "Porygon2",  "Hinoarashi", "Maril",
-    "Fushigibana",
-};
+/* 3EAA50 */ static char*
+    db_PokemonNames[It_PKind_Terminate - It_PKind_Random] = {
+        "Random",      "Tosakinto", "Chicorita", "Kabigon",    "Kamex",
+        "Matadogas",   "Lizardon",  "Fire",      "Thunder",    "Freezer",
+        "Sonans",      "Hassam",    "Unknown",   "Entei",      "Raikou",
+        "Suikun",      "Kireihana", "Marumine",  "Lugia",      "Houou",
+        "Metamon",     "Pippi",     "Togepy",    "Mew",        "Cerebi",
+        "Hitodeman",   "Lucky",     "Porygon2",  "Hinoarashi", "Maril",
+        "Fushigibana",
+    };
 
-/* 3EAAFC */ static char* db_BarrelEnemies[] = { "Kuriboh ", "Leadead ",
-                                                 "Octarock", "Ottosei " };
+/* 3EAAFC */ static char*
+    db_BarrelEnemies[It_Kind_Monster_End - It_Kind_Monster_Start] = {
+        "Kuriboh ", "Leadead ", "Octarock", "Ottosei "
+    };
 
-/* 3EABA8 */ static char* db_AdventureEnemies[26] = {
-    // clang-format off
+/// TODO: Add remaining names or Stage items and possibly split into two
+/// separate arrays
+/* 3EABA8 */ static char*
+    db_AdventureEnemies[It_Kind_Stage_End - It_Kind_Monster2_Start] = {
+        // clang-format off
     "old-Kuri",
     "Mato    ",
     "Heiho   ",
@@ -92,9 +100,11 @@ static struct {
     "klap    ",
     "zgshell ",
     "zrshell ",
-    // clang-format on
-};
+        // clang-format on
+    };
 
+/// Did these names come from the source code? If so, should we rename the item
+/// categories to match?
 static char unused_db_string_803EAC10[] =
     "Item=%d Foods=%d Yaku=%d Sp_Item=%d Pokemon=%d PokeShot=%d CZako=%d "
     "CZakoShot=%d Zako=%d ZakoShot=%d Shot=%d Etc=%d\n";
