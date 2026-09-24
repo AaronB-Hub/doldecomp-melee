@@ -53,6 +53,8 @@ typedef struct it_804D6D20_t {
 /* 4D6D14 */ extern u32 it_804D6D14;
 
 /* 4D6D18 */ extern u32 it_804D6D18;
+/// @todo find/create enum or define for size of this array (used other places
+/// as well)
 /* 4D6D1C */ extern u8 it_804D6D1C[4];
 /* 4D6D20 */ extern it_804D6D20_t* it_804D6D20;
 

@@ -11,7 +11,7 @@
 /* 4D6B3C */ static int db_ShowItemCollisionBubbles;
 
 static struct {
-    /// TODO: Make this an enum?
+    /// @todo: Make this an enum?
     unsigned int DisplayStatus; // 0=uninitialized, 1=visible, 2=hidden
     unsigned int DisplayFadeTimer;
     int ItemSpawnsEnabled;
@@ -82,7 +82,7 @@ static struct {
         "Kuriboh ", "Leadead ", "Octarock", "Ottosei "
     };
 
-/// TODO: Add remaining names or Stage items and possibly split into two
+/// @todo: Add remaining names or Stage items and possibly split into two
 /// separate arrays
 /* 3EABA8 */ static char*
     db_AdventureEnemies[It_Kind_Stage_End - It_Kind_Monster2_Start] = {

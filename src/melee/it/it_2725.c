@@ -608,7 +608,7 @@ void it_80273670(Item_GObj* item_gobj, int arg1, f32 arg8)
     item->x524_cmd.u = NULL;
 }
 
-/// TODO: Looks like a bunch of code is shared with it_80273B50 that could be
+/// @todo: Looks like a bunch of code is shared with it_80273B50 that could be
 /// reused
 void it_80273748(Item_GObj* item_gobj, Vec3* pos, Vec3* vel)
 {

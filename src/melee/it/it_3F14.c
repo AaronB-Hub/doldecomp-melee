@@ -841,23 +841,23 @@ char it_803F1ED8[] = "ItCo.dat";
 char it_803F1EE4[] = "ItCo.usd";
 char it_803F1EF0[] = "itPublicData";
 
-DamageLogEntry it_804A0E70[15];
 Article* it_804A0F60[It_Kind_Max_Check -
                      It_Kind_Monster2_Start]; // Stage and Monster 2 items data
+DamageLogEntry it_804A0E70[15];
 
-s8 it_804D6D00;
-Fighter_804D653C_t* it_804D6D04;
-s32 it_804D6D08;
-s32 it_804D6D0C;
-u32 it_804D6D10;
-u32 it_804D6D14;
-u32 it_804D6D18;
-u8 it_804D6D1C[4];
-
-it_804D6D20_t* it_804D6D20;
-/// @TODO: Change these Article** vars to type Article*[] like it_804A0F60?
-Article** it_804D6D24; // Common or Item-related items data
-ItemCommonData* it_804D6D28;
-Article** it_804D6D30 ATTRIBUTE_ALIGN(8); // Pokemon and Related items data
-Article** it_804D6D38 ATTRIBUTE_ALIGN(8); // Character or Monster items data
 it_804D6D40_t* it_804D6D40 ATTRIBUTE_ALIGN(8);
+/// @todo: Change these Article** vars to type Article*[] like it_804A0F60?
+Article** it_804D6D38 ATTRIBUTE_ALIGN(8); // Character or Monster items data
+Article** it_804D6D30 ATTRIBUTE_ALIGN(8); // Pokemon and Related items data
+ItemCommonData* it_804D6D28;
+Article** it_804D6D24; // Common or Item-related items data
+it_804D6D20_t* it_804D6D20;
+
+u8 it_804D6D1C[4];
+u32 it_804D6D18;
+u32 it_804D6D14;
+u32 it_804D6D10;
+s32 it_804D6D0C;
+s32 it_804D6D08;
+Fighter_804D653C_t* it_804D6D04;
+s8 it_804D6D00;

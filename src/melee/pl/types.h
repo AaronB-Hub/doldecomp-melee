@@ -131,7 +131,7 @@ struct pl_x5EC_t {
     } x10[6];
 };
 
-/// TODO: 215 comes up a few times in the stale moves code.
+/// @todo: 215 comes up a few times in the stale moves code.
 /// Figure out where this comes from and define a variable to reference.
 
 struct StaleMoveTable {
